@@ -1,0 +1,219 @@
+/* ───────────────────────────────────────────────
+   Product Card — matches Saranga reference design
+──────────────────────────────────────────────── */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  border: none;
+  position: relative;
+  cursor: pointer;
+}
+
+/* ── Image container ── */
+.product-card-image-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #f5f0ea;     /* warm off-white, like the reference */
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.product-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  display: block;
+}
+
+.product-card:hover .product-card-image {
+  transform: scale(1.05);
+}
+
+/* ── Badge (New Arrival / % OFF) ── */
+.product-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 100px;
+  z-index: 3;
+  pointer-events: none;
+}
+.badge-new {
+  background: #fff;
+  color: #2d2d2d;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.badge-offer {
+  background: #e53935;
+  color: #fff;
+}
+
+/* ── Out of Stock overlay ── */
+.product-card-oos {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 18px;
+  z-index: 4;
+}
+
+/* ── Quick View hover strip ── */
+.product-card-quick-view {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2d2d2d;
+  letter-spacing: 0.2px;
+
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+  z-index: 3;
+  border-radius: 0 0 18px 18px;
+  pointer-events: none;
+}
+
+.product-card:hover .product-card-quick-view {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* ── Wishlist heart (top-right) ── */
+.product-card-wish-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  cursor: pointer;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.12);
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  z-index: 5;
+
+  /* Hidden until hover, shown when active */
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.22s ease, transform 0.22s ease, background 0.2s, color 0.2s;
+}
+.product-card:hover .product-card-wish-btn,
+.product-card-wish-btn.active {
+  opacity: 1;
+  transform: scale(1);
+}
+.product-card-wish-btn:hover { background: #fff; color: #e53935; }
+.product-card-wish-btn.active { color: #e53935; background: #fff0f0; }
+
+/* ── Text body (below image) ── */
+.product-card-body {
+  padding: 14px 4px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.product-card-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  line-height: 1.45;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.product-card-name:hover { color: #694d21; }
+
+.product-card-pricing {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.product-card-price {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.product-card-original {
+  font-size: 0.8rem;
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* ── Add to Cart button (slides in on hover) ── */
+.product-card-cart-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px 0;
+  background: #5c6b55;   /* muted sage-green, exactly like reference */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: opacity 0.26s ease, transform 0.26s ease, background 0.2s;
+
+  /* Hidden by default */
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+}
+.product-card:hover .product-card-cart-btn,
+.product-card-cart-btn.loading {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.product-card-cart-btn:hover:not(:disabled) {
+  background: #4a5844;
+}
+.product-card-cart-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* ── Responsive grid spacing ── */
+@media (max-width: 480px) {
+  .product-card-image-wrap {
+    border-radius: 14px;
+  }
+  .product-card-name { font-size: 0.88rem; }
+}

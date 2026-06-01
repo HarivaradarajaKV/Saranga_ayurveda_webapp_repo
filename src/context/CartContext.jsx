@@ -1,0 +1,122 @@
+import { createContext, useContext, useState, useEffect } from 'react';
+import api, { ENDPOINTS } from '../api/api';
+import { useAuth } from './AuthContext';
+
+const CartContext = createContext(null);
+
+export function CartProvider({ children }) {
+  const { isAuthenticated } = useAuth();
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isAuthenticated) fetchCart();
+    else setItems([]);
+  }, [isAuthenticated]);
+
+  const fetchCart = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get(ENDPOINTS.CART);
+      const raw = Array.isArray(res.data) ? res.data : res.data?.items || [];
+      // Normalize: ensure each item has both `cartId` (cart row id) and `product_id`
+      const normalized = raw.map(item => ({
+        ...item,
+        // `id` from backend is the cart row id; `product_id` is the product reference
+        cartId: item.id,           // cart row id used for PUT/DELETE
+        product_id: item.product_id || item.id,
+      }));
+      setItems(normalized);
+    } catch { setItems([]); }
+    finally { setLoading(false); }
+  };
+
+  const addToCart = async (productId, quantity = 1, variant = null) => {
+    try {
+      // Check if already in cart — just increment quantity
+      const existing = items.find(i => (i.product_id || i.id) === productId && i.variant === variant);
+      if (existing) {
+        await updateQuantity(productId, (existing.quantity || 1) + 1, variant);
+        return { success: true };
+      }
+      await api.post(ENDPOINTS.CART, { product_id: productId, quantity, variant });
+      await fetchCart();
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err.response?.data?.error || 'Failed to add to cart' };
+    }
+  };
+
+  // Remove by product_id — finds the cartId internally
+  const removeFromCart = async (productId, variant = null) => {
+    const item = items.find(i =>
+      (i.product_id === productId || i.id === productId) &&
+      (variant ? i.variant === variant : true)
+    );
+    const cartId = item?.cartId || item?.id;
+    if (!cartId) { await fetchCart(); return; }
+    try {
+      await api.delete(ENDPOINTS.CART_ITEM(cartId));
+      setItems(prev => prev.filter(i => i.cartId !== cartId));
+    } catch { await fetchCart(); }
+  };
+
+  // updateQuantity: quantity is the new absolute value
+  const updateQuantity = async (productId, quantity, variant = null) => {
+    if (quantity < 1) { removeFromCart(productId, variant); return; }
+    const item = items.find(i =>
+      (i.product_id === productId || i.id === productId) &&
+      (variant ? i.variant === variant : true)
+    );
+    const cartId = item?.cartId || item?.id;
+    if (!cartId) { await fetchCart(); return; }
+    try {
+      await api.put(ENDPOINTS.CART_ITEM(cartId), { quantity });
+      setItems(prev => prev.map(i =>
+        i.cartId === cartId ? { ...i, quantity } : i
+      ));
+    } catch { await fetchCart(); }
+  };
+
+  const clearCart = async () => {
+    try {
+      // Try /cart/clear first (mobile uses this), fallback to deleting individually
+      try {
+        await api.delete('/cart/clear');
+      } catch {
+        await Promise.all(items.map(i => api.delete(ENDPOINTS.CART_ITEM(i.cartId || i.id))));
+      }
+      setItems([]);
+    } catch { await fetchCart(); }
+  };
+
+  const cartCount = items.reduce((sum, i) => sum + (i.quantity || 1), 0);
+
+  const cartSubtotal = items.reduce((sum, i) => {
+    let finalPrice;
+    if (i.is_from_combo && i.combo_discounted_price !== undefined) {
+      finalPrice = parseFloat(i.combo_discounted_price);
+    } else {
+      const price = parseFloat(i.price || 0);
+      const offer = parseFloat(i.offer_percentage || 0);
+      finalPrice = price * (1 - offer / 100);
+    }
+    const qty = i.quantity || 1;
+    return sum + (finalPrice * qty);
+  }, 0);
+
+  return (
+    <CartContext.Provider value={{
+      items, loading, cartCount, cartSubtotal,
+      addToCart, removeFromCart, updateQuantity, clearCart, fetchCart
+    }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export const useCart = () => {
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error('useCart must be used within CartProvider');
+  return ctx;
+};
