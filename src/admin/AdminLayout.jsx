@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Package, ShoppingBag, Users, FolderOpen,
-  Gift, Tag, Star, LogOut, Menu, X, Leaf
+  Gift, Tag, Star, LogOut, Menu, X, Leaf, Sparkles
 } from 'lucide-react';
 import { useState } from 'react';
 import './Admin.css';
@@ -16,6 +16,7 @@ const NAV = [
   { to: '/admin/combos', label: 'Combo Deals', icon: <Gift size={18} /> },
   { to: '/admin/coupons', label: 'Coupons', icon: <Tag size={18} /> },
   { to: '/admin/reviews', label: 'Reviews', icon: <Star size={18} /> },
+  { to: '/admin/new-arrivals', label: 'New Arrivals', icon: <Sparkles size={18} /> },
 ];
 
 export default function AdminLayout() {

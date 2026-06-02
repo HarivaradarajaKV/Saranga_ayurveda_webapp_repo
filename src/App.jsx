@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { CategoryProvider } from './context/CategoryContext';
@@ -54,10 +55,28 @@ import AdminCategories from './admin/AdminCategories';
 import AdminCombos from './admin/AdminCombos';
 import AdminCoupons from './admin/AdminCoupons';
 import AdminReviews from './admin/AdminReviews';
+import AdminNewArrivals from './admin/AdminNewArrivals';
 
 import './styles/global.css';
 
 function Layout({ children }) {
+  const { isAuthenticated, isAdmin, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && isAuthenticated && isAdmin()) {
+      navigate('/admin', { replace: true });
+    }
+  }, [isAuthenticated, loading, navigate]);
+
+  if (loading) {
+    return <div className="loading-center"><div className="spinner" /></div>;
+  }
+
+  if (isAuthenticated && isAdmin()) {
+    return null;
+  }
+
   return (
     <>
       <Navbar />
@@ -120,6 +139,7 @@ export default function App() {
                     <Route path="combos" element={<AdminCombos />} />
                     <Route path="coupons" element={<AdminCoupons />} />
                     <Route path="reviews" element={<AdminReviews />} />
+                    <Route path="new-arrivals" element={<AdminNewArrivals />} />
                   </Route>
                 </Routes>
               </ToastProvider>

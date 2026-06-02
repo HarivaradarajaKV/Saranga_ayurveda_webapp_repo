@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api, { ENDPOINTS } from '../api/api';
-import { Package, ShoppingBag, Users, Star, TrendingUp, DollarSign } from 'lucide-react';
+import { 
+  Package, ShoppingBag, Users, Star, DollarSign, 
+  PlusCircle, FolderOpen, Tag, Gift, Sparkles 
+} from 'lucide-react';
 import './Admin.css';
 
 export default function AdminDashboard() {
@@ -23,8 +27,20 @@ export default function AdminDashboard() {
     { label: 'Total Products', value: stats.total_products || stats.products || 0, icon: <Package size={20} />, color: '#694d21', bg: '#fdf3e6' },
     { label: 'Total Orders', value: stats.total_orders || stats.orders || 0, icon: <ShoppingBag size={20} />, color: '#3b82f6', bg: '#eff6ff' },
     { label: 'Total Users', value: stats.total_users || stats.users || 0, icon: <Users size={20} />, color: '#8b5cf6', bg: '#f5f3ff' },
-    { label: 'Revenue (₹)', value: `₹${parseFloat(stats.total_revenue || stats.revenue || 0).toFixed(0)}`, icon: <DollarSign size={20} />, color: '#22c55e', bg: '#f0fff4' },
+    { label: 'Revenue', value: `₹${parseFloat(stats.total_revenue || stats.revenue || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, icon: <DollarSign size={20} />, color: '#22c55e', bg: '#f0fff4' },
   ] : [];
+
+  const SHORTCUTS = [
+    { label: 'View Products', desc: 'Manage your catalog, stock & prices.', to: '/admin/products', icon: <Package size={22} />, color: '#694d21', bg: '#fdf3e6' },
+    { label: 'Add Product', desc: 'Publish a new product to store.', to: '/admin/products?add=true', icon: <PlusCircle size={22} />, color: '#ec4899', bg: '#fdf2f8' },
+    { label: 'Categories', desc: 'Organize catalog collections.', to: '/admin/categories', icon: <FolderOpen size={22} />, color: '#10b981', bg: '#ecfdf5' },
+    { label: 'Orders', desc: 'Confirm, pack & ship user orders.', to: '/admin/orders', icon: <ShoppingBag size={22} />, color: '#3b82f6', bg: '#eff6ff' },
+    { label: 'Users', desc: 'View customer accounts & profiles.', to: '/admin/users', icon: <Users size={22} />, color: '#8b5cf6', bg: '#f5f3ff' },
+    { label: 'Coupons', desc: 'Configure discounts & promo codes.', to: '/admin/coupons', icon: <Tag size={22} />, color: '#f59e0b', bg: '#fffbeb' },
+    { label: 'Combo Deals', desc: 'Group products for special deals.', to: '/admin/combos', icon: <Gift size={22} />, color: '#ef4444', bg: '#fef2f2' },
+    { label: 'Reviews', desc: 'Monitor rating & feedback.', to: '/admin/reviews', icon: <Star size={22} />, color: '#facc15', bg: '#fefce8' },
+    { label: 'New Arrivals', desc: 'Select home page featured products.', to: '/admin/new-arrivals', icon: <Sparkles size={22} />, color: '#d946ef', bg: '#fdf4ff' },
+  ];
 
   const STATUS_COLORS = { pending: '#f59e0b', processing: '#3b82f6', shipped: '#8b5cf6', delivered: '#22c55e', cancelled: '#ef4444' };
 
@@ -34,6 +50,7 @@ export default function AdminDashboard() {
         <h1 className="admin-page-title">Dashboard Overview</h1>
       </div>
 
+      {/* KPI Stats */}
       {loading ? (
         <div className="admin-stats-grid">
           {Array(4).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 120, borderRadius: 14 }} />)}
@@ -50,7 +67,24 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      <div className="admin-table-wrap">
+      {/* Quick Action Shortcuts Grid (Mobile Aligned) */}
+      <div className="admin-shortcuts-section">
+        <h3 style={{ fontWeight: 700, color: 'var(--text)', marginBottom: '16px' }}>Quick Actions</h3>
+        <div className="admin-shortcuts-grid">
+          {SHORTCUTS.map((s, i) => (
+            <Link key={i} to={s.to} className="admin-shortcut-card">
+              <div className="admin-shortcut-icon" style={{ background: s.bg, color: s.color }}>
+                {s.icon}
+              </div>
+              <h4 className="admin-shortcut-title">{s.label}</h4>
+              <p className="admin-shortcut-desc">{s.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent Orders Table */}
+      <div className="admin-table-wrap" style={{ marginTop: '28px' }}>
         <div className="admin-table-header">
           <h3 style={{ fontWeight: 700, color: 'var(--text)' }}>Recent Orders</h3>
         </div>

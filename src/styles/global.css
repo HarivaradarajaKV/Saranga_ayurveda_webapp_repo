@@ -47,7 +47,7 @@
   /* Fonts & Layout */
   --font-sans: 'Outfit', 'Inter', system-ui, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
-  --navbar-height: 145px; /* Adjusted for single-row header */
+  --navbar-height: 78px; /* Single-row navbar, no announcement bar */
   --sidebar-width: 240px;
   --transition: 0.22s ease;
 }

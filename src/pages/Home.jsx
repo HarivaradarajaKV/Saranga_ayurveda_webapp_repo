@@ -75,9 +75,9 @@ export default function Home() {
   const fetchHomeData = async () => {
     setLoading(true);
     try {
-      const prodRes = await api.get(`${ENDPOINTS.PRODUCTS}?limit=8`);
+      const prodRes = await api.get(`${ENDPOINTS.PRODUCTS}?new_arrivals=true&limit=8`);
       if (prodRes.data) {
-        setProducts(Array.isArray(prodRes.data) ? prodRes.data.slice(0, 4) : (prodRes.data?.products || []).slice(0, 4));
+        setProducts(Array.isArray(prodRes.data) ? prodRes.data : (prodRes.data.products || []));
       }
     } catch { }
     setLoading(false);
@@ -85,76 +85,123 @@ export default function Home() {
 
   return (
     <div className="home page-fade-in">
-      {/* ── SPLIT HERO ── */}
-      <section className="hero-split">
-        <div className="hero-split-left">
-          <img src="/images/hero/hero_main.jpg" alt="Ayurvedic Products" className="hero-split-img" />
-          <div className="hero-left-overlay">
-            <p className="hero-left-text">
-              Experience the power of traditional plant-based medicine with our curated range of Ayurvedic oils and supplements.
-            </p>
-          </div>
+      {/* ── LUXURY AYURVEDA HERO BANNER ── */}
+      <section className="hero-ayurveda">
+        <div className="hero-ayurveda-content">
+          <img src="/images/logo.png" alt="Saranga Logo" className="hero-ayurveda-logo" />
+
+          <img src="/images/name.png" alt="Saranga Ayurveda" className="hero-ayurveda-name-img" />
+          <h2 className="hero-specialist-title">We're Specialist in</h2>
+          {/*<-- we need change--->*/}
         </div>
-        <div className="hero-split-right">
-          <div className="hero-carousel-container">
-            {carouselImages.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`Slide ${idx + 1}`}
-                className={`hero-carousel-img ${idx === currentSlide ? 'active' : ''}`}
-              />
-            ))}
-            <div className="hero-carousel-overlay">
-              {/* Removed redundant logo and text as requested */}
+      </section>
+
+      {/* ── CATEGORIES OVERLAY SECTION ── */}
+      <section className="categories-overlay-container">
+        <div className="container">
+          <div className="categories-overlay-card">
+            {!catLoading && categories.length > 0 && (
+              <div className="categories-overlay-grid">
+                {categories.map((cat) => (
+                  <Link to={`/category/${cat.id}`} key={cat.id} className="category-overlay-item">
+                    <div className="category-overlay-img-wrap">
+                      {cat.image_url ? (
+                        <img src={getImageUrl(cat.image_url)} alt={cat.name} className="category-overlay-img" />
+                      ) : (
+                        <div className="category-overlay-fallback">
+                          <Leaf size={36} />
+                        </div>
+                      )}
+                    </div>
+                    <span className="category-overlay-name">{cat.name.toUpperCase()}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+
+            {/* Bottom Row of 4 Features */}
+            <div className="features-divider" />
+            <div className="hero-features-row">
+              <div className="hero-feature-item">
+                <div className="hero-feature-icon">
+                  <Leaf size={22} />
+                </div>
+                <div className="hero-feature-text">
+                  <h3>Ayurvedic & Natural</h3>
+                  <p>Clean, safe & effective</p>
+                </div>
+              </div>
+              <div className="hero-feature-item">
+                <div className="hero-feature-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></svg>
+                </div>
+                <div className="hero-feature-text">
+                  <h3>Holistic Care</h3>
+                  <p>For every stage of life</p>
+                </div>
+              </div>
+              <div className="hero-feature-item">
+                <div className="hero-feature-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /></svg>
+                </div>
+                <div className="hero-feature-text">
+                  <h3>Sustainable & Ethical</h3>
+                  <p>Good for you, good for Earth</p>
+                </div>
+              </div>
+              <div className="hero-feature-item">
+                <div className="hero-feature-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                </div>
+                <div className="hero-feature-text">
+                  <h3>Trusted & Authentic</h3>
+                  <p>Rooted in Ayurveda</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── WHATS ON YOUR MIND ── */}
-      <section className="container section-padding">
-        <h2 className="section-title-center">Whats On Your Mind ?</h2>
-        {!catLoading && categories.length > 0 && (
-          <div className="categories-grid">
-            {categories.map((cat) => (
-              <Link to={`/category/${cat.id}`} key={cat.id} className="category-circle-item">
-                <div className="category-circle-img-wrap">
-                  {cat.image_url ? (
-                    <img src={getImageUrl(cat.image_url)} alt={cat.name} />
-                  ) : (
-                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface-2)', color: 'var(--text-light)' }}>
-                      <Leaf size={32} />
-                    </div>
-                  )}
-                </div>
-                <span className="category-circle-name">{cat.name}</span>
-              </Link>
-            ))}
+      {/* ── NATURE'S WELLNESS COLLECTION ── */}
+      <section className="new-arrivals-section">
+        <div className="container-large">
+          <div className="section-header-centered">
+            <span className="section-subtitle-ayur">Premium Selection</span>
+            <h2 className="section-title-flat">Nature's Wellness Collection</h2>
+            <p className="section-desc-ayur">
+              Discover our premium selection of luxury Ayurvedic formulations, hand-crafted to restore balance and nurture your body naturally.
+            </p>
           </div>
-        )}
-      </section>
 
-      {/* ── NEW ARRIVALS ── */}
-      <section className="container section-padding">
-        <div className="section-header-flat">
-          <h2 className="section-title-flat">New Arrivals</h2>
-          <Link to="/explore" className="section-link-flat">SHOP ALL</Link>
+          {loading ? (
+            <div className="new-arrivals-grid-custom">
+              {Array(8).fill(0).map((_, i) => (
+                <div key={i} className="skeleton" style={{ width: 260, height: 420, borderRadius: 24, background: '#efe7da', opacity: 0.6, margin: '0 auto' }} />
+              ))}
+            </div>
+          ) : products.length > 0 ? (
+            <div className="new-arrivals-grid-custom">
+              {products.map(p => (
+                <Link to={`/product/${p.id}`} key={p.id} className="new-arrival-card">
+                  <div className="new-arrival-img-wrap">
+                    <img src={getImageUrl(p.image_url)} alt={p.name} className="new-arrival-img" />
+                  </div>
+                  <div className="new-arrival-info">
+                    <h3 className="new-arrival-name">{p.name.toUpperCase()}</h3>
+                    <span className="new-arrival-category">
+                      {p.category_name ? p.category_name.toUpperCase() : p.category ? p.category.toUpperCase() : 'CAPSULES'}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center" style={{ color: 'var(--text-light)', padding: '40px 0' }}>
+              No products available yet.
+            </p>
+          )}
         </div>
-
-        {loading ? (
-          <div className="products-grid-skeleton">
-            {Array(4).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 400, borderRadius: 0 }} />)}
-          </div>
-        ) : products.length > 0 ? (
-          <div className="new-arrivals-grid">
-            {products.map(p => <ProductCard key={p.id} product={p} />)}
-          </div>
-        ) : (
-          <p className="text-center" style={{ color: 'var(--text-light)', padding: '40px 0' }}>
-            No products available yet.
-          </p>
-        )}
       </section>
 
       {/* ── FOUR STEP ROUTINE ── */}
@@ -211,7 +258,7 @@ export default function Home() {
                 </ul>
               </div>
             </div>
-            
+
             <div className="foundation-form-card">
               <h3>Your Contribution to Needy</h3>
               <form className="foundation-form" onSubmit={(e) => e.preventDefault()}>
@@ -245,9 +292,9 @@ export default function Home() {
                     <button type="button" className={donationAmount === '2000' ? 'active' : ''} onClick={() => setDonationAmount('2000')}>₹2,000</button>
                     <button type="button" className={donationAmount === '3000' ? 'active' : ''} onClick={() => setDonationAmount('3000')}>₹3,000</button>
                   </div>
-                  <input 
-                    type="number" 
-                    placeholder="Enter Custom Amount" 
+                  <input
+                    type="number"
+                    placeholder="Enter Custom Amount"
                     value={donationAmount}
                     onChange={(e) => setDonationAmount(e.target.value)}
                     className="custom-amount-input"

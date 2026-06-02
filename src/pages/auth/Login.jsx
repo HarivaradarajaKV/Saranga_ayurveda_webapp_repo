@@ -35,7 +35,11 @@ export default function Login() {
     setLoading(false);
     if (result.success) {
       toast.success(`Welcome back, ${result.user?.name || 'User'}!`);
-      navigate('/');
+      if (result.user?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } else {
       if (result.needsVerification) {
         setShowOtpInput(true);
@@ -63,7 +67,11 @@ export default function Login() {
         }
         setAuthData(res.data.token, u);
         toast.success('Account verified! Welcome 🎉');
-        navigate('/');
+        if (u?.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       }
     } catch (err) {
       toast.error(err.response?.data?.error || 'Verification failed');

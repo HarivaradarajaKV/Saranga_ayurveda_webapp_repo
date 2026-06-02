@@ -115,5 +115,61 @@
   .admin-main { margin-left: 0; }
   .admin-menu-btn { display: flex; }
   .admin-overlay { display: block; }
+  .admin-shortcuts-grid { grid-template-columns: repeat(2, 1fr); }
   .admin-stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Shortcuts card grid */
+.admin-shortcuts-section {
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+.admin-shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+.admin-shortcut-card {
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 24px;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition);
+}
+.admin-shortcut-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary-light);
+}
+.admin-shortcut-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+}
+.admin-shortcut-card:hover .admin-shortcut-icon {
+  transform: scale(1.1);
+}
+.admin-shortcut-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.admin-shortcut-desc {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  line-height: 1.4;
 }

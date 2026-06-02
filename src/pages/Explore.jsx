@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import api, { ENDPOINTS } from '../api/api';
+import api, { ENDPOINTS, getImageUrl } from '../api/api';
 import { useCategories } from '../context/CategoryContext';
 import ProductCard from '../components/ProductCard';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Search, X, Leaf } from 'lucide-react';
 import './Explore.css';
 
 export default function Explore() {
@@ -74,12 +74,41 @@ export default function Explore() {
         {/* Page Header */}
         <div className="explore-header">
           <div>
-            <h1>Shop All Products</h1>
+            <h1>Saranga Space</h1>
             <p className="explore-sub">Discover our complete Ayurvedic collection</p>
           </div>
         </div>
 
-        {/* Search & Filters Bar */}
+        {/* Category Filter Chips (Above Search Bar) */}
+        <div className="explore-category-filter">
+          <button
+            className={`explore-category-item ${!selectedCategory ? 'active' : ''}`}
+            onClick={() => setSelectedCategory(null)}
+          >
+            <div className="explore-category-img-wrap">
+              <Leaf size={18} />
+            </div>
+            <span className="explore-category-name">All</span>
+          </button>
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              className={`explore-category-item ${selectedCategory === cat.id ? 'active' : ''}`}
+              onClick={() => setSelectedCategory(cat.id === selectedCategory ? null : cat.id)}
+            >
+              <div className="explore-category-img-wrap">
+                {cat.image_url ? (
+                  <img src={getImageUrl(cat.image_url)} alt={cat.name} className="explore-category-img" />
+                ) : (
+                  <Leaf size={18} />
+                )}
+              </div>
+              <span className="explore-category-name">{cat.name}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Search & Filters Bar (Below Categories) */}
         <div className="explore-controls">
           <form className="explore-search" onSubmit={handleSearch}>
             <Search size={18} className="explore-search-icon" />
@@ -98,22 +127,13 @@ export default function Explore() {
           </form>
 
           <div className="explore-filter-row">
-            <button
-              className={`btn btn-secondary btn-sm ${showFilters ? 'btn-active' : ''}`}
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <SlidersHorizontal size={16} />
-              Filters {activeFilters > 0 && <span className="filter-badge">{activeFilters}</span>}
-            </button>
             <select
               className="form-input form-select explore-sort"
               value={sortBy}
               onChange={e => setSortBy(e.target.value)}
             >
-              <option value="newest">Newest First</option>
-              <option value="price_asc">Price: Low to High</option>
-              <option value="price_desc">Price: High to Low</option>
-              <option value="rating">Top Rated</option>
+              <option value="newest">New Arrivals</option>
+              <option value="rating">Best Sellers</option>
             </select>
             {activeFilters > 0 && (
               <button className="btn btn-ghost btn-sm" onClick={clearFilters}>
@@ -122,27 +142,6 @@ export default function Explore() {
             )}
           </div>
         </div>
-
-        {/* Category Filter Chips */}
-        {showFilters && (
-          <div className="explore-category-filter">
-            <button
-              className={`category-filter-chip ${!selectedCategory ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(null)}
-            >
-              All
-            </button>
-            {categories.map(cat => (
-              <button
-                key={cat.id}
-                className={`category-filter-chip ${selectedCategory === cat.id ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(cat.id === selectedCategory ? null : cat.id)}
-              >
-                {cat.name}
-              </button>
-            ))}
-          </div>
-        )}
 
         {/* Results Count */}
         {!loading && (
