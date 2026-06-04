@@ -15,7 +15,8 @@ const FOUR_STEP = [
 
 export default function Home() {
   const { categories, loading: catLoading } = useCategories();
-  const [products, setProducts] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
+  const [bestSellers, setBestSellers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -75,9 +76,15 @@ export default function Home() {
   const fetchHomeData = async () => {
     setLoading(true);
     try {
-      const prodRes = await api.get(`${ENDPOINTS.PRODUCTS}?new_arrivals=true&limit=8`);
-      if (prodRes.data) {
-        setProducts(Array.isArray(prodRes.data) ? prodRes.data : (prodRes.data.products || []));
+      const [newRes, bestRes] = await Promise.all([
+        api.get(`${ENDPOINTS.PRODUCTS}?new_arrivals=true&limit=8`),
+        api.get('/products/best-sellers')
+      ]);
+      if (newRes.data) {
+        setNewArrivals(Array.isArray(newRes.data) ? newRes.data : (newRes.data.products || []));
+      }
+      if (bestRes.data) {
+        setBestSellers(Array.isArray(bestRes.data) ? bestRes.data : (bestRes.data.products || []));
       }
     } catch { }
     setLoading(false);
@@ -180,9 +187,9 @@ export default function Home() {
                 <div key={i} className="skeleton" style={{ width: 260, height: 420, borderRadius: 24, background: '#efe7da', opacity: 0.6, margin: '0 auto' }} />
               ))}
             </div>
-          ) : products.length > 0 ? (
+          ) : newArrivals.length > 0 ? (
             <div className="new-arrivals-grid-custom">
-              {products.map(p => (
+              {newArrivals.map(p => (
                 <Link to={`/product/${p.id}`} key={p.id} className="new-arrival-card">
                   <div className="new-arrival-img-wrap">
                     <img src={getImageUrl(p.image_url)} alt={p.name} className="new-arrival-img" />
@@ -199,6 +206,47 @@ export default function Home() {
           ) : (
             <p className="text-center" style={{ color: 'var(--text-light)', padding: '40px 0' }}>
               No products available yet.
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* ── OUR BEST SELLERS ── */}
+      <section className="new-arrivals-section" style={{ backgroundColor: '#FAF8F5', borderTop: '1px solid #efe7da', padding: '80px 0' }}>
+        <div className="container-large">
+          <div className="section-header-centered">
+            <span className="section-subtitle-ayur">Customer Favorites</span>
+            <h2 className="section-title-flat">Our Best Sellers</h2>
+            <p className="section-desc-ayur">
+              Explore our most loved and highly-rated products, chosen by our community for their exceptional quality and results.
+            </p>
+          </div>
+
+          {loading ? (
+            <div className="new-arrivals-grid-custom">
+              {Array(8).fill(0).map((_, i) => (
+                <div key={i} className="skeleton" style={{ width: 260, height: 420, borderRadius: 24, background: '#efe7da', opacity: 0.6, margin: '0 auto' }} />
+              ))}
+            </div>
+          ) : bestSellers.length > 0 ? (
+            <div className="best-sellers-scroll-row">
+              {bestSellers.map(p => (
+                <Link to={`/product/${p.id}`} key={p.id} className="new-arrival-card" style={{ backgroundColor: '#F3EEE6', flexShrink: 0 }}>
+                  <div className="new-arrival-img-wrap">
+                    <img src={getImageUrl(p.image_url)} alt={p.name} className="new-arrival-img" />
+                  </div>
+                  <div className="new-arrival-info" style={{ backgroundColor: '#F3EEE6' }}>
+                    <h3 className="new-arrival-name">{p.name.toUpperCase()}</h3>
+                    <span className="new-arrival-category">
+                      {p.category_name ? p.category_name.toUpperCase() : p.category ? p.category.toUpperCase() : 'CAPSULES'}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center" style={{ color: 'var(--text-light)', padding: '40px 0' }}>
+              No best sellers available yet.
             </p>
           )}
         </div>

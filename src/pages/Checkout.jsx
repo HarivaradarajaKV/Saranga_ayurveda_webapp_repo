@@ -176,7 +176,7 @@ export default function Checkout() {
           key: rzpOrder.key || rzpOrder.key_id || RAZORPAY_KEY,
           amount: rzpOrder.amount,
           currency: rzpOrder.currency || 'INR',
-          name: 'Saranga Ayurveda',
+          name: 'Saranga Ayurveda LLP',
           description: `Order #${order.id}`,
           order_id: rzpOrder.id,
           prefill: {
@@ -184,7 +184,7 @@ export default function Checkout() {
             email: user?.email || '',
             contact: selectedAddress.phone_number || '',
           },
-          theme: { color: '#694d21' },
+          theme: { color: '#2b3a1a' },
           handler: async (response) => {
             try {
               await api.post('/razorpay/verify-payment', {

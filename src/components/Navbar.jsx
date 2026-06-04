@@ -89,8 +89,12 @@ export default function Navbar() {
             <ChevronDown size={14} className={`dropdown-chevron ${aboutOpen ? 'rotated' : ''}`} />
             {aboutOpen && (
               <div className="navbar-dropdown">
-                <Link to="/about" className="navbar-dropdown-item">Saranga Sampradaya</Link>
-                <div className="navbar-dropdown-divider" />
+                {isAuthenticated && (
+                  <>
+                    <Link to="/about" className="navbar-dropdown-item">Saranga Sampradaya</Link>
+                    <div className="navbar-dropdown-divider" />
+                  </>
+                )}
                 <Link to="/legal/privacy-policy" className="navbar-dropdown-item">Privacy Policy</Link>
                 <Link to="/legal/terms" className="navbar-dropdown-item">Terms and Conditions</Link>
                 <Link to="/legal/shipping" className="navbar-dropdown-item">Shipping Policy</Link>
@@ -181,7 +185,7 @@ export default function Navbar() {
           <div className="container">
             <Link to="/" className="mobile-nav-link">Home</Link>
             <Link to="/explore" className="mobile-nav-link">Saranga Space</Link>
-            <Link to="/about" className="mobile-nav-link">Saranga Sampradaya</Link>
+            {isAuthenticated && <Link to="/about" className="mobile-nav-link">Saranga Sampradaya</Link>}
             <a href="#footer" className="mobile-nav-link" onClick={scrollToFooter}>Contact Us</a>
             <div className="navbar-dropdown-divider" style={{ margin: '16px 0' }}></div>
             {isAuthenticated ? (

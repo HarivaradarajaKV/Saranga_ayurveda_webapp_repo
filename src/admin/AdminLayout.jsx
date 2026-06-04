@@ -17,6 +17,7 @@ const NAV = [
   { to: '/admin/coupons', label: 'Coupons', icon: <Tag size={18} /> },
   { to: '/admin/reviews', label: 'Reviews', icon: <Star size={18} /> },
   { to: '/admin/new-arrivals', label: 'New Arrivals', icon: <Sparkles size={18} /> },
+  { to: '/admin/best-sellers', label: 'Best Sellers', icon: <Star size={18} /> },
 ];
 
 export default function AdminLayout() {

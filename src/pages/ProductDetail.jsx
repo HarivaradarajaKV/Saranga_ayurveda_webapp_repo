@@ -267,7 +267,13 @@ export default function ProductDetail() {
                 {product.usage_instructions && (
                   <div className="product-extra-item">
                     <strong>How to Use</strong>
-                    <p>{product.usage_instructions}</p>
+                    <p>
+                      {String(product.usage_instructions)
+                        .split('\n')
+                        .map(inst => inst.replace(/^\s*(?:step\s*\d+\s*[:.-]?\s*|\d+\s*[:.-]\s*)/i, '').trim())
+                        .filter(Boolean)
+                        .join(' ')}
+                    </p>
                   </div>
                 )}
               </div>

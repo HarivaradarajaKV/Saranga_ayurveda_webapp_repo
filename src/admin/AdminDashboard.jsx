@@ -40,6 +40,7 @@ export default function AdminDashboard() {
     { label: 'Combo Deals', desc: 'Group products for special deals.', to: '/admin/combos', icon: <Gift size={22} />, color: '#ef4444', bg: '#fef2f2' },
     { label: 'Reviews', desc: 'Monitor rating & feedback.', to: '/admin/reviews', icon: <Star size={22} />, color: '#facc15', bg: '#fefce8' },
     { label: 'New Arrivals', desc: 'Select home page featured products.', to: '/admin/new-arrivals', icon: <Sparkles size={22} />, color: '#d946ef', bg: '#fdf4ff' },
+    { label: 'Best Sellers', desc: 'Pin best selling products on homepage.', to: '/admin/best-sellers', icon: <Star size={22} />, color: '#f59e0b', bg: '#fefce8' },
   ];
 
   const STATUS_COLORS = { pending: '#f59e0b', processing: '#3b82f6', shipped: '#8b5cf6', delivered: '#22c55e', cancelled: '#ef4444' };
