@@ -23,17 +23,27 @@ export function WishlistProvider({ children }) {
 
   const addToWishlist = async (productId) => {
     try {
-      await api.post(ENDPOINTS.WISHLIST, { productId });
+      await api.post(ENDPOINTS.WISHLIST, { product_id: productId, productId });
       await fetchWishlist();
       return { success: true };
     } catch { return { success: false }; }
   };
 
   const removeFromWishlist = async (productId) => {
+    const item = items.find(i => (i.product_id || i.id) === productId);
+    const wishlistId = item ? (item.product_id ? item.id : productId) : productId;
+
     try {
-      await api.delete(ENDPOINTS.WISHLIST_ITEM(productId));
+      await api.delete(ENDPOINTS.WISHLIST_ITEM(wishlistId));
       setItems(prev => prev.filter(i => (i.product_id || i.id) !== productId));
-    } catch { await fetchWishlist(); }
+    } catch {
+      try {
+        await api.delete(ENDPOINTS.WISHLIST_ITEM(productId));
+        setItems(prev => prev.filter(i => (i.product_id || i.id) !== productId));
+      } catch {
+        await fetchWishlist();
+      }
+    }
   };
 
   const isInWishlist = (productId) =>

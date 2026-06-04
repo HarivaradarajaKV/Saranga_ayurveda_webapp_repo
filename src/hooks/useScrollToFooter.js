@@ -7,13 +7,15 @@ export const useScrollToFooter = () => {
   const scrollToFooter = (e) => {
     if (e) e.preventDefault();
     
-    const footer = document.getElementById('footer');
-    if (footer) {
-      footer.scrollIntoView({ behavior: 'smooth' });
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollToFooter: true } });
     } else {
-      // If footer not found (maybe on a page that doesn't have it, though Layout has it)
-      // Or if we need to navigate first? Layout is on almost all routes.
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      const footer = document.getElementById('footer');
+      if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }
     }
   };
 

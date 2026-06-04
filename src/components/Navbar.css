@@ -6,7 +6,11 @@
   right: 0;
   z-index: 900;
   background: transparent;
-  transition: background 0.4s ease, box-shadow 0.4s ease;
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), background 0.4s ease, box-shadow 0.4s ease;
+}
+.navbar-hidden {
+  transform: translateY(-100%);
+  pointer-events: none;
 }
 .navbar-scrolled {
   background: rgba(255, 252, 247, 0.97);
@@ -244,11 +248,14 @@
 
 /* ── MOBILE ── */
 .navbar-hamburger { display: none; }
+.mobile-search-btn { display: none !important; }
 
 @media (max-width: 992px) {
   .navbar-center { display: none; }
   .navbar-hamburger { display: flex; }
+  .mobile-search-btn { display: flex !important; }
   .navbar-inner { padding: 10px 0; min-height: 58px; }
+  .hide-on-mobile { display: none !important; }
 }
 
 .navbar-mobile-menu {

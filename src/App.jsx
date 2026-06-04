@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
@@ -17,6 +17,10 @@ import CategoryDetail from './pages/CategoryDetail';
 import ProductDetail from './pages/ProductDetail';
 import Search from './pages/Search';
 import About from './pages/About';
+import Donate from './pages/Donate';
+import Foundation from './pages/Foundation';
+import Careers from './pages/Careers';
+import Contact from './pages/Contact';
 import ComboOffers from './pages/deals/ComboOffers';
 import ComboDetail from './pages/deals/ComboDetail';
 import FlashSale from './pages/deals/FlashSale';
@@ -63,6 +67,7 @@ import './styles/global.css';
 function Layout({ children }) {
   const { isAuthenticated, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!loading && isAuthenticated && isAdmin()) {
@@ -82,7 +87,7 @@ function Layout({ children }) {
     <>
       <Navbar />
       <main className="page-content">{children}</main>
-      <Footer />
+      {location.pathname === '/' && <Footer />}
     </>
   );
 }
@@ -104,6 +109,10 @@ export default function App() {
                   <Route path="/product/:id" element={<Layout><ProductDetail /></Layout>} />
                   <Route path="/search" element={<Layout><Search /></Layout>} />
                   <Route path="/about" element={<Layout><About /></Layout>} />
+                  <Route path="/donate" element={<Layout><Donate /></Layout>} />
+                  <Route path="/foundation" element={<Foundation />} />
+                  <Route path="/careers" element={<Layout><Careers /></Layout>} />
+                  <Route path="/contact-us" element={<Layout><Contact /></Layout>} />
                   <Route path="/deals/combo-offers" element={<Layout><ComboOffers /></Layout>} />
                   <Route path="/deals/combo/:id" element={<Layout><ComboDetail /></Layout>} />
                   <Route path="/deals/flash-sale" element={<Layout><FlashSale /></Layout>} />

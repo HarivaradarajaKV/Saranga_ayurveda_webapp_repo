@@ -1,7 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import api, { ENDPOINTS } from '../../api/api';
+import api, { ENDPOINTS, getImageUrl } from '../../api/api';
 import { Tag } from 'lucide-react';
+
+const getComboImageUrl = (combo) => {
+  const name = (combo.name || combo.title || '').trim().toLowerCase();
+  if (name.includes('dandruff')) {
+    return '/images/combos/Anti Dandruff Kit.png';
+  }
+  if (name.includes('baby')) {
+    return '/images/combos/Baby Combo.png';
+  }
+  if (name.includes('hair')) {
+    return '/images/combos/Hair Growth Kit.png';
+  }
+  if (combo.image_url) {
+    return getImageUrl(combo.image_url);
+  }
+  return '/images/logo.png';
+};
 
 export default function ComboOffers() {
   const [combos, setCombos] = useState([]);
@@ -37,23 +54,44 @@ export default function ComboOffers() {
           </div>
         ) : (
           <div className="grid-3">
-            {combos.map(combo => (
-              <Link key={combo.id} to={`/deals/combo/${combo.id}`} className="card" style={{ display: 'block', padding: 24, position: 'relative', overflow: 'visible' }}>
-                {(combo.discount_amount || (combo.original_price && combo.combo_price)) && (
-                  <div style={{ position: 'absolute', top: -10, right: 16, background: 'var(--danger)', color: '#fff', fontSize: '0.72rem', fontWeight: 700, padding: '4px 12px', borderRadius: 100 }}>
-                    SAVE ₹{combo.discount_amount || (parseFloat(combo.original_price) - parseFloat(combo.combo_price || combo.price)).toFixed(0)}
+            {combos.map(combo => {
+              const originalPrice = combo.subtotal || combo.original_price;
+              const comboPrice = combo.total || combo.combo_price || combo.price;
+              const discountVal = (originalPrice && comboPrice) ? (parseFloat(originalPrice) - parseFloat(comboPrice)) : (combo.discount_amount || combo.discount || 0);
+
+              return (
+                <Link key={combo.id} to={`/deals/combo/${combo.id}`} className="card" style={{ display: 'flex', flexDirection: 'column', padding: 24, position: 'relative', overflow: 'visible', textDecoration: 'none', minHeight: 320 }}>
+                  {parseFloat(discountVal) > 0 && (
+                    <div style={{ position: 'absolute', top: -10, right: 16, background: 'var(--danger)', color: '#fff', fontSize: '0.72rem', fontWeight: 700, padding: '4px 12px', borderRadius: 100 }}>
+                      SAVE ₹{parseFloat(discountVal).toFixed(0)}
+                    </div>
+                  )}
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: 'var(--secondary)', marginBottom: 8 }}>Combo Pack</div>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', color: 'var(--text)', marginBottom: 6 }}>{combo.title || combo.name}</h3>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 8 }}>{combo.description}</p>
+                  
+                  {/* Single Combo Image */}
+                  <div style={{ width: '100%', height: 160, borderRadius: 12, overflow: 'hidden', marginBottom: 12, background: '#FAF8F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img 
+                      src={getComboImageUrl(combo)} 
+                      alt={combo.title || combo.name} 
+                      style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                      onError={e => { e.target.src = 'https://via.placeholder.com/200?text=Combo+Pack'; }} 
+                    />
                   </div>
-                )}
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, color: 'var(--secondary)', marginBottom: 8 }}>Combo Pack</div>
-                <h3 style={{ fontFamily: 'var(--font-serif)', color: 'var(--text)', marginBottom: 10 }}>{combo.name}</h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 16 }}>{combo.description}</p>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
-                  <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--primary)' }}>₹{combo.combo_price || combo.price}</span>
-                  {combo.original_price && <span style={{ fontSize: '0.9rem', color: 'var(--text-light)', textDecoration: 'line-through' }}>₹{combo.original_price}</span>}
-                </div>
-                <div style={{ marginTop: 16, color: 'var(--primary)', fontWeight: 600, fontSize: '0.88rem' }}>View Details →</div>
-              </Link>
-            ))}
+
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginTop: 'auto' }}>
+                    <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--primary)' }}>₹{parseFloat(comboPrice || 0).toFixed(0)}</span>
+                    {originalPrice && parseFloat(originalPrice) > parseFloat(comboPrice || 0) && (
+                      <span style={{ fontSize: '0.9rem', color: 'var(--text-light)', textDecoration: 'line-through' }}>₹{parseFloat(originalPrice).toFixed(0)}</span>
+                    )}
+                  </div>
+                  <div style={{ marginTop: 12, color: 'var(--primary)', fontWeight: 600, fontSize: '0.88rem', borderTop: '1px solid var(--border-light)', paddingTop: 10 }}>
+                    View Details →
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>

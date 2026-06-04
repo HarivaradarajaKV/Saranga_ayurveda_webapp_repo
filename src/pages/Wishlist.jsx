@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
 import { getImageUrl } from '../api/api';
-import { Heart, Trash2, ShoppingCart } from 'lucide-react';
+import { Heart, Trash2, ShoppingCart, Leaf, Plus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import './Wishlist.css';
+import '../components/ProductCard.css';
 import { useToast } from '../context/ToastContext';
 
 export default function Wishlist() {
@@ -25,50 +27,93 @@ export default function Wishlist() {
   return (
     <div className="wishlist-page page-fade-in" style={{ paddingTop: 40, paddingBottom: 80 }}>
       <div className="container">
-        <h1 style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary)', marginBottom: 28 }}>
+        <h1 style={{ fontFamily: 'var(--font-serif)', color: '#2E5D34', marginBottom: 28 }}>
           My Wishlist <span style={{ fontSize: '1rem', fontWeight: 400, color: 'var(--text-muted)' }}>({items.length})</span>
         </h1>
-        <div className="grid-4">
+        <div className="new-arrivals-grid-custom">
           {items.map(item => {
             const price = parseFloat(item.price || 0);
             const offer = parseFloat(item.offer_percentage || 0);
             const discounted = price * (1 - offer / 100);
             const pid = item.product_id || item.id;
+
+            const handleAddToCart = async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              const r = await addToCart(pid, 1);
+              if (r?.success !== false) {
+                toast.success(`${item.name} added to cart!`);
+              } else {
+                toast.error(r?.error || 'Failed to add to cart');
+              }
+            };
+
+            const handleRemove = async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              await removeFromWishlist(pid);
+              toast.success('Removed from wishlist');
+            };
+
             return (
-              <div key={item.id} className="card" style={{ overflow: 'hidden' }}>
-                <Link to={`/product/${pid}`}>
-                  <div style={{ height: 200, overflow: 'hidden', background: 'var(--surface)' }}>
-                    <img src={getImageUrl(item.image_url)} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => e.target.src = 'https://via.placeholder.com/200'} />
+              <Link key={item.id} to={`/product/${pid}`} className="new-arrival-card">
+                <div className="new-arrival-img-wrap">
+                  {/* Decorative Leaves inside image border */}
+                  <div className="new-arrival-leaves-dec">
+                    <Leaf size={18} className="dec-leaf-1" />
+                    <Leaf size={12} className="dec-leaf-2" />
                   </div>
-                </Link>
-                <div className="card-body">
-                  <Link to={`/product/${pid}`}>
-                    <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: 8, color: 'var(--text)' }}>{item.name}</div>
-                  </Link>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 12 }}>
-                    <span style={{ fontWeight: 700, color: 'var(--primary)' }}>₹{discounted.toFixed(0)}</span>
-                    {offer > 0 && <span style={{ fontSize: '0.8rem', color: 'var(--text-light)', textDecoration: 'line-through' }}>₹{price.toFixed(0)}</span>}
+
+                  {/* Wishlist Heart Button -> Replaced with Trash/Delete Button */}
+                  <button 
+                    className="new-arrival-wishlist-btn active"
+                    style={{ color: '#e53e3e', backgroundColor: 'rgba(250, 248, 245, 0.95)' }}
+                    onClick={handleRemove}
+                    title="Remove from wishlist"
+                  >
+                    <Trash2 size={15} />
+                  </button>
+
+                  <img
+                    src={getImageUrl(item.image_url)}
+                    alt={item.name}
+                    className="new-arrival-img"
+                    onError={e => { e.target.src = 'https://via.placeholder.com/300x300?text=No+Image'; }}
+                    loading="lazy"
+                  />
+
+                  {/* Decorative Capsules near bottom-right of bottle */}
+                  <div className="new-arrival-capsules-dec">
+                    <span className="dec-capsule capsule-1" />
+                    <span className="dec-capsule capsule-2" />
                   </div>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <button
-                      className="btn btn-primary btn-sm"
-                      style={{ flex: 1 }}
-                      onClick={async () => {
-                        const r = await addToCart(pid, 1);
-                        if (r?.success !== false) toast.success('Added to cart!');
-                      }}
+                </div>
+                <div className="new-arrival-info">
+                  <span className="new-arrival-category">
+                    {item.category_name ? item.category_name.toUpperCase() : 'WELLNESS'}
+                  </span>
+                  <h3 className="new-arrival-name" title={item.name}>{item.name}</h3>
+                  <div className="new-arrival-footer">
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span className="new-arrival-price">
+                        ₹{discounted.toFixed(0)}
+                      </span>
+                      {offer > 0 && (
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-light)', textDecoration: 'line-through', marginTop: 2 }}>
+                          ₹{price.toFixed(0)}
+                        </span>
+                      )}
+                    </div>
+                    <button 
+                      className="new-arrival-add-btn"
+                      onClick={handleAddToCart}
+                      title="Add to cart"
                     >
-                      <ShoppingCart size={14} /> Add to Cart
-                    </button>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => { removeFromWishlist(pid); toast.success('Removed from wishlist'); }}
-                    >
-                      <Trash2 size={14} />
+                      <Plus size={14} />
                     </button>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

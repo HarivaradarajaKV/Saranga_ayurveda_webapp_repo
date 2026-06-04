@@ -40,23 +40,27 @@ export default function ComboDetail() {
   };
 
   const products = combo.products || combo.items || [];
-  const savings = combo.original_price ? parseFloat(combo.original_price) - parseFloat(combo.combo_price || combo.price) : combo.discount_amount || 0;
+  const originalPrice = combo.subtotal || combo.original_price;
+  const comboPrice = combo.total || combo.combo_price || combo.price;
+  const savings = (originalPrice && comboPrice) ? (parseFloat(originalPrice) - parseFloat(comboPrice)) : (combo.discount_amount || combo.discount || 0);
 
   return (
     <div className="page-content page-fade-in">
       <div className="container-sm">
         <Link to="/deals/combo-offers" className="btn btn-ghost btn-sm mb-16"><ArrowLeft size={16} /> Back to Combos</Link>
         <div className="card card-body" style={{ marginBottom: 24 }}>
-          {savings > 0 && (
+          {parseFloat(savings) > 0 && (
             <div style={{ background: 'var(--danger)', color: '#fff', fontSize: '0.8rem', fontWeight: 700, padding: '6px 14px', borderRadius: 100, width: 'fit-content', marginBottom: 14 }}>
               SAVE ₹{parseFloat(savings).toFixed(0)} on this combo
             </div>
           )}
-          <h1 style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary)', marginBottom: 10 }}>{combo.name}</h1>
+          <h1 style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary)', marginBottom: 10 }}>{combo.title || combo.name}</h1>
           <p style={{ color: 'var(--text-muted)', marginBottom: 20 }}>{combo.description}</p>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 24 }}>
-            <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)' }}>₹{combo.combo_price || combo.price}</span>
-            {combo.original_price && <span style={{ fontSize: '1.1rem', color: 'var(--text-light)', textDecoration: 'line-through' }}>₹{combo.original_price}</span>}
+            <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)' }}>₹{parseFloat(comboPrice || 0).toFixed(0)}</span>
+            {originalPrice && parseFloat(originalPrice) > parseFloat(comboPrice || 0) && (
+              <span style={{ fontSize: '1.1rem', color: 'var(--text-light)', textDecoration: 'line-through' }}>₹{parseFloat(originalPrice).toFixed(0)}</span>
+            )}
           </div>
           <button className="btn btn-primary btn-lg" onClick={handleAddAll} disabled={adding}>
             <ShoppingCart size={18} /> {adding ? 'Adding...' : 'Add All to Cart'}

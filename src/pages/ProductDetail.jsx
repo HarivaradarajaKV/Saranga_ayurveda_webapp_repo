@@ -33,6 +33,22 @@ export default function ProductDetail() {
   const [submittingReview, setSubmittingReview] = useState(false);
   const [imageErrors, setImageErrors] = useState({});
 
+  const images = product ? Array.from(new Set([
+    ...(Array.isArray(product.media) ? product.media.map(m => m.url) : []),
+    product.image_url,
+    product.image_url2,
+    product.image_url3,
+    product.image_url4
+  ].filter(Boolean))) : [];
+
+  useEffect(() => {
+    if (!images || images.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveImage(prev => (prev + 1) % images.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [images.length, activeImage]);
+
   useEffect(() => {
     if (id) { fetchProduct(); fetchReviews(); }
     window.scrollTo(0, 0);
@@ -112,7 +128,6 @@ export default function ProductDetail() {
     </div>
   );
 
-  const images = [product.image_url, product.image_url2, product.image_url3].filter(Boolean);
   const discountedPrice = product.price * (1 - (product.offer_percentage || 0) / 100);
   const inWishlist = isInWishlist(product.id);
   const avgRating = reviews.length > 0 ? (reviews.reduce((s, r) => s + (r.rating || 0), 0) / reviews.length).toFixed(1) : product.rating || 0;
@@ -349,7 +364,7 @@ export default function ProductDetail() {
               <h2 className="section-title">You May Also Like</h2>
               <Link to={`/category/${product.category_id}`} className="see-all">View All</Link>
             </div>
-            <div className="grid-4">
+            <div className="new-arrivals-grid-custom">
               {related.map(p => <ProductCard key={p.id} product={p} />)}
             </div>
           </div>
