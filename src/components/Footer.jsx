@@ -19,8 +19,14 @@ export default function Footer() {
             
             <div className="footer-download-section">
               <h4 className="footer-section-title">Download App</h4>
-              <p>Get it on <a href="#google-play" className="download-bold-link">Google Play</a></p>
-              <p>Download on the <a href="#app-store" className="download-bold-link">App Store</a></p>
+              <div className="footer-badge-container">
+                <a href="https://play.google.com/store" target="_blank" rel="noreferrer" className="footer-badge-link">
+                  <img src="/images/google-play-badge.svg" alt="Get it on Google Play" className="footer-badge-img" />
+                </a>
+                <a href="https://www.apple.com/app-store/" target="_blank" rel="noreferrer" className="footer-badge-link">
+                  <img src="/images/app-store-badge.svg" alt="Download on the App Store" className="footer-badge-img" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -39,7 +45,7 @@ export default function Footer() {
             <h4 className="footer-col-title">Connect With Us</h4>
             <ul className="footer-links-list">
               <li><a href="https://www.instagram.com/saranga_ayurveda" target="_blank" rel="noreferrer">Instagram</a></li>
-              <li><a href="#facebook">Facebook</a></li>
+              <li><a href="https://www.facebook.com" target="_blank" rel="noreferrer">Facebook</a></li>
             </ul>
           </div>
 
@@ -58,7 +64,7 @@ export default function Footer() {
             <h4 className="footer-col-title">Quick Links</h4>
             <ul className="footer-links-list">
               <li><Link to="/explore">Trending</Link></li>
-              <li><a href="#blogs">Blogs</a></li>
+              <li><Link to="/explore">Blogs</Link></li>
               <li><Link to="/contact-us">Contact Us</Link></li>
             </ul>
           </div>

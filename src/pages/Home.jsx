@@ -326,42 +326,7 @@ export default function Home() {
           ) : newArrivals.length > 0 ? (
             <div className="new-arrivals-grid-custom">
               {newArrivals.map(p => (
-                <Link to={`/product/${p.id}`} key={p.id} className="new-arrival-card">
-                  <div className="new-arrival-img-wrap">
-                    <div className="new-arrival-leaves-dec">
-                      <Leaf size={18} className="dec-leaf-1" />
-                      <Leaf size={12} className="dec-leaf-2" />
-                    </div>
-                    <button 
-                      className={`new-arrival-wishlist-btn ${isInWishlist(p.id) ? 'active' : ''}`}
-                      onClick={(e) => handleWishlist(e, p)}
-                    >
-                      <Heart size={15} fill={isInWishlist(p.id) ? 'currentColor' : 'none'} />
-                    </button>
-                    <img src={getImageUrl(p.image_url)} alt={p.name} className="new-arrival-img" />
-                    <div className="new-arrival-capsules-dec">
-                      <span className="dec-capsule capsule-1" />
-                      <span className="dec-capsule capsule-2" />
-                    </div>
-                  </div>
-                  <div className="new-arrival-info">
-                    <span className="new-arrival-category">
-                      {p.category_name ? p.category_name.toUpperCase() : p.category ? p.category.toUpperCase() : 'CAPSULES'}
-                    </span>
-                    <h3 className="new-arrival-name">{p.name}</h3>
-                    <div className="new-arrival-footer">
-                      <span className="new-arrival-price">
-                        ₹{p.price ? parseFloat(p.price).toFixed(2) : '0.00'}
-                      </span>
-                      <button 
-                        className="new-arrival-add-btn"
-                        onClick={(e) => handleAddToCart(e, p)}
-                      >
-                        <Plus size={14} />
-                      </button>
-                    </div>
-                  </div>
-                </Link>
+                <ProductCard key={p.id} product={p} />
               ))}
             </div>
           ) : (
@@ -392,19 +357,27 @@ export default function Home() {
             </div>
           ) : bestSellers.length > 0 ? (
             <div className="best-sellers-scroll-row">
-              {bestSellers.map(p => (
-                <Link to={`/product/${p.id}`} key={p.id} className="new-arrival-card" style={{ backgroundColor: '#F3EEE6', flexShrink: 0 }}>
-                  <div className="new-arrival-img-wrap">
-                    <img src={getImageUrl(p.image_url)} alt={p.name} className="new-arrival-img" />
-                  </div>
-                  <div className="new-arrival-info" style={{ backgroundColor: '#F3EEE6' }}>
-                    <h3 className="new-arrival-name">{p.name.toUpperCase()}</h3>
-                    <span className="new-arrival-category">
-                      {p.category_name ? p.category_name.toUpperCase() : p.category ? p.category.toUpperCase() : 'CAPSULES'}
-                    </span>
-                  </div>
-                </Link>
-              ))}
+              {bestSellers.map(p => {
+                const hasOffer = p.offer_percentage > 0;
+                return (
+                  <Link to={`/product/${p.id}`} key={p.id} className="new-arrival-card" style={{ backgroundColor: '#F3EEE6', flexShrink: 0 }}>
+                    {hasOffer && (
+                      <div className="new-arrival-offer-badge">
+                        {Math.round(p.offer_percentage)}% OFF
+                      </div>
+                    )}
+                    <div className="new-arrival-img-wrap">
+                      <img src={getImageUrl(p.image_url)} alt={p.name} className="new-arrival-img" />
+                    </div>
+                    <div className="new-arrival-info" style={{ backgroundColor: '#F3EEE6' }}>
+                      <h3 className="new-arrival-name">{p.name.toUpperCase()}</h3>
+                      <span className="new-arrival-category">
+                        {p.category_name ? p.category_name.toUpperCase() : p.category ? p.category.toUpperCase() : 'CAPSULES'}
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <p className="text-center" style={{ color: 'var(--text-light)', padding: '40px 0' }}>

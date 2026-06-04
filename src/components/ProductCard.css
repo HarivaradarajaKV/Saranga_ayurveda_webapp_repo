@@ -203,10 +203,41 @@
   width: 100%;
 }
 
+.new-arrival-price-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.new-arrival-original-price {
+  font-size: 0.75rem;
+  color: #8A8A8A;
+  text-decoration: line-through;
+  font-weight: 400;
+}
+
 .new-arrival-price {
   font-size: 0.85rem;
   font-weight: 600; /* Semi-bold price */
   color: #2D2D2D;
+}
+
+.new-arrival-offer-badge {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  background-color: #C85A49; /* Elegant terracotta red/rust */
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(200, 90, 73, 0.25);
+  pointer-events: none;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .new-arrival-wishlist-btn {

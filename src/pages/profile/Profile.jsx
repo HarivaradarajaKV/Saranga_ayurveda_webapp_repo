@@ -180,7 +180,7 @@ export default function Profile() {
         <div className="profile-logout-container">
           <button className="profile-logout-btn" onClick={handleLogout}>
             <LogOut size={20} />
-            <span>Logout</span>
+            <span>Sign Out</span>
           </button>
         </div>
 

@@ -55,8 +55,14 @@ export default function Wishlist() {
               toast.success('Removed from wishlist');
             };
 
+            const hasOffer = offer > 0;
             return (
               <Link key={item.id} to={`/product/${pid}`} className="new-arrival-card">
+                {hasOffer && (
+                  <div className="new-arrival-offer-badge">
+                    {Math.round(offer)}% OFF
+                  </div>
+                )}
                 <div className="new-arrival-img-wrap">
                   {/* Decorative Leaves inside image border */}
                   <div className="new-arrival-leaves-dec">
@@ -94,15 +100,15 @@ export default function Wishlist() {
                   </span>
                   <h3 className="new-arrival-name" title={item.name}>{item.name}</h3>
                   <div className="new-arrival-footer">
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span className="new-arrival-price">
-                        ₹{discounted.toFixed(0)}
-                      </span>
-                      {offer > 0 && (
-                        <span style={{ fontSize: '0.72rem', color: 'var(--text-light)', textDecoration: 'line-through', marginTop: 2 }}>
-                          ₹{price.toFixed(0)}
+                    <div className="new-arrival-price-wrap">
+                      {hasOffer && (
+                        <span className="new-arrival-original-price">
+                          ₹{price.toFixed(2)}
                         </span>
                       )}
+                      <span className="new-arrival-price">
+                        ₹{discounted.toFixed(2)}
+                      </span>
                     </div>
                     <button 
                       className="new-arrival-add-btn"

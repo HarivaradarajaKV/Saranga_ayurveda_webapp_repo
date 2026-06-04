@@ -20,11 +20,16 @@ export default function ProductCard({ product }) {
   if (!product) return null;
 
   const {
-    id, name, price = 0, category_name, category, image_url, stock_quantity = 0
+    id, name, price = 0, category_name, category, image_url, stock_quantity = 0, offer_percentage = 0
   } = product;
 
   const inWishlist = isInWishlist(id);
-  const displayPrice = price ? parseFloat(price).toFixed(2) : '0.00';
+  const hasOffer = offer_percentage > 0;
+  const originalPrice = parseFloat(price);
+  const discountedPrice = hasOffer ? originalPrice * (1 - offer_percentage / 100) : originalPrice;
+
+  const displayPrice = price ? discountedPrice.toFixed(2) : '0.00';
+  const displayOriginalPrice = price ? originalPrice.toFixed(2) : '0.00';
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
@@ -56,6 +61,11 @@ export default function ProductCard({ product }) {
 
   return (
     <Link to={`/product/${id}`} className="new-arrival-card">
+      {hasOffer && (
+        <div className="new-arrival-offer-badge">
+          {Math.round(offer_percentage)}% OFF
+        </div>
+      )}
       <div className="new-arrival-img-wrap">
         {/* Decorative Leaves inside image border */}
         <div className="new-arrival-leaves-dec">
@@ -92,9 +102,16 @@ export default function ProductCard({ product }) {
         </span>
         <h3 className="new-arrival-name">{name}</h3>
         <div className="new-arrival-footer">
-          <span className="new-arrival-price">
-            ₹{displayPrice}
-          </span>
+          <div className="new-arrival-price-wrap">
+            {hasOffer && (
+              <span className="new-arrival-original-price">
+                ₹{displayOriginalPrice}
+              </span>
+            )}
+            <span className="new-arrival-price">
+              ₹{displayPrice}
+            </span>
+          </div>
           <button 
             className={`new-arrival-add-btn ${adding ? 'loading' : ''}`}
             onClick={handleAddToCart}

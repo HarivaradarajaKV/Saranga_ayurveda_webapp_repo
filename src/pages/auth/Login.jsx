@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import api, { ENDPOINTS } from '../../api/api';
-import { Eye, EyeOff, Leaf } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { GoogleLogin } from '@react-oauth/google';
 import './Auth.css';
 
@@ -107,8 +107,10 @@ export default function Login() {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-logo">
-          <div className="auth-logo-icon"><Leaf size={20} /></div>
-          <div className="auth-logo-name">Saranga Ayurveda</div>
+          <Link to="/" className="auth-logo-link">
+            <img src="/images/logo.png" alt="Saranga Ayurveda" className="auth-logo-img" />
+            <img src="/images/name.png" alt="Saranga Ayurveda" className="auth-logo-name-img" />
+          </Link>
         </div>
         <h1 className="auth-title">Welcome Back</h1>
         <p className="auth-sub">Sign in to continue your Ayurvedic journey</p>
