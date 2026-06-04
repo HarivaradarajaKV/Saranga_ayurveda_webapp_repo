@@ -199,7 +199,7 @@ export default function ProductDetail() {
             <div className={`product-stock ${product.stock_quantity > 0 ? 'in-stock' : 'out-stock'}`}>
               <Package size={14} />
               {product.stock_quantity > 0
-                ? product.stock_quantity <= 5 ? `Only ${product.stock_quantity} left!` : 'In Stock'
+                ? product.stock_quantity <= 10 ? 'Selling Fast' : 'In Stock'
                 : 'Out of Stock'
               }
             </div>

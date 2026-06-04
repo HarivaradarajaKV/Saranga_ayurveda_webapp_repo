@@ -359,11 +359,17 @@ export default function Home() {
             <div className="best-sellers-scroll-row">
               {bestSellers.map(p => {
                 const hasOffer = p.offer_percentage > 0;
+                const isSellingFast = p.stock_quantity > 0 && p.stock_quantity <= 10;
                 return (
                   <Link to={`/product/${p.id}`} key={p.id} className="new-arrival-card" style={{ backgroundColor: '#F3EEE6', flexShrink: 0 }}>
                     {hasOffer && (
                       <div className="new-arrival-offer-badge">
                         {Math.round(p.offer_percentage)}% OFF
+                      </div>
+                    )}
+                    {isSellingFast && (
+                      <div className="new-arrival-stock-badge">
+                        Selling Fast
                       </div>
                     )}
                     <div className="new-arrival-img-wrap">

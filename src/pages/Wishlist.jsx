@@ -56,11 +56,17 @@ export default function Wishlist() {
             };
 
             const hasOffer = offer > 0;
+            const isSellingFast = item.stock_quantity > 0 && item.stock_quantity <= 10;
             return (
               <Link key={item.id} to={`/product/${pid}`} className="new-arrival-card">
                 {hasOffer && (
                   <div className="new-arrival-offer-badge">
                     {Math.round(offer)}% OFF
+                  </div>
+                )}
+                {isSellingFast && (
+                  <div className="new-arrival-stock-badge">
+                    Selling Fast
                   </div>
                 )}
                 <div className="new-arrival-img-wrap">

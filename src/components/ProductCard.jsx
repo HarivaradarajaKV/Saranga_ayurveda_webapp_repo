@@ -66,6 +66,11 @@ export default function ProductCard({ product }) {
           {Math.round(offer_percentage)}% OFF
         </div>
       )}
+      {stock_quantity > 0 && stock_quantity <= 10 && (
+        <div className="new-arrival-stock-badge">
+          Selling Fast
+        </div>
+      )}
       <div className="new-arrival-img-wrap">
         {/* Decorative Leaves inside image border */}
         <div className="new-arrival-leaves-dec">
