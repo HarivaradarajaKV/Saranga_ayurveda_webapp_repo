@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useToast } from '../context/ToastContext';
+import api from '../api/api';
 import './Donate.css';
 
 export default function Donate() {
@@ -8,12 +9,13 @@ export default function Donate() {
   const [currency, setCurrency] = useState('INR');
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(true);
-  const [showQRModal, setShowQRModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const presets = [100, 500, 1000, 1500];
 
-  const handleDonate = (e) => {
+  const handleDonate = async (e) => {
     e.preventDefault();
     if (!agreeTerms) {
       toast.warning('Please agree to the terms to proceed.');
@@ -23,9 +25,82 @@ export default function Donate() {
       toast.warning('Please enter a valid donation amount.');
       return;
     }
-    
-    const displayName = isAnonymous ? 'Anonymous' : (name.trim() || 'Donor');
-    toast.success(`Thank you, ${displayName}! Your donation of ${currency} ${amount} was successful.`);
+    if (!isAnonymous) {
+      if (!name.trim()) {
+        toast.warning('Please enter your name.');
+        return;
+      }
+      if (!phone.trim()) {
+        toast.warning('Please enter your phone number.');
+        return;
+      }
+    }
+
+    try {
+      setLoading(true);
+      const nameToUse = isAnonymous ? 'Anonymous' : name.trim();
+      const numericAmount = parseFloat(amount);
+
+      // Call public donation order endpoint
+      const res = await api.post('/razorpay/create-donation', {
+        amount: numericAmount,
+        donor_name: nameToUse,
+        is_anonymous: isAnonymous,
+        donor_phone: isAnonymous ? '' : phone.trim(),
+      });
+
+      const razorpayOrder = res.data;
+
+      if (!window.Razorpay) {
+        toast.error('Razorpay payment SDK not loaded. Please refresh page.');
+        setLoading(false);
+        return;
+      }
+
+      const options = {
+        key: razorpayOrder.key || razorpayOrder.key_id,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency || 'INR',
+        name: 'Saranga Ayurveda LLP',
+        description: `Donation by ${nameToUse}`,
+        order_id: razorpayOrder.id,
+        prefill: {
+          name: nameToUse,
+          contact: isAnonymous ? '' : phone.trim(),
+        },
+        theme: { color: '#2b3a1a' },
+        handler: async (response) => {
+          try {
+            await api.post('/razorpay/verify-donation-payment', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              donation_id: razorpayOrder.donation_id,
+            });
+            toast.success(`Thank you, ${nameToUse}! Your donation of ₹${numericAmount} was successful.`);
+            setName('');
+            setPhone('');
+            setAmount('500');
+          } catch (err) {
+            console.error('Donation verification error:', err);
+            toast.error('Donation payment verification failed.');
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            toast.info('Payment window closed.');
+          }
+        }
+      };
+
+      const rzpInstance = new window.Razorpay(options);
+      rzpInstance.open();
+    } catch (error) {
+      console.error('Donation error:', error);
+      toast.error(error.response?.data?.error || 'Failed to initiate donation. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -96,17 +171,28 @@ export default function Donate() {
               </label>
             </div>
 
-            {/* Name Input */}
+            {/* Name and Phone Inputs */}
             {!isAnonymous && (
-              <div className="donate-input-group">
-                <input 
-                  type="text" 
-                  className="donate-name-input"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your name"
-                />
-              </div>
+              <>
+                <div className="donate-input-group">
+                  <input 
+                    type="text" 
+                    className="donate-name-input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Enter your name"
+                  />
+                </div>
+                <div className="donate-input-group" style={{ marginTop: '12px' }}>
+                  <input 
+                    type="tel" 
+                    className="donate-name-input"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Enter your phone number"
+                  />
+                </div>
+              </>
             )}
 
             {/* Agree Terms Checkbox */}
@@ -126,8 +212,8 @@ export default function Donate() {
 
           {/* Action Buttons */}
           <div className="donate-actions">
-            <button className="donate-submit-btn" onClick={handleDonate}>
-              DONATE
+            <button className="donate-submit-btn" onClick={handleDonate} disabled={loading}>
+              {loading ? 'PROCESSING...' : 'DONATE'}
             </button>
           </div>
         </div>
