@@ -16,7 +16,18 @@ export default function SearchPage() {
       api.get(`${ENDPOINTS.PRODUCTS}?search=${encodeURIComponent(q)}&limit=40`)
         .then(res => {
           const d = res.data;
-          setProducts(Array.isArray(d) ? d : (d?.products || []));
+          let items = Array.isArray(d) ? d : (d?.products || []);
+          
+          // Strict frontend filter
+          const lowerQ = q.toLowerCase();
+          items = items.filter(p => {
+            const nameLower = (p.name || '').toLowerCase();
+            const catNameLower = (p.category_name || '').toLowerCase();
+            const catLower = (p.category || '').toLowerCase();
+            return nameLower.includes(lowerQ) || catNameLower.includes(lowerQ) || catLower.includes(lowerQ);
+          });
+          
+          setProducts(items);
         })
         .catch(() => setProducts([]))
         .finally(() => setLoading(false));
@@ -29,11 +40,11 @@ export default function SearchPage() {
         <h1 style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary)', marginBottom: 8 }}>Search Results</h1>
         {q && <p style={{ color: 'var(--text-muted)', marginBottom: 28 }}>Showing results for "<strong>{q}</strong>"</p>}
         {loading ? (
-          <div className="grid-4">
-            {Array(8).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 340, borderRadius: 14 }} />)}
+          <div className="new-arrivals-grid-custom">
+            {Array(8).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 300, borderRadius: 22 }} />)}
           </div>
         ) : products.length > 0 ? (
-          <div className="grid-4">
+          <div className="new-arrivals-grid-custom">
             {products.map(p => <ProductCard key={p.id} product={p} />)}
           </div>
         ) : (

@@ -4,55 +4,84 @@ import './Footer.css';
 export default function Footer() {
   return (
     <footer className="footer" id="footer">
-      <div className="container">
-        <h1 className="footer-main-title">Saranga Ayurveda</h1>
-        
-        <div className="footer-layout">
-          {/* Newsletter Column */}
-          <div className="footer-col newsletter-col">
-            <h3 className="footer-sub-title">Step Into a World of Ayurveda</h3>
-            <p className="footer-text">We'll tell you about monthly drops and Skin care tips. No spam, we promise.</p>
+      <div className="footer-container">
+        <div className="footer-grid">
+          {/* Column 1: Info and Download App */}
+          <div className="footer-col info-col">
+            <h3 className="footer-brand-title">Saranga Ayurveda</h3>
+            <div className="footer-info-details">
+              <p className="info-llp">Saranga Ayurveda LLP</p>
+              <p>Office: Bengaluru, Karnataka, India</p>
+              <p>Contact Number: +91 90081 45960</p>
+              <p>Email: <a href="mailto:sarangaconsumerhelp@gmail.com">sarangaconsumerhelp@gmail.com</a></p>
+              <p>Monday to Sunday - 10:00 AM to 05:00 PM</p>
+            </div>
             
-            <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-              <input type="email" placeholder="Enter your email" required />
-              <div className="newsletter-checkbox">
-                <input type="checkbox" id="subscribe" required />
-                <label htmlFor="subscribe">Yes, subscribe me to your newsletter.</label>
-              </div>
-              <button type="submit" className="join-btn">Join Now</button>
-            </form>
+            <div className="footer-download-section">
+              <h4 className="footer-section-title">Download App</h4>
+              <p>Get it on <a href="#google-play" className="download-bold-link">Google Play</a></p>
+              <p>Download on the <a href="#app-store" className="download-bold-link">App Store</a></p>
+            </div>
           </div>
 
-          {/* Links Column */}
+          {/* Column 2: Get To Know Us */}
           <div className="footer-col">
-            <h4 className="footer-col-title">Helpful Links</h4>
-            <ul className="footer-link-list">
+            <h4 className="footer-col-title">Get To Know Us</h4>
+            <ul className="footer-links-list">
+              <li><Link to="/about">Our Story</Link></li>
+              <li><Link to="/careers">Careers</Link></li>
+              <li><Link to="/careers">Internships</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Connect With Us */}
+          <div className="footer-col">
+            <h4 className="footer-col-title">Connect With Us</h4>
+            <ul className="footer-links-list">
+              <li><a href="https://www.instagram.com/saranga_ayurveda" target="_blank" rel="noreferrer">Instagram</a></li>
+              <li><a href="#facebook">Facebook</a></li>
+            </ul>
+          </div>
+
+          {/* Column 4: Let Us Help You */}
+          <div className="footer-col">
+            <h4 className="footer-col-title">Let Us Help You</h4>
+            <ul className="footer-links-list">
+              <li><Link to="/profile">My Account</Link></li>
+              <li><Link to="/profile/orders">My Orders</Link></li>
+              <li><Link to="/profile/orders">Track My Order</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 5: Quick Links */}
+          <div className="footer-col">
+            <h4 className="footer-col-title">Quick Links</h4>
+            <ul className="footer-links-list">
+              <li><Link to="/explore">Trending</Link></li>
+              <li><a href="#blogs">Blogs</a></li>
+              <li><Link to="/contact-us">Contact Us</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 6: Support Links */}
+          <div className="footer-col">
+            <h4 className="footer-col-title">Support Links</h4>
+            <ul className="footer-links-list">
               <li><Link to="/legal/terms">Terms & Conditions</Link></li>
               <li><Link to="/legal/privacy-policy">Privacy Policy</Link></li>
+              <li><Link to="/legal/shipping">Shipping and Delivery Policy</Link></li>
+              <li><Link to="/legal/refund">Return/Cancellation Policy</Link></li>
               <li><Link to="/legal/refund">Refund Policy</Link></li>
-              <li><Link to="/legal/shipping">Shipping Policy</Link></li>
+              <li><Link to="/faqs">FAQs</Link></li>
+              <li><Link to="/help">Help</Link></li>
             </ul>
-          </div>
-
-          {/* Contact Column */}
-          <div className="footer-col">
-            <h4 className="footer-col-title">Contact Us</h4>
-            <ul className="footer-link-list">
-              <li><a href="mailto:sarangaconsumershelp@gmail.com">sarangaconsumershelp@gmail.com</a></li>
-              <li><a href="tel:+919008145980">+91 9008145980</a></li>
-              <li><span style={{ fontSize: '0.9rem', color: '#333', fontWeight: 500 }}>Saranga Ayurveda, Bengaluru, India</span></li>
-            </ul>
-            
-            <div className="footer-social-wrap" style={{ marginTop: 24 }}>
-              <a href="https://www.instagram.com/saranga_ayurveda" target="_blank" rel="noreferrer" style={{ display: 'block', marginBottom: 8 }}>Instagram</a>
-              <a href="https://www.whatsapp.com/channel/0029Vb76UKxL2ATwk9Z5Sd1z" target="_blank" rel="noreferrer">WhatsApp Channel</a>
-            </div>
           </div>
         </div>
 
-        <div className="footer-copyright-area">
-          <p>© 2025 by Saranga Ayurveda</p>
-          <p className="developed-by">Developed and Maintained by Curiospry Technologies Pvt Ltd</p>
+        {/* Footer Bottom copyright */}
+        <div className="footer-bottom-copyright">
+          <p>© 2026 by Saranga Ayurveda. All Rights Reserved</p>
+          <p className="footer-made-in">Proudly Made In India</p>
         </div>
       </div>
     </footer>

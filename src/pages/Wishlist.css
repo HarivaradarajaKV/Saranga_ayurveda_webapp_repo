@@ -1,0 +1,55 @@
+/* ================================
+   WISHLIST PAGE — Theme Overrides
+   ================================ */
+
+.wishlist-page {
+  background-color: #FFF5EE;
+  min-height: 100vh;
+}
+
+/* Title */
+.wishlist-page h1 {
+  font-family: var(--font-serif);
+  color: #2E5D34 !important;
+}
+
+/* Product price */
+.wishlist-page .wishlist-price {
+  color: #2E5D34 !important;
+}
+
+/* Empty state icon circle */
+.wishlist-page .empty-state-icon {
+  background: #e8f5e8;
+  color: #2E5D34;
+}
+
+/* Empty state heading */
+.wishlist-page .empty-state h2 {
+  color: #2E5D34;
+}
+
+/* Primary buttons — green */
+.wishlist-page .btn-primary {
+  background: #2E5D34 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.wishlist-page .btn-primary:hover {
+  background: #224426 !important;
+  transform: translateY(-1px);
+}
+
+/* Product cards */
+.wishlist-page .card {
+  background: #ffffff;
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.wishlist-page .card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}

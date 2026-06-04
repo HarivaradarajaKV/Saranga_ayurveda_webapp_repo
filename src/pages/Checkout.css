@@ -1,8 +1,12 @@
-.checkout-page { padding-bottom: 60px; }
+.checkout-page { 
+  padding-bottom: 60px; 
+  background-color: #FFF5EE; 
+  min-height: 100vh;
+}
 .checkout-title { font-family: var(--font-serif); color: var(--primary); margin-bottom: 28px; }
 .checkout-grid { display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: flex-start; }
 .checkout-main { display: flex; flex-direction: column; gap: 24px; }
-.checkout-step { background: var(--bg); border-radius: var(--radius); border: 1px solid var(--border-light); padding: 24px; box-shadow: var(--shadow-sm); }
+.checkout-step { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border-light); padding: 24px; box-shadow: var(--shadow-sm); }
 .checkout-step-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
 .checkout-step-header h2 { font-size: 1.1rem; font-weight: 700; color: var(--text); margin: 0; }
 .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -27,9 +31,9 @@
 
 /* Payment Methods */
 .payment-methods { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-.payment-method-card { display: flex; align-items: center; padding: 16px; border: 1px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-.payment-method-card:hover { border-color: var(--primary); background-color: #fcf9f5; }
-.payment-method-card.selected { border-color: var(--primary); background-color: #f8f6f0; box-shadow: 0 4px 8px rgba(105, 77, 33, 0.05); }
+.payment-method-card { display: flex; align-items: center; padding: 16px; border: 1.5px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: all var(--transition); }
+.payment-method-card:hover { border-color: var(--primary-light); background-color: var(--primary-pale); }
+.payment-method-card.selected { border-color: var(--primary); background-color: var(--primary-pale); box-shadow: var(--shadow-sm); }
 .method-info { margin-left: 16px; }
 .method-info strong { display: block; font-size: 1rem; color: var(--text); }
 .method-info p { margin: 4px 0 0; font-size: 0.8rem; color: var(--text-muted); }
@@ -37,4 +41,90 @@
 @media (max-width: 768px) {
   .checkout-grid { grid-template-columns: 1fr; }
   .checkout-summary { position: static; }
+}
+
+/* Color Palette Customization: Green Theme (#2E5D34) */
+.checkout-page .checkout-title {
+  color: #2E5D34;
+}
+
+.checkout-page .step-num {
+  background: #2E5D34;
+}
+
+.checkout-page .address-card:hover {
+  border-color: #2E5D34;
+  background: var(--secondary-pale);
+}
+
+.checkout-page .address-card.selected {
+  border-color: #2E5D34;
+  background: var(--secondary-pale);
+}
+
+.checkout-page .radio-circle.active {
+  border-color: #2E5D34;
+}
+
+.checkout-page .payment-method-card:hover {
+  border-color: #2E5D34;
+  background-color: var(--secondary-pale);
+}
+
+.checkout-page .payment-method-card.selected {
+  border-color: #2E5D34;
+  background-color: var(--secondary-pale);
+}
+
+.checkout-page .btn-primary {
+  background: #2E5D34 !important;
+  color: #ffffff !important;
+}
+
+.checkout-page .btn-primary:hover {
+  background: #224426 !important;
+}
+
+.checkout-page .btn-secondary {
+  border-color: #2E5D34 !important;
+  color: #2E5D34 !important;
+}
+
+.checkout-page .btn-secondary:hover {
+  background: var(--secondary-pale) !important;
+}
+
+.checkout-page .btn-outline {
+  border-color: #2E5D34 !important;
+  color: #2E5D34 !important;
+}
+
+.checkout-page .btn-outline:hover {
+  background: var(--secondary-pale) !important;
+}
+
+/* Input fields — remove brown focus ring, apply green */
+.checkout-page .form-input {
+  background: #ffffff !important;
+  border-color: var(--border) !important;
+}
+
+.checkout-page .form-input:focus {
+  border-color: #2E5D34 !important;
+  box-shadow: 0 0 0 3px rgba(46, 93, 52, 0.12) !important;
+}
+
+/* Add-address form card — white background, green border accent */
+.checkout-page .add-address-form {
+  background: #ffffff !important;
+  border-color: rgba(46, 93, 52, 0.18) !important;
+}
+
+.checkout-page .add-address-form h3 {
+  color: #2E5D34;
+}
+
+/* Form labels — neutral, not brown */
+.checkout-page .form-label {
+  color: var(--text-muted);
 }

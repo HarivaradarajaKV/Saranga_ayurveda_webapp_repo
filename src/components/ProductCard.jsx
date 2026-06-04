@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Heart, Eye } from 'lucide-react';
+import { Heart, Leaf, Plus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
@@ -16,23 +16,22 @@ export default function ProductCard({ product }) {
   const navigate = useNavigate();
   const [adding, setAdding] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [hovered, setHovered] = useState(false);
 
   if (!product) return null;
 
   const {
-    id, name, price = 0, offer_percentage = 0,
-    image_url, stock_quantity = 0, is_new_arrival
+    id, name, price = 0, category_name, category, image_url, stock_quantity = 0
   } = product;
 
-  const discountedPrice = price * (1 - offer_percentage / 100);
   const inWishlist = isInWishlist(id);
+  const displayPrice = price ? parseFloat(price).toFixed(2) : '0.00';
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (!isAuthenticated) { navigate('/auth/login'); return; }
     if (stock_quantity <= 0) { toast.warning('This product is out of stock'); return; }
+    
     setAdding(true);
     const result = await addToCart(id, 1);
     setAdding(false);
@@ -56,69 +55,55 @@ export default function ProductCard({ product }) {
     : getImageUrl(image_url);
 
   return (
-    <div
-      className={`product-card${hovered ? ' is-hovered' : ''}`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Image block */}
-      <Link to={`/product/${id}`} className="product-card-image-wrap">
-        <img
-          src={imgUrl}
-          alt={name}
-          className="product-card-image"
-          onError={() => setImageError(true)}
-          loading="lazy"
-        />
-
-        {/* Badge: New Arrival or Offer */}
-        {is_new_arrival && (
-          <span className="product-card-badge badge-new">New Arrival</span>
-        )}
-        {!is_new_arrival && offer_percentage > 0 && (
-          <span className="product-card-badge badge-offer">{Math.round(offer_percentage)}% OFF</span>
-        )}
-
-        {/* Out of Stock overlay */}
-        {stock_quantity <= 0 && (
-          <div className="product-card-oos">Out of Stock</div>
-        )}
-
-        {/* Hover: Quick View strip */}
-        <div className="product-card-quick-view">
-          <Eye size={15} strokeWidth={2} />
-          Quick View
+    <Link to={`/product/${id}`} className="new-arrival-card">
+      <div className="new-arrival-img-wrap">
+        {/* Decorative Leaves inside image border */}
+        <div className="new-arrival-leaves-dec">
+          <Leaf size={18} className="dec-leaf-1" />
+          <Leaf size={12} className="dec-leaf-2" />
         </div>
 
-        {/* Wishlist btn top-right */}
-        <button
-          className={`product-card-wish-btn${inWishlist ? ' active' : ''}`}
+        {/* Wishlist Heart Button (Top Right of image) */}
+        <button 
+          className={`new-arrival-wishlist-btn ${inWishlist ? 'active' : ''}`}
           onClick={handleWishlist}
           title={inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}
         >
           <Heart size={15} fill={inWishlist ? 'currentColor' : 'none'} />
         </button>
-      </Link>
 
-      {/* Info */}
-      <div className="product-card-body">
-        <Link to={`/product/${id}`} className="product-card-name">{name}</Link>
-        <div className="product-card-pricing">
-          <span className="product-card-price">₹{discountedPrice.toFixed(2)}</span>
-          {offer_percentage > 0 && (
-            <span className="product-card-original">₹{parseFloat(price).toFixed(2)}</span>
-          )}
+        <img
+          src={imgUrl}
+          alt={name}
+          className="new-arrival-img"
+          onError={() => setImageError(true)}
+          loading="lazy"
+        />
+
+        {/* Decorative Capsules near bottom-right of bottle */}
+        <div className="new-arrival-capsules-dec">
+          <span className="dec-capsule capsule-1" />
+          <span className="dec-capsule capsule-2" />
         </div>
       </div>
-
-      {/* Add to Cart — slides in on hover */}
-      <button
-        className={`product-card-cart-btn${adding ? ' loading' : ''}`}
-        onClick={handleAddToCart}
-        disabled={adding || stock_quantity <= 0}
-      >
-        {adding ? 'Adding…' : stock_quantity <= 0 ? 'Out of Stock' : 'Add to Cart'}
-      </button>
-    </div>
+      <div className="new-arrival-info">
+        <span className="new-arrival-category">
+          {category_name ? category_name.toUpperCase() : category ? category.toUpperCase() : 'CAPSULES'}
+        </span>
+        <h3 className="new-arrival-name">{name}</h3>
+        <div className="new-arrival-footer">
+          <span className="new-arrival-price">
+            ₹{displayPrice}
+          </span>
+          <button 
+            className={`new-arrival-add-btn ${adding ? 'loading' : ''}`}
+            onClick={handleAddToCart}
+            disabled={adding || stock_quantity <= 0}
+          >
+            <Plus size={14} />
+          </button>
+        </div>
+      </div>
+    </Link>
   );
 }

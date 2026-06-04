@@ -77,7 +77,7 @@ export default function AdminLayout() {
             {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
           <div style={{ flex: 1 }} />
-          <Link to="/" style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 600 }}>← Back to Shop</Link>
+          <Link to="/" style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 600 }}>← Back to Saranga Space</Link>
         </header>
         <div className="admin-content">
           <Outlet />

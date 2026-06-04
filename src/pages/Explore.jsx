@@ -9,178 +9,195 @@ import './Explore.css';
 export default function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { categories } = useCategories();
+
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [searchQ, setSearchQ] = useState(searchParams.get('q') || '');
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [sortBy, setSortBy] = useState('newest');
+  const [debouncedSearchQ, setDebouncedSearchQ] = useState(searchQ);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
 
-  const fetchProducts = useCallback(async (reset = false) => {
+  const fetchProducts = useCallback(async (reset = false, overrideQuery = null) => {
+    const query = (overrideQuery !== null ? overrideQuery : searchQ).trim();
+    if (!query) {
+      setProducts([]);
+      return;
+    }
+
     const pg = reset ? 1 : page;
     if (reset) setPage(1);
     setLoading(true);
-    try {
-      let url = `${ENDPOINTS.PRODUCTS}?page=${pg}&limit=20`;
-      if (selectedCategory) {
-        const catName = categories.find(c => c.id === selectedCategory)?.name;
-        if (catName) url += `&category=${encodeURIComponent(catName)}`;
-      }
-      if (searchQ.trim()) url += `&search=${encodeURIComponent(searchQ.trim())}`;
-      if (sortBy === 'price_asc') url += '&sort=price&order=asc';
-      else if (sortBy === 'price_desc') url += '&sort=price&order=desc';
-      else if (sortBy === 'rating') url += '&sort=rating&order=desc';
-      else url += '&sort=created_at&order=desc';
 
+    try {
+      const url = `${ENDPOINTS.PRODUCTS}?page=${pg}&limit=20&search=${encodeURIComponent(query)}`;
       const res = await api.get(url);
       const data = res.data;
-      const items = Array.isArray(data) ? data : (data?.products || []);
+      let items = Array.isArray(data) ? data : (data?.products || []);
+      
+      // Strict frontend filter: match against name, category, or category_name only
+      const lowerQ = query.toLowerCase();
+      items = items.filter(p => {
+        const nameLower = (p.name || '').toLowerCase();
+        const catNameLower = (p.category_name || '').toLowerCase();
+        const catLower = (p.category || '').toLowerCase();
+        return nameLower.includes(lowerQ) || catNameLower.includes(lowerQ) || catLower.includes(lowerQ);
+      });
+      
       if (reset) setProducts(items);
       else setProducts(prev => pg === 1 ? items : [...prev, ...items]);
       setHasMore(items.length === 20);
-    } catch { setProducts([]); }
+    } catch (err) {
+      console.error('Error searching products:', err);
+      setProducts([]);
+    }
     setLoading(false);
-  }, [selectedCategory, searchQ, sortBy, page]);
+  }, [searchQ, page]);
 
-  useEffect(() => { fetchProducts(true); }, [selectedCategory, sortBy]);
   useEffect(() => {
     const q = searchParams.get('q') || '';
     setSearchQ(q);
+    setDebouncedSearchQ(q);
   }, [searchParams]);
-  useEffect(() => { if (searchQ) fetchProducts(true); }, [searchQ]);
 
-  const handleSearch = (e) => {
+  // Debounce search query as user types
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQ(searchQ);
+    }, 400); // 400ms debounce delay
+
+    return () => clearTimeout(timer);
+  }, [searchQ]);
+
+  // Trigger search on debounced query changes
+  useEffect(() => {
+    const query = debouncedSearchQ.trim();
+    if (query.length >= 3) {
+      fetchProducts(true, query);
+    } else if (query.length === 0) {
+      setProducts([]);
+    }
+  }, [debouncedSearchQ, fetchProducts]);
+
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
-    fetchProducts(true);
-    if (searchQ.trim()) setSearchParams({ q: searchQ });
-    else setSearchParams({});
+    const query = searchQ.trim();
+    if (query) {
+      setSearchParams({ q: query });
+      setDebouncedSearchQ(query);
+      fetchProducts(true, query);
+    } else {
+      setSearchParams({});
+      setProducts([]);
+    }
   };
 
-  const clearFilters = () => {
-    setSelectedCategory(null);
+  const handleClear = () => {
     setSearchQ('');
-    setSortBy('newest');
     setSearchParams({});
-    fetchProducts(true);
+    setProducts([]);
   };
-
-  const activeFilters = (selectedCategory ? 1 : 0) + (searchQ ? 1 : 0);
 
   return (
     <div className="explore-page page-fade-in">
-      <div className="container">
+      <div className="container" style={{ padding: '40px 24px' }}>
         {/* Page Header */}
-        <div className="explore-header">
+        <div className="explore-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div>
-            <h1>Saranga Space</h1>
-            <p className="explore-sub">Discover our complete Ayurvedic collection</p>
+            <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.5rem', color: 'var(--primary)', marginBottom: '8px' }}>Saranga Space</h1>
+            <p className="explore-sub" style={{ color: 'var(--text-muted)' }}>Discover our complete Ayurvedic collection</p>
           </div>
         </div>
 
-        {/* Category Filter Chips (Above Search Bar) */}
-        <div className="explore-category-filter">
-          <button
-            className={`explore-category-item ${!selectedCategory ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(null)}
-          >
-            <div className="explore-category-img-wrap">
-              <Leaf size={18} />
+        {/* 12 Circular Category Icons Card (Homepage design) */}
+        <div className="categories-overlay-card">
+          {categories.length > 0 && (
+            <div className="categories-overlay-grid">
+              {categories.map((cat) => (
+                <Link
+                  to={`/category/${cat.id}`}
+                  key={cat.id}
+                  className="category-overlay-item"
+                  title={`View ${cat.name} products`}
+                >
+                  <div className="category-overlay-img-wrap">
+                    {cat.image_url ? (
+                      <img src={getImageUrl(cat.image_url)} alt={cat.name} className="category-overlay-img" />
+                    ) : (
+                      <div className="category-overlay-fallback">
+                        <Leaf size={36} />
+                      </div>
+                    )}
+                  </div>
+                  <span className="category-overlay-name">{cat.name.toUpperCase()}</span>
+                </Link>
+              ))}
             </div>
-            <span className="explore-category-name">All</span>
-          </button>
-          {categories.map(cat => (
-            <button
-              key={cat.id}
-              className={`explore-category-item ${selectedCategory === cat.id ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat.id === selectedCategory ? null : cat.id)}
-            >
-              <div className="explore-category-img-wrap">
-                {cat.image_url ? (
-                  <img src={getImageUrl(cat.image_url)} alt={cat.name} className="explore-category-img" />
-                ) : (
-                  <Leaf size={18} />
-                )}
-              </div>
-              <span className="explore-category-name">{cat.name}</span>
-            </button>
-          ))}
+          )}
+
+
         </div>
 
-        {/* Search & Filters Bar (Below Categories) */}
-        <div className="explore-controls">
-          <form className="explore-search" onSubmit={handleSearch}>
-            <Search size={18} className="explore-search-icon" />
+        {/* Google-like Search Bar Container */}
+        <div className="explore-google-search-container">
+          <form className="explore-google-search-form" onSubmit={handleSearchSubmit}>
+            <Search size={20} className="google-search-icon" />
             <input
               type="text"
               value={searchQ}
               onChange={e => setSearchQ(e.target.value)}
-              placeholder="Search products..."
-              className="explore-search-input form-input"
+              placeholder="Search for luxury Ayurvedic care..."
+              className="google-search-input"
             />
             {searchQ && (
-              <button type="button" className="explore-clear-btn" onClick={() => { setSearchQ(''); setSearchParams({}); fetchProducts(true); }}>
-                <X size={16} />
+              <button 
+                type="button" 
+                className="google-clear-btn" 
+                onClick={handleClear}
+                title="Clear search"
+              >
+                <X size={20} />
               </button>
             )}
           </form>
-
-          <div className="explore-filter-row">
-            <select
-              className="form-input form-select explore-sort"
-              value={sortBy}
-              onChange={e => setSortBy(e.target.value)}
-            >
-              <option value="newest">New Arrivals</option>
-              <option value="rating">Best Sellers</option>
-            </select>
-            {activeFilters > 0 && (
-              <button className="btn btn-ghost btn-sm" onClick={clearFilters}>
-                <X size={14} /> Clear All
-              </button>
-            )}
-          </div>
         </div>
 
-        {/* Results Count */}
-        {!loading && (
-          <div className="explore-count">
-            {products.length} product{products.length !== 1 ? 's' : ''}
-            {selectedCategory && ` in ${categories.find(c => c.id === selectedCategory)?.name || ''}`}
-          </div>
-        )}
+        {/* Search Results Display Section */}
+        {searchQ.trim() && (
+          <div className="search-results-section" style={{ marginTop: '20px' }}>
+            <h2 className="section-title-flat" style={{ fontSize: '1.5rem', marginBottom: '24px', textAlign: 'center' }}>
+              Search Results for "{searchQ}"
+            </h2>
 
-        {/* Products Grid */}
-        {loading && products.length === 0 ? (
-          <div className="grid-4">
-            {Array(8).fill(0).map((_, i) => (
-              <div key={i} className="skeleton" style={{ height: 340, borderRadius: 14 }} />
-            ))}
-          </div>
-        ) : products.length > 0 ? (
-          <>
-            <div className="grid-4">
-              {products.map(p => <ProductCard key={p.id} product={p} />)}
-            </div>
-            {hasMore && (
-              <div className="text-center mt-32">
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => { setPage(p => p + 1); fetchProducts(); }}
-                  disabled={loading}
-                >
-                  {loading ? 'Loading...' : 'Load More'}
-                </button>
+            {loading && products.length === 0 ? (
+              <div className="new-arrivals-grid-custom">
+                {Array(4).fill(0).map((_, i) => (
+                  <div key={i} className="skeleton" style={{ height: 300, borderRadius: 22 }} />
+                ))}
+              </div>
+            ) : products.length > 0 ? (
+              <>
+                <div className="new-arrivals-grid-custom">
+                  {products.map(p => <ProductCard key={p.id} product={p} />)}
+                </div>
+                {hasMore && (
+                  <div className="text-center mt-32">
+                    <button
+                      className="btn btn-secondary"
+                      onClick={() => { setPage(p => p + 1); fetchProducts(); }}
+                      disabled={loading}
+                    >
+                      {loading ? 'Searching...' : 'Load More'}
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="empty-state" style={{ padding: '40px 0' }}>
+                <div className="empty-state-icon"><Search size={32} /></div>
+                <h3>No products found</h3>
+                <p>We couldn't find any products matching "{searchQ}". Try another query.</p>
               </div>
             )}
-          </>
-        ) : (
-          <div className="empty-state">
-            <div className="empty-state-icon"><Search size={32} /></div>
-            <h3>No products found</h3>
-            <p>Try adjusting your search or filters</p>
-            <button className="btn btn-primary" onClick={clearFilters}>Clear Filters</button>
           </div>
         )}
       </div>

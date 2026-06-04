@@ -327,8 +327,8 @@ export default function Checkout() {
                     className={`payment-method-card ${paymentMethod === 'online' ? 'selected' : ''}`}
                     onClick={() => setPaymentMethod('online')}
                   >
-                    <div className="radio-circle" style={{ borderColor: paymentMethod === 'online' ? 'var(--primary)' : '#ccc' }}>
-                      {paymentMethod === 'online' && <div className="active" style={{ background: 'var(--primary)', width: 10, height: 10, borderRadius: '50%', margin: 2 }} />}
+                    <div className="radio-circle" style={{ borderColor: paymentMethod === 'online' ? '#2E5D34' : '#ccc' }}>
+                      {paymentMethod === 'online' && <div className="active" style={{ background: '#2E5D34', width: 10, height: 10, borderRadius: '50%', margin: 2 }} />}
                     </div>
                     <div className="method-info">
                       <strong>Pay Online</strong>
@@ -339,8 +339,8 @@ export default function Checkout() {
                     className={`payment-method-card ${paymentMethod === 'cod' ? 'selected' : ''}`}
                     onClick={() => setPaymentMethod('cod')}
                   >
-                    <div className="radio-circle" style={{ borderColor: paymentMethod === 'cod' ? 'var(--primary)' : '#ccc' }}>
-                      {paymentMethod === 'cod' && <div className="active" style={{ background: 'var(--primary)', width: 10, height: 10, borderRadius: '50%', margin: 2 }} />}
+                    <div className="radio-circle" style={{ borderColor: paymentMethod === 'cod' ? '#2E5D34' : '#ccc' }}>
+                      {paymentMethod === 'cod' && <div className="active" style={{ background: '#2E5D34', width: 10, height: 10, borderRadius: '50%', margin: 2 }} />}
                     </div>
                     <div className="method-info">
                       <strong>Cash on Delivery</strong>

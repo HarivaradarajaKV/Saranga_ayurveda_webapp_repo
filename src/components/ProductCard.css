@@ -1,219 +1,304 @@
 /* ───────────────────────────────────────────────
    Product Card — matches Saranga reference design
+   (Same as homepage product card)
+   - Width: 200px
+   - Height: 300px
 ──────────────────────────────────────────────── */
-.product-card {
+
+/* Centered 4-column grid with exact gap specs */
+.new-arrivals-grid-custom {
+  display: grid;
+  grid-template-columns: repeat(4, 200px);
+  gap: 42px 44px; /* row-gap: 42px, column-gap: 44px */
+  justify-content: center; /* Horizontally centered on screen */
+  margin-top: 40px; 
+  margin-bottom: 40px; 
+  width: 100%;
+}
+
+/* Custom premium card dimensions & animation */
+.new-arrival-card {
   display: flex;
   flex-direction: column;
-  background: transparent;
-  border: none;
-  position: relative;
-  cursor: pointer;
-}
-
-/* ── Image container ── */
-.product-card-image-wrap {
-  position: relative;
-  display: block;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: 18px;
-  overflow: hidden;
-  background: #f5f0ea;     /* warm off-white, like the reference */
+  width: 200px; /* Width: 200px */
+  height: 300px; /* Height: 300px */
+  background-color: #FAF8F5; /* Clean cream colored area base */
+  border-radius: 22px; /* Border radius: 22px */
+  overflow: visible; /* ALLOW decorative leaves to overflow from top-left */
+  box-shadow: 0 10px 30px rgba(53, 62, 53, 0.04); /* Soft floating shadow */
   text-decoration: none;
-  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+  position: relative;
+  box-sizing: border-box;
 }
 
-.product-card-image {
+/* Smooth hover lift & shadow lift */
+.new-arrival-card:hover {
+  transform: translateY(-8px); /* Card slightly lifts upward */
+  box-shadow: 0 20px 45px rgba(46, 93, 52, 0.12); /* Increase shadow intensity */
+}
+
+/* Top Section: Occupies exactly 200px (matching the 200px card width for a perfect square) */
+.new-arrival-img-wrap {
+  width: 100%;
+  height: 200px; /* Height: 200px (making it a square) */
+  overflow: visible; /* Allow decorative leaves to overflow */
+  background-color: transparent;
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Make image occupy 100% of top half, round top corners to match card */
+.new-arrival-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
+  object-fit: contain; /* Complete image shown without cropping */
+  z-index: 2;
   display: block;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.product-card:hover .product-card-image {
-  transform: scale(1.05);
+/* Zoom image to 1.06 on card hover */
+.new-arrival-card:hover .new-arrival-img {
+  transform: scale(1.06);
 }
 
-/* ── Badge (New Arrival / % OFF) ── */
-.product-card-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 100px;
-  z-index: 3;
-  pointer-events: none;
-}
-.badge-new {
-  background: #fff;
-  color: #2d2d2d;
-  border: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-}
-.badge-offer {
-  background: #e53935;
-  color: #fff;
-}
-
-/* ── Out of Stock overlay ── */
-.product-card-oos {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.9rem;
-  border-radius: 18px;
-  z-index: 4;
-}
-
-/* ── Quick View hover strip ── */
-.product-card-quick-view {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #2d2d2d;
-  letter-spacing: 0.2px;
-
-  /* Hidden by default */
-  opacity: 0;
-  transform: translateY(100%);
-  transition: opacity 0.28s ease, transform 0.28s ease;
-  z-index: 3;
-  border-radius: 0 0 18px 18px;
-  pointer-events: none;
-}
-
-.product-card:hover .product-card-quick-view {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* ── Wishlist heart (top-right) ── */
-.product-card-wish-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px;
-  height: 32px;
+.new-arrival-add-btn {
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.9);
+  background-color: #2E5D34; /* theme green */
+  color: #ffffff; /* white plus */
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #888;
   cursor: pointer;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.12);
-  transition: background 0.2s, color 0.2s, transform 0.2s;
+  transition: background-color 0.3s ease, transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(46, 93, 52, 0.12);
   z-index: 5;
-
-  /* Hidden until hover, shown when active */
-  opacity: 0;
-  transform: scale(0.85);
-  transition: opacity 0.22s ease, transform 0.22s ease, background 0.2s, color 0.2s;
-}
-.product-card:hover .product-card-wish-btn,
-.product-card-wish-btn.active {
-  opacity: 1;
-  transform: scale(1);
-}
-.product-card-wish-btn:hover { background: #fff; color: #e53935; }
-.product-card-wish-btn.active { color: #e53935; background: #fff0f0; }
-
-/* ── Text body (below image) ── */
-.product-card-body {
-  padding: 14px 4px 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
 
-.product-card-name {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #1a1a1a;
-  line-height: 1.45;
-  text-decoration: none;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.product-card-name:hover { color: #694d21; }
-
-.product-card-pricing {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-}
-.product-card-price {
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-.product-card-original {
-  font-size: 0.8rem;
-  color: #999;
-  text-decoration: line-through;
+.new-arrival-add-btn:hover {
+  background-color: #1f4224; /* darker green */
+  transform: scale(1.12);
+  box-shadow: 0 4px 10px rgba(46, 93, 52, 0.22);
 }
 
-/* ── Add to Cart button (slides in on hover) ── */
-.product-card-cart-btn {
-  margin-top: 10px;
-  width: 100%;
-  padding: 12px 0;
-  background: #5c6b55;   /* muted sage-green, exactly like reference */
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  cursor: pointer;
-  transition: opacity 0.26s ease, transform 0.26s ease, background 0.2s;
-
-  /* Hidden by default */
-  opacity: 0;
-  transform: translateY(6px);
-  pointer-events: none;
-}
-.product-card:hover .product-card-cart-btn,
-.product-card-cart-btn.loading {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-.product-card-cart-btn:hover:not(:disabled) {
-  background: #4a5844;
-}
-.product-card-cart-btn:disabled {
-  background: #aaa;
+.new-arrival-add-btn:disabled {
+  background-color: #aaa;
   cursor: not-allowed;
 }
 
-/* ── Responsive grid spacing ── */
-@media (max-width: 480px) {
-  .product-card-image-wrap {
-    border-radius: 14px;
+.new-arrival-leaves-dec {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  display: flex;
+  gap: 2px;
+  z-index: 10;
+  pointer-events: none;
+  color: #2E5D34; /* Dark forest green */
+}
+
+.new-arrival-leaves-dec .dec-leaf-1 {
+  transform: rotate(-10deg);
+  opacity: 0.9;
+  filter: drop-shadow(1px 2px 4px rgba(46,93,52,0.18));
+}
+
+.new-arrival-leaves-dec .dec-leaf-2 {
+  transform: rotate(-45deg) translate(2px, 2px);
+  opacity: 0.65;
+}
+
+/* Decorative Capsules near bottom-right of image */
+.new-arrival-capsules-dec {
+  position: absolute;
+  bottom: 8px;
+  right: 16px; /* Positioned nicely near bottom right of the image */
+  width: 40px;
+  height: 20px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.new-arrival-capsules-dec .dec-capsule {
+  position: absolute;
+  width: 14px;
+  height: 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.new-arrival-capsules-dec .capsule-1 {
+  background-color: #efe7da; /* soft cream/herb */
+  transform: rotate(-25deg);
+  left: 0;
+  bottom: 4px;
+}
+
+.new-arrival-capsules-dec .capsule-2 {
+  background-color: #d8cdba; /* darker herb */
+  transform: rotate(40deg);
+  left: 10px;
+  bottom: 0px;
+}
+
+/* Bottom Section: Occupies exactly 100px */
+.new-arrival-info {
+  height: 100px; /* Height: 100px */
+  padding: 14px 18px; /* Generous side padding matching reference */
+  text-align: left; /* Left align text */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Space category, name, and footer vertically */
+  background-color: #FAF8F5; /* Clean cream colored content area */
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  border-bottom-left-radius: 22px;
+  border-bottom-right-radius: 22px;
+  overflow: hidden;
+}
+
+/* Left-aligned Category name */
+.new-arrival-category {
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: #8A8A8A;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-align: left;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Left-aligned Title Case Product Name */
+.new-arrival-name {
+  font-size: 0.88rem;
+  font-weight: 500; /* Medium weight matching reference */
+  color: #2D2D2D; /* Dark charcoal color */
+  margin: 0;
+  letter-spacing: 0.1px;
+  font-family: var(--font-sans);
+  text-transform: none; /* Sentence/Title case */
+  text-align: left;
+  line-height: 1.25;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Ensure overflow truncates cleanly */
+}
+
+/* Footer layout containing price and arrow */
+.new-arrival-footer {
+  display: flex;
+  justify-content: space-between; /* Align price left, arrow right */
+  align-items: center;
+  width: 100%;
+}
+
+.new-arrival-price {
+  font-size: 0.85rem;
+  font-weight: 600; /* Semi-bold price */
+  color: #2D2D2D;
+}
+
+.new-arrival-wishlist-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgba(250, 248, 245, 0.85); /* translucent cream */
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2E5D34; /* Theme green heart */
+  cursor: pointer;
+  z-index: 5;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.new-arrival-wishlist-btn:hover {
+  background-color: #2E5D34;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.new-arrival-wishlist-btn.active {
+  background-color: #2E5D34;
+  color: #ffffff;
+}
+
+/* Responsive Grid styling */
+@media (max-width: 1200px) {
+  .new-arrivals-grid-custom {
+    grid-template-columns: repeat(3, 200px);
+    gap: 42px 30px;
+    justify-content: center;
   }
-  .product-card-name { font-size: 0.88rem; }
+}
+
+@media (max-width: 1024px) {
+  .new-arrivals-grid-custom { 
+    grid-template-columns: repeat(2, 200px);
+    gap: 42px 32px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .new-arrivals-grid-custom { 
+    grid-template-columns: repeat(2, 200px);
+    gap: 42px 24px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .new-arrivals-grid-custom { 
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 12px;
+    justify-content: center;
+    padding: 0 8px;
+  }
+  .new-arrival-card {
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+    max-width: 100%;
+  }
+  .new-arrival-img-wrap {
+    height: auto;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+  }
+  .new-arrival-info {
+    padding: 10px 12px;
+    height: 90px;
+  }
+  .new-arrival-name {
+    font-size: 0.8rem;
+  }
+  .new-arrival-price {
+    font-size: 0.78rem;
+  }
+  .new-arrival-category {
+    font-size: 0.58rem;
+  }
+  .new-arrival-wishlist-btn {
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+  }
 }

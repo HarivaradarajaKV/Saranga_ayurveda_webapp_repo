@@ -31,9 +31,9 @@ export default function FlashSale() {
           <p style={{ color: 'var(--text-muted)', marginTop: 8 }}>Grab discounted Ayurvedic products — limited time only!</p>
         </div>
         {loading ? (
-          <div className="grid-4">{Array(8).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 340, borderRadius: 14 }} />)}</div>
+          <div className="new-arrivals-grid-custom">{Array(8).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 300, borderRadius: 22 }} />)}</div>
         ) : products.length > 0 ? (
-          <div className="grid-4">{products.map(p => <ProductCard key={p.id} product={p} />)}</div>
+          <div className="new-arrivals-grid-custom">{products.map(p => <ProductCard key={p.id} product={p} />)}</div>
         ) : (
           <div className="empty-state">
             <h3>No flash sale items right now</h3>
