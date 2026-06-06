@@ -942,21 +942,13 @@
   box-sizing: border-box;
 }
 
-/* Custom premium scrollbar for best-sellers-scroll-row */
+/* Hide scrollbar for best-sellers-scroll-row */
+.best-sellers-scroll-row {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 .best-sellers-scroll-row::-webkit-scrollbar {
-  height: 8px;
-}
-.best-sellers-scroll-row::-webkit-scrollbar-track {
-  background: rgba(46, 93, 52, 0.05);
-  border-radius: 100px;
-}
-.best-sellers-scroll-row::-webkit-scrollbar-thumb {
-  background: rgba(46, 93, 52, 0.25);
-  border-radius: 100px;
-  transition: background 0.3s;
-}
-.best-sellers-scroll-row::-webkit-scrollbar-thumb:hover {
-  background: rgba(46, 93, 52, 0.45);
+  display: none; /* Chrome, Safari and Opera */
 }
 
 /* Home Page Combo Card Styles */

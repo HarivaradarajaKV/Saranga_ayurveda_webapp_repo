@@ -8,14 +8,6 @@ export default function Footer() {
         <div className="footer-grid">
           {/* Column 1: Info and Download App */}
           <div className="footer-col info-col">
-            <h3 className="footer-brand-title">Saranga Ayurveda</h3>
-            <div className="footer-info-details">
-              <p className="info-llp">Saranga Ayurveda LLP</p>
-              <p>Office: Bengaluru, Karnataka, India</p>
-              <p>Contact Number: +91 90081 45960</p>
-              <p>Email: <a href="mailto:sarangaconsumerhelp@gmail.com">sarangaconsumerhelp@gmail.com</a></p>
-              <p>Monday to Sunday - 10:00 AM to 05:00 PM</p>
-            </div>
             
             <div className="footer-download-section">
               <h4 className="footer-section-title">Download App</h4>
@@ -28,16 +20,6 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-          </div>
-
-          {/* Column 2: Get To Know Us */}
-          <div className="footer-col">
-            <h4 className="footer-col-title">Get To Know Us</h4>
-            <ul className="footer-links-list">
-              <li><Link to="/about">Our Story</Link></li>
-              <li><Link to="/careers">Careers</Link></li>
-              <li><Link to="/careers">Internships</Link></li>
-            </ul>
           </div>
 
           {/* Column 3: Connect With Us */}
@@ -64,8 +46,10 @@ export default function Footer() {
             <h4 className="footer-col-title">Quick Links</h4>
             <ul className="footer-links-list">
               <li><Link to="/explore">Trending</Link></li>
-              <li><Link to="/explore">Blogs</Link></li>
               <li><Link to="/contact-us">Contact Us</Link></li>
+              <li><Link to="/about">Our Story</Link></li>
+              <li><Link to="/careers">Careers</Link></li>
+              <li><Link to="/careers">Internships</Link></li>
             </ul>
           </div>
 

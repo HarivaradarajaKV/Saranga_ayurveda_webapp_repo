@@ -47,9 +47,9 @@
 .contact-layout-grid {
   display: grid;
   grid-template-columns: 1.02fr 0.98fr;
-  gap: 80px;
+  gap: 40px;
   align-items: start;
-  padding: 60px 0;
+  padding: 30px 0;
 }
 
 /* Section label */
@@ -158,21 +158,21 @@
 .ways-to-reach-card {
   background-color: #FAF7F2;
   border-radius: 30px;
-  padding: 48px 40px;
+  padding: 32px 24px;
   border: 1px solid rgba(46, 93, 52, 0.04);
 }
 
 .reach-methods-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 20px;
-  margin-top: 36px;
+  margin-top: 24px;
 }
 
 .reach-method-item {
   background-color: #ffffff;
   border-radius: 20px;
-  padding: 28px 20px;
+  padding: 20px 16px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -182,15 +182,15 @@
 }
 
 .reach-icon-wrap {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid rgba(46, 93, 52, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #2E5D34;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   background-color: #ffffff;
 }
 
@@ -237,7 +237,7 @@
 .contact-success-card {
   background-color: #ffffff;
   border-radius: 30px;
-  padding: 48px 40px;
+  padding: 32px 24px;
   border: 1px solid rgba(46, 93, 52, 0.06);
   box-shadow: 0 20px 48px rgba(46, 93, 52, 0.06);
 }

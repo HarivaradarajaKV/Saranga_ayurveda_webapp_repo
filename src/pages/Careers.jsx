@@ -17,7 +17,8 @@ export default function Careers() {
     fieldInterest: '',
     semester: '',
     about: '',
-    agreed: false
+    agreed: false,
+    positionType: 'Internship'
   });
 
   const [resumeFile, setResumeFile] = useState(null);
@@ -108,7 +109,8 @@ export default function Careers() {
       fieldInterest: '',
       semester: '',
       about: '',
-      agreed: false
+      agreed: false,
+      positionType: 'Internship'
     });
     setResumeFile(null);
     setCoverFile(null);
@@ -130,7 +132,7 @@ export default function Careers() {
         {/* Hero Section */}
         <div className="careers-section careers-hero-section">
           <div className="careers-text-col">
-            <div className="careers-section-label">INTERNSHIP AT SARANGA</div>
+            <div className="careers-section-label">CAREERS & INTERNSHIPS</div>
             <h1 className="careers-section-title font-serif-main">
               Learn. Grow.<br />Make a Difference.
             </h1>
@@ -140,13 +142,13 @@ export default function Careers() {
               <span className="careers-heart-line"></span>
             </div>
             <p className="careers-section-paragraph hero-para">
-              At Saranga Ayurveda, we believe in nurturing curious minds and passionate hearts. Our internship program offers a unique opportunity to learn from experts, work on meaningful projects, and contribute to natural wellness and holistic living.
+              At Saranga Ayurveda, we believe in nurturing curious minds and passionate hearts. We are hiring for both full-time positions and internships, offering unique opportunities to learn, work on meaningful projects, and build a rewarding career in natural wellness.
             </p>
             <button 
               className="explore-internships-btn"
               onClick={() => document.getElementById('apply-form-section').scrollIntoView({ behavior: 'smooth' })}
             >
-              EXPLORE INTERNSHIPS
+              EXPLORE OPPORTUNITIES
             </button>
           </div>
           {/* Hidden on desktop, shown on mobile */}
@@ -160,10 +162,10 @@ export default function Careers() {
         {/* Form and Why Intern With Us layout */}
         <div className="careers-layout-grid" id="apply-form-section">
           
-          {/* Left Column: Why Intern With Us */}
+          {/* Left Column: Why Work With Us */}
           <div className="why-intern-col">
             <div className="careers-section-label">
-              <span>WHY INTERN WITH US?</span>
+              <span>WHY WORK WITH US?</span>
               <div className="label-underline"></div>
             </div>
             
@@ -220,14 +222,43 @@ export default function Careers() {
             {!submitted ? (
               <form className="application-form-card" onSubmit={handleSubmit}>
                 <div className="careers-section-label">
-                  <span>APPLY FOR INTERNSHIP</span>
+                  <span>APPLY FOR OPPORTUNITIES</span>
                   <div className="label-underline"></div>
                 </div>
                 
                 <h2 className="form-card-title">We'd Love to Hear From You</h2>
                 <p className="form-card-subtitle">
-                  Fill out the form below to apply for an internship opportunity at Saranga Ayurveda.
+                  Fill out the form below to apply for a career or internship opportunity at Saranga Ayurveda.
                 </p>
+
+                {/* Position Type Radio Options */}
+                <div className="form-group">
+                  <label>I am applying for <span className="req">*</span></label>
+                  <div className="position-type-options" style={{ display: 'flex', gap: '24px', marginTop: '8px' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.9rem', color: '#3f4a35' }}>
+                      <input 
+                        type="radio" 
+                        name="positionType" 
+                        value="Internship"
+                        checked={formData.positionType === 'Internship'}
+                        onChange={handleInputChange}
+                        style={{ accentColor: '#2E5D34' }}
+                      />
+                      Internship
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.9rem', color: '#3f4a35' }}>
+                      <input 
+                        type="radio" 
+                        name="positionType" 
+                        value="Full-Time"
+                        checked={formData.positionType === 'Full-Time'}
+                        onChange={handleInputChange}
+                        style={{ accentColor: '#2E5D34' }}
+                      />
+                      Full-Time Job
+                    </label>
+                  </div>
+                </div>
 
                 {/* Full Name */}
                 <div className="form-group">
@@ -297,13 +328,13 @@ export default function Careers() {
 
                 {/* College / University */}
                 <div className="form-group">
-                  <label>College / University <span className="req">*</span></label>
+                  <label>{formData.positionType === 'Full-Time' ? 'College / University / Last Employer' : 'College / University'} <span className="req">*</span></label>
                   <input 
                     type="text" 
                     name="college"
                     value={formData.college}
                     onChange={handleInputChange}
-                    placeholder="Enter your college or university" 
+                    placeholder={formData.positionType === 'Full-Time' ? 'Enter your college or last company name' : 'Enter your college or university'} 
                     className={errors.college ? 'input-error' : ''}
                   />
                   {errors.college && <span className="error-text">{errors.college}</span>}
@@ -356,9 +387,9 @@ export default function Careers() {
                   {errors.fieldInterest && <span className="error-text">{errors.fieldInterest}</span>}
                 </div>
 
-                {/* Semester / Year */}
+                {/* Semester / Year or Experience Level */}
                 <div className="form-group">
-                  <label>Semester / Year <span className="req">*</span></label>
+                  <label>{formData.positionType === 'Full-Time' ? 'Experience Level' : 'Semester / Year'} <span className="req">*</span></label>
                   <div className="select-wrap">
                     <select 
                       name="semester"
@@ -366,13 +397,24 @@ export default function Careers() {
                       onChange={handleInputChange}
                       className={errors.semester ? 'input-error' : ''}
                     >
-                      <option value="">Select semester or year</option>
-                      <option value="Year 1">1st Year</option>
-                      <option value="Year 2">2nd Year</option>
-                      <option value="Year 3">3rd Year</option>
-                      <option value="Year 4">4th Year</option>
-                      <option value="Final Intern">Final Year / Intern</option>
-                      <option value="Graduated">Graduated</option>
+                      <option value="">Select your option</option>
+                      {formData.positionType === 'Internship' ? (
+                        <>
+                          <option value="Year 1">1st Year Student</option>
+                          <option value="Year 2">2nd Year Student</option>
+                          <option value="Year 3">3rd Year Student</option>
+                          <option value="Year 4">4th Year Student</option>
+                          <option value="Final Intern">Final Year / Intern</option>
+                          <option value="Graduated">Graduated / Postgraduate</option>
+                        </>
+                      ) : (
+                        <>
+                          <option value="Fresh Graduate">Fresh Graduate</option>
+                          <option value="1-2 Years">1 - 2 Years Experience</option>
+                          <option value="3-5 Years">3 - 5 Years Experience</option>
+                          <option value="5+ Years">5+ Years Experience</option>
+                        </>
+                      )}
                     </select>
                     <ChevronDown size={16} className="select-arrow" />
                   </div>
@@ -432,7 +474,10 @@ export default function Careers() {
                     name="about"
                     value={formData.about}
                     onChange={handleInputChange}
-                    placeholder="Share your background, interests and why you want to intern with us..."
+                    placeholder={formData.positionType === 'Full-Time' 
+                      ? "Share your career achievements, background, and why you want to build your career with us..."
+                      : "Share your background, interests, and why you want to intern with us..."
+                    }
                     rows={4}
                     className={errors.about ? 'input-error' : ''}
                   />
@@ -457,7 +502,7 @@ export default function Careers() {
 
                 {/* Submit button */}
                 <button type="submit" className="submit-application-btn">
-                  SUBMIT APPLICATIONS
+                  SUBMIT APPLICATION
                 </button>
               </form>
             ) : (
@@ -465,10 +510,10 @@ export default function Careers() {
                 <CheckCircle2 className="success-check-icon" />
                 <h2>Application Submitted Successfully!</h2>
                 <p>
-                  Thank you, <strong>{formData.fullName}</strong>. We have received your application for the internship program at Saranga Ayurveda.
+                  Thank you, <strong>{formData.fullName}</strong>. We have received your application for a <strong>{formData.positionType === 'Full-Time' ? 'Full-Time position' : 'Internship position'}</strong> at Saranga Ayurveda.
                 </p>
                 <p className="success-subtext">
-                  Our review team will look over your details and resume. We will get in touch with you at <strong>{formData.email}</strong> soon.
+                  Our recruitment team will look over your details and resume. We will get in touch with you at <strong>{formData.email}</strong> soon.
                 </p>
                 <button className="reset-application-btn" onClick={resetForm}>
                   SUBMIT ANOTHER APPLICATION

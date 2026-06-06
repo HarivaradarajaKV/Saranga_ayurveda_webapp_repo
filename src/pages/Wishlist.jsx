@@ -2,15 +2,16 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
 import { getImageUrl } from '../api/api';
-import { Heart, Trash2, ShoppingCart, Leaf, Plus } from 'lucide-react';
+import { Heart, Trash2, ShoppingCart, Leaf, Plus, Minus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { getDisplayCategoryName } from '../context/CategoryContext';
 import './Wishlist.css';
 import '../components/ProductCard.css';
 import { useToast } from '../context/ToastContext';
 
 export default function Wishlist() {
   const { items, removeFromWishlist } = useWishlist();
-  const { addToCart } = useCart();
+  const { items: cartItems, addToCart, updateQuantity } = useCart();
   const toast = useToast();
 
   if (items.length === 0) return (
@@ -36,6 +37,8 @@ export default function Wishlist() {
             const offer = parseFloat(item.offer_percentage || 0);
             const discounted = price * (1 - offer / 100);
             const pid = item.product_id || item.id;
+            const cartItem = cartItems.find(i => (i.product_id || i.id) === pid);
+            const cartQty = cartItem ? cartItem.quantity : 0;
 
             const handleAddToCart = async (e) => {
               e.preventDefault();
@@ -102,7 +105,7 @@ export default function Wishlist() {
                 </div>
                 <div className="new-arrival-info">
                   <span className="new-arrival-category">
-                    {item.category_name ? item.category_name.toUpperCase() : 'WELLNESS'}
+                    {getDisplayCategoryName(item.category_name || 'WELLNESS').toUpperCase()}
                   </span>
                   <h3 className="new-arrival-name" title={item.name}>{item.name}</h3>
                   <div className="new-arrival-footer">
@@ -116,13 +119,33 @@ export default function Wishlist() {
                         ₹{discounted.toFixed(2)}
                       </span>
                     </div>
-                    <button 
-                      className="new-arrival-add-btn"
-                      onClick={handleAddToCart}
-                      title="Add to cart"
-                    >
-                      <Plus size={14} />
-                    </button>
+                    {cartQty > 0 ? (
+                      <div className="product-card-qty-control">
+                        <button 
+                          className="product-card-qty-btn" 
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateQuantity(pid, cartQty - 1); }}
+                          title="Decrease quantity"
+                        >
+                          <Minus size={10} strokeWidth={3} />
+                        </button>
+                        <span className="product-card-qty-val">{cartQty}</span>
+                        <button 
+                          className="product-card-qty-btn" 
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateQuantity(pid, cartQty + 1); }}
+                          title="Increase quantity"
+                        >
+                          <Plus size={10} strokeWidth={3} />
+                        </button>
+                      </div>
+                    ) : (
+                      <button 
+                        className="new-arrival-add-btn"
+                        onClick={handleAddToCart}
+                        title="Add to cart"
+                      >
+                        <Plus size={14} />
+                      </button>
+                    )}
                   </div>
                 </div>
               </Link>

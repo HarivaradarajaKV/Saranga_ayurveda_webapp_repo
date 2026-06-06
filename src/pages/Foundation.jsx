@@ -145,7 +145,7 @@ export default function Foundation() {
             <button onClick={() => handleScroll('what-we-do')} className="foundation-sub-nav-btn">WHAT WE DO</button>
             <button onClick={() => handleScroll('news-events')} className="foundation-sub-nav-btn">NEWS & EVENTS</button>
             <button onClick={() => handleScroll('get-involved')} className="foundation-sub-nav-btn">GET INVOLVED</button>
-            <Link to="/" className="foundation-sub-nav-btn highlight-btn">SARANGA SPACE</Link>
+            <Link to="/" className="foundation-sub-nav-btn highlight-btn">SARANGA AYURVEDA</Link>
           </div>
         </div>
       </header>
@@ -196,7 +196,7 @@ export default function Foundation() {
                 src="/images/foundation/card_1.png" 
                 alt="Card 1" 
                 onError={(e) => { e.target.src = 'https://via.placeholder.com/400x360?text=Card+1+Image'; }}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '39px', display: 'block' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '24px', display: 'block' }}
               />
             </div>
             <div className="foundation-outline-card">
@@ -204,7 +204,7 @@ export default function Foundation() {
                 src="/images/foundation/card_2.png" 
                 alt="Card 2" 
                 onError={(e) => { e.target.src = 'https://via.placeholder.com/400x360?text=Card+2+Image'; }}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '39px', display: 'block' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '24px', display: 'block' }}
               />
             </div>
             <div className="foundation-outline-card">
@@ -212,7 +212,7 @@ export default function Foundation() {
                 src="/images/foundation/card_3.png" 
                 alt="Card 3" 
                 onError={(e) => { e.target.src = 'https://via.placeholder.com/400x360?text=Card+3+Image'; }}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '39px', display: 'block' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '24px', display: 'block' }}
               />
             </div>
           </div>
@@ -222,18 +222,29 @@ export default function Foundation() {
       {/* 3. Who We Are Section */}
       <section className="foundation-content-section bg-white" id="who-we-are">
         <div className="foundation-section-container text-content">
-          <p className="foundation-para">
-            Saranga Anugraha Foundation was established with a clear purpose to bring authentic Ayurvedic healing and compassionate social support to people who truly need it but cannot afford it. In today's fast-paced world, many individuals suffer from chronic illnesses, stress, lifestyle disorders, and financial limitations that prevent them from accessing quality healthcare.
-          </p>
-          <p className="foundation-para">
-            The foundation was born from the belief that healthcare should be a right, not a privilege. Ayurveda has the power to restore wellbeing naturally. No individual should be left helpless due to financial difficulties. The foundation is built on compassion, community support, and the values of traditional healing blended with modern care.
-          </p>
-          <p className="foundation-para">
-            We are Saranga Ayurveda—a humble blend of tradition, care, and community. Rooted in ancient Ayurvedic wisdom and guided by the rhythms of nature, we craft wellness solutions that speak to real people and real lives. We're not here just to offer products. We're here to share a way of living—one that honors balance, celebrates connection, and restores harmony in everyday moments. With every herb we source and every remedy we create, our purpose is simple: to help you feel seen, supported, and whole. Because true wellness is not just about healing the body—it's about nurturing the mind, uplifting the spirit, and reconnecting with nature.
-          </p>
-          <p className="foundation-para-bold">
-            This is us. And we're here for you—naturally.
-          </p>
+          <div className="foundation-green-badge">
+            <span>Who We Are</span>
+          </div>
+          <h2 className="foundation-section-heading" style={{ marginBottom: '24px' }}>Our Mission & Story</h2>
+          
+          <div className="foundation-two-col-text">
+            <div className="foundation-text-col">
+              <p className="foundation-para">
+                Saranga Anugraha Foundation was established with a clear purpose to bring authentic Ayurvedic healing and compassionate social support to people who truly need it but cannot afford it. In today's fast-paced world, many individuals suffer from chronic illnesses, stress, lifestyle disorders, and financial limitations that prevent them from accessing quality healthcare.
+              </p>
+              <p className="foundation-para">
+                The foundation was born from the belief that healthcare should be a right, not a privilege. Ayurveda has the power to restore wellbeing naturally. No individual should be left helpless due to financial difficulties. The foundation is built on compassion, community support, and the values of traditional healing blended with modern care.
+              </p>
+            </div>
+            <div className="foundation-text-col">
+              <p className="foundation-para">
+                We are Saranga Ayurveda—a humble blend of tradition, care, and community. Rooted in ancient Ayurvedic wisdom and guided by the rhythms of nature, we craft wellness solutions that speak to real people and real lives. We're not here just to offer products. We're here to share a way of living—one that honors balance, celebrates connection, and restores harmony in everyday moments.
+              </p>
+              <p className="foundation-para-bold" style={{ marginTop: '16px' }}>
+                This is us. And we're here for you—naturally.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
