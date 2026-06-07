@@ -31,7 +31,7 @@ export default function AdminOrders() {
       
       // Update selected order detail modal state with fresh database values
       if (targetOrderIdToUpdate) {
-        const found = orderList.find(o => o.id === targetOrderIdToUpdate);
+        const found = orderList.find(o => String(o.id) === String(targetOrderIdToUpdate));
         if (found) {
           setSelectedOrder(found);
         }
@@ -50,8 +50,8 @@ export default function AdminOrders() {
   const updateStatus = async (id, status) => {
     try {
       await api.put(ENDPOINTS.ADMIN_ORDER_STATUS(id), { status });
-      setOrders(prev => prev.map(o => o.id === id ? { ...o, status } : o));
-      setSelectedOrder(prev => prev && prev.id === id ? { ...prev, status } : prev);
+      setOrders(prev => prev.map(o => String(o.id) === String(id) ? { ...o, status } : o));
+      setSelectedOrder(prev => prev && String(prev.id) === String(id) ? { ...prev, status } : prev);
       toast.success(`Order status updated to ${status}`);
     } catch { 
       toast.error('Failed to update status'); 
@@ -72,6 +72,25 @@ export default function AdminOrders() {
       });
       if (res.data?.success) {
         toast.success('Shipment created successfully!');
+        
+        // Optimistic UI updates
+        const shiprocketOrderId = res.data.data?.order_id;
+        const shiprocketShipmentId = res.data.data?.shipment_id;
+        
+        setOrders(prev => prev.map(o => String(o.id) === String(orderId) ? { 
+          ...o, 
+          shiprocket_order_id: shiprocketOrderId,
+          shiprocket_shipment_id: shiprocketShipmentId,
+          shipment_status: 'created'
+        } : o));
+        
+        setSelectedOrder(prev => prev && String(prev.id) === String(orderId) ? { 
+          ...prev, 
+          shiprocket_order_id: shiprocketOrderId,
+          shiprocket_shipment_id: shiprocketShipmentId,
+          shipment_status: 'created'
+        } : prev);
+
         await fetchOrders(orderId);
       } else {
         toast.error(res.data?.error || 'Failed to create shipment');
@@ -89,6 +108,25 @@ export default function AdminOrders() {
       const res = await api.post(`/shiprocket/assign-courier/${orderId}`);
       if (res.data?.success) {
         toast.success('Courier assigned & AWB generated successfully!');
+        
+        // Optimistic UI updates
+        const awbCode = res.data.data?.response?.data?.awb_code;
+        const courierName = res.data.data?.response?.data?.courier_name;
+        
+        setOrders(prev => prev.map(o => String(o.id) === String(orderId) ? { 
+          ...o, 
+          awb_number: awbCode,
+          courier_name: courierName,
+          shipment_status: 'awb_generated'
+        } : o));
+        
+        setSelectedOrder(prev => prev && String(prev.id) === String(orderId) ? { 
+          ...prev, 
+          awb_number: awbCode,
+          courier_name: courierName,
+          shipment_status: 'awb_generated'
+        } : prev);
+
         await fetchOrders(orderId);
       } else {
         toast.error(res.data?.error || 'Failed to assign courier');
@@ -107,6 +145,12 @@ export default function AdminOrders() {
       if (res.data?.success && res.data.data?.label_url) {
         window.open(res.data.data.label_url, '_blank');
         toast.success('Label generated successfully!');
+        
+        // Optimistic UI updates
+        const labelUrl = res.data.data.label_url;
+        setOrders(prev => prev.map(o => String(o.id) === String(orderId) ? { ...o, label_url: labelUrl } : o));
+        setSelectedOrder(prev => prev && String(prev.id) === String(orderId) ? { ...prev, label_url: labelUrl } : prev);
+
         await fetchOrders(orderId);
       } else {
         toast.error('Failed to generate label');
@@ -124,6 +168,11 @@ export default function AdminOrders() {
       const res = await api.post(`/shiprocket/request-pickup/${orderId}`);
       if (res.data?.success) {
         toast.success('Pickup scheduled successfully!');
+        
+        // Optimistic UI updates
+        setOrders(prev => prev.map(o => String(o.id) === String(orderId) ? { ...o, shipment_status: 'pickup_scheduled' } : o));
+        setSelectedOrder(prev => prev && String(prev.id) === String(orderId) ? { ...prev, shipment_status: 'pickup_scheduled' } : prev);
+
         await fetchOrders(orderId);
       } else {
         toast.error(res.data?.error || 'Failed to schedule pickup');
