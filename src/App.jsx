@@ -64,6 +64,8 @@ import AdminCoupons from './admin/AdminCoupons';
 import AdminReviews from './admin/AdminReviews';
 import AdminNewArrivals from './admin/AdminNewArrivals';
 import AdminBestSellers from './admin/AdminBestSellers';
+import AdminContactSubmissions from './admin/AdminContactSubmissions';
+import AdminCareerSubmissions from './admin/AdminCareerSubmissions';
 
 import './styles/global.css';
 
@@ -157,6 +159,8 @@ export default function App() {
                     <Route path="reviews" element={<AdminReviews />} />
                     <Route path="new-arrivals" element={<AdminNewArrivals />} />
                     <Route path="best-sellers" element={<AdminBestSellers />} />
+                    <Route path="contact-submissions" element={<AdminContactSubmissions />} />
+                    <Route path="career-submissions" element={<AdminCareerSubmissions />} />
                   </Route>
                 </Routes>
               </ToastProvider>

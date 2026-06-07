@@ -2,7 +2,8 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Package, ShoppingBag, Users, FolderOpen,
-  Gift, Tag, Star, LogOut, Menu, X, Leaf, Sparkles
+  Gift, Tag, Star, LogOut, Menu, X, Leaf, Sparkles,
+  Mail, Briefcase
 } from 'lucide-react';
 import { useState } from 'react';
 import './Admin.css';
@@ -18,6 +19,8 @@ const NAV = [
   { to: '/admin/reviews', label: 'Reviews', icon: <Star size={18} /> },
   { to: '/admin/new-arrivals', label: 'New Arrivals', icon: <Sparkles size={18} /> },
   { to: '/admin/best-sellers', label: 'Best Sellers', icon: <Star size={18} /> },
+  { to: '/admin/contact-submissions', label: 'Contact Submissions', icon: <Mail size={18} /> },
+  { to: '/admin/career-submissions', label: 'Career Submissions', icon: <Briefcase size={18} /> },
 ];
 
 export default function AdminLayout() {

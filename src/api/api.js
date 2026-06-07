@@ -121,6 +121,8 @@ export const ENDPOINTS = {
 
   // Admin
   ADMIN_STATS: '/admin/stats',
+  ADMIN_CONTACT_SUBMISSIONS: '/submissions/contact',
+  ADMIN_CAREER_SUBMISSIONS: '/submissions/career',
   ADMIN_PRODUCTS: '/admin/products',
   ADMIN_PRODUCT: (id) => `/admin/products/${id}`,
   ADMIN_ORDERS: '/admin/orders',
