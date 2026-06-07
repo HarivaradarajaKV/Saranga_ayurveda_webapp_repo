@@ -12,7 +12,8 @@ const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_RhzLf3BDT
 export default function Checkout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { items, clearCart, cartSubtotal } = useCart();
+  const { items, clearCart, cartSubtotal, getSelectedItems } = useCart();
+  const selectedCartItems = getSelectedItems();
   const { user } = useAuth();
   const toast = useToast();
 
@@ -41,8 +42,8 @@ export default function Checkout() {
 
   useEffect(() => {
     fetchAddresses();
-    if (items.length === 0) navigate('/cart');
-  }, []);
+    if (selectedCartItems.length === 0) navigate('/cart');
+  }, [selectedCartItems]);
 
   const fetchCoupons = async () => {
     setLoadingCoupons(true);
@@ -147,7 +148,7 @@ export default function Checkout() {
           phone_number: selectedAddress.phone_number || selectedAddress.phone || '',
         },
         payment_method: paymentMethod,
-        items: items.map(i => ({
+        items: selectedCartItems.map(i => ({
           product_id: i.product_id || i.id,
           quantity: i.quantity || 1,
           price: i.is_from_combo && i.combo_discounted_price !== undefined ? parseFloat(i.combo_discounted_price) : parseFloat(i.price) * (1 - parseFloat(i.offer_percentage || 0) / 100),
@@ -357,7 +358,7 @@ export default function Checkout() {
             <div className="card card-body">
               <h3 className="cart-summary-heading">Order Summary</h3>
               <div className="checkout-items-list">
-                {items.slice(0, 3).map(item => {
+                {selectedCartItems.slice(0, 3).map(item => {
                   let finalPrice;
                   if (item.is_from_combo && item.combo_discounted_price !== undefined) {
                     finalPrice = parseFloat(item.combo_discounted_price);
@@ -371,7 +372,7 @@ export default function Checkout() {
                     </div>
                   );
                 })}
-                {items.length > 3 && <p style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>+{items.length - 3} more items</p>}
+                {selectedCartItems.length > 3 && <p style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>+{selectedCartItems.length - 3} more items</p>}
               </div>
               <div className="summary-divider" />
               <div className="summary-row"><span>Subtotal</span><span>₹{cartSubtotal.toFixed(0)}</span></div>

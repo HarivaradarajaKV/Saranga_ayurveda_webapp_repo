@@ -73,7 +73,7 @@ export default function OrderDetail() {
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600 }}>{item.name || item.product_name}</div>
                 <div style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Qty: {item.quantity}</div>
-                <div style={{ fontWeight: 700, color: 'var(--primary)' }}>₹{parseFloat(item.price || 0).toFixed(0)}</div>
+                <div style={{ fontWeight: 700, color: 'var(--primary)' }}>₹{parseFloat(item.price || item.price_at_time || 0).toFixed(0)}</div>
               </div>
             </div>
           ))}

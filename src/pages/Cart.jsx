@@ -8,7 +8,7 @@ import { Trash2, Plus, Minus, ShoppingBag, Tag, ArrowRight, X } from 'lucide-rea
 import './Cart.css';
 
 export default function Cart() {
-  const { items, removeFromCart, updateQuantity, cartSubtotal, loading } = useCart();
+  const { items, removeFromCart, updateQuantity, cartSubtotal, loading, selectedItems, setSelectedItems, toggleItemSelection } = useCart();
   const { isAuthenticated } = useAuth();
   const toast = useToast();
   const navigate = useNavigate();
@@ -136,6 +136,24 @@ export default function Cart() {
         <div className="cart-grid">
           {/* Items */}
           <div className="cart-items-col">
+            {/* Select All */}
+            <div className="select-all-row-web">
+              <input
+                type="checkbox"
+                id="select-all-web"
+                className="cart-item-checkbox"
+                checked={items.length > 0 && items.every(item => selectedItems.includes(item.product_id || item.id))}
+                onChange={() => {
+                  const allIds = items.map(item => item.product_id || item.id);
+                  if (items.every(item => selectedItems.includes(item.product_id || item.id))) {
+                    setSelectedItems([]);
+                  } else {
+                    setSelectedItems(allIds);
+                  }
+                }}
+              />
+              <label htmlFor="select-all-web" className="select-all-label">Select All Items</label>
+            </div>
             {items.map(item => {
               const price = parseFloat(item.price || 0);
               const offer = parseFloat(item.offer_percentage || 0);
@@ -150,6 +168,14 @@ export default function Cart() {
               const qty = item.quantity || 1;
               return (
                 <div key={item.id || item.product_id} className="cart-item-card">
+                  <div className="cart-item-checkbox-wrapper">
+                    <input
+                      type="checkbox"
+                      className="cart-item-checkbox"
+                      checked={selectedItems.includes(item.product_id || item.id)}
+                      onChange={() => toggleItemSelection(item.product_id || item.id)}
+                    />
+                  </div>
                   <Link to={`/product/${item.product_id || item.id}`} className="cart-item-img">
                     <img src={getImageUrl(item.image_url)} alt={item.name} onError={e => { e.target.src = 'https://via.placeholder.com/100'; }} />
                     {item.is_from_combo ? (
@@ -241,7 +267,7 @@ export default function Cart() {
             <div className="cart-order-summary card card-body">
               <h3 className="cart-summary-heading">Order Summary</h3>
               <div className="summary-row">
-                <span>Subtotal ({items.length} items)</span>
+                <span>Subtotal ({selectedItems.length} items)</span>
                 <span>₹{cartSubtotal.toFixed(0)}</span>
               </div>
               {couponDiscount > 0 && (
@@ -267,7 +293,11 @@ export default function Cart() {
                 <span>₹{total.toFixed(0)}</span>
               </div>
               <p className="summary-gst">* Inclusive of GST</p>
-              <button className="btn btn-primary btn-lg btn-block" onClick={handleCheckout}>
+              <button 
+                className="btn btn-primary btn-lg btn-block" 
+                onClick={handleCheckout}
+                disabled={selectedItems.length === 0}
+              >
                 Proceed to Checkout <ArrowRight size={18} />
               </button>
             </div>

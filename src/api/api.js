@@ -5,7 +5,13 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 export const getImageUrl = (url) => {
   if (!url) return 'https://via.placeholder.com/300x300?text=No+Image';
-  if (url.startsWith('http')) return url;
+  if (url.startsWith('http')) {
+    if (url.includes('supabase.co/storage/v1/object/public/')) {
+      return url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/')
+        + '?width=600&height=600&resize=contain&quality=80&format=webp';
+    }
+    return url;
+  }
   // Relative path → prepend backend base (strip /api)
   const backendBase = BASE_URL.replace(/\/api$/, '');
   return `${backendBase}${url.startsWith('/') ? '' : '/'}${url}`;

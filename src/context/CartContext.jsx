@@ -7,6 +7,7 @@ const CartContext = createContext(null);
 export function CartProvider({ children }) {
   const { isAuthenticated } = useAuth();
   const [items, setItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -27,6 +28,13 @@ export function CartProvider({ children }) {
         product_id: item.product_id || item.id,
       }));
       setItems(normalized);
+      setSelectedItems(prev => {
+        const newIds = normalized.map(item => item.product_id || item.id);
+        const filteredPrev = prev.filter(id => newIds.includes(id));
+        const currentIds = items.map(item => item.product_id || item.id);
+        const newlyAdded = newIds.filter(id => !currentIds.includes(id));
+        return [...filteredPrev, ...newlyAdded];
+      });
     } catch { setItems([]); }
     finally { setLoading(false); }
   };
@@ -93,6 +101,8 @@ export function CartProvider({ children }) {
   const cartCount = items.reduce((sum, i) => sum + (i.quantity || 1), 0);
 
   const cartSubtotal = items.reduce((sum, i) => {
+    const itemId = i.product_id || i.id;
+    if (!selectedItems.includes(itemId)) return sum;
     let finalPrice;
     if (i.is_from_combo && i.combo_discounted_price !== undefined) {
       finalPrice = parseFloat(i.combo_discounted_price);
@@ -105,10 +115,25 @@ export function CartProvider({ children }) {
     return sum + (finalPrice * qty);
   }, 0);
 
+  const toggleItemSelection = (productId) => {
+    setSelectedItems(prev =>
+      prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
+    );
+  };
+
+  const getSelectedItems = () => {
+    return items.filter(item => selectedItems.includes(item.product_id || item.id));
+  };
+
+  useEffect(() => {
+    setSelectedItems(prev => prev.filter(id => items.some(item => (item.product_id || item.id) === id)));
+  }, [items]);
+
   return (
     <CartContext.Provider value={{
       items, loading, cartCount, cartSubtotal,
-      addToCart, removeFromCart, updateQuantity, clearCart, fetchCart
+      addToCart, removeFromCart, updateQuantity, clearCart, fetchCart,
+      selectedItems, setSelectedItems, toggleItemSelection, getSelectedItems
     }}>
       {children}
     </CartContext.Provider>

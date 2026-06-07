@@ -8,7 +8,7 @@ import { useToast } from '../context/ToastContext';
 import ProductCard from '../components/ProductCard';
 import {
   Heart, ShoppingCart, Star, ArrowLeft, Plus, Minus,
-  Package, Shield, Truck, ChevronDown, ChevronUp
+  Package, Shield, Truck, ChevronDown, ChevronUp, Trash2
 } from 'lucide-react';
 import './ProductDetail.css';
 
@@ -17,7 +17,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const toast = useToast();
 
   const [product, setProduct] = useState(null);
@@ -104,6 +104,17 @@ export default function ProductDetail() {
       fetchReviews();
     } catch { toast.error('Failed to submit review'); }
     setSubmittingReview(false);
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('Are you sure you want to delete your review?')) return;
+    try {
+      await api.delete(`${ENDPOINTS.PRODUCT_REVIEWS(id)}/${reviewId}`);
+      toast.success('Review deleted!');
+      fetchReviews();
+    } catch {
+      toast.error('Failed to delete review');
+    }
   };
 
   if (loading) return (
@@ -343,8 +354,27 @@ export default function ProductDetail() {
                       </div>
                     </div>
                     {r.created_at && (
-                      <div style={{ marginLeft: 'auto', fontSize: '0.78rem', color: 'var(--text-light)' }}>
+                      <div style={{ marginLeft: 'auto', fontSize: '0.78rem', color: 'var(--text-light)', display: 'flex', alignItems: 'center' }}>
                         {new Date(r.created_at).toLocaleDateString()}
+                        {user && Number(r.user_id) === Number(user.id) && (
+                          <button 
+                            onClick={() => handleDeleteReview(r.id)} 
+                            className="review-delete-btn"
+                            title="Delete Review"
+                            style={{
+                              marginLeft: '12px',
+                              background: 'none',
+                              border: 'none',
+                              color: '#dc2626',
+                              cursor: 'pointer',
+                              padding: '4px',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
