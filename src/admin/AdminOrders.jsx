@@ -324,27 +324,23 @@ export default function AdminOrders() {
                   </div>
 
                   {/* Shiprocket Delivery Section */}
-                  <div style={{ background: '#fcfbf9', border: '1px solid var(--border)', borderRadius: '8px', padding: '18px' }}>
-                    <h4 style={{ margin: '0 0 12px 0', fontSize: '0.95rem', color: 'var(--text-h)', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ background: '#fcfbf9', border: '1px solid var(--border)', borderRadius: '8px', padding: '18px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    <h4 style={{ margin: '0', fontSize: '0.95rem', color: 'var(--text-h)', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <Truck size={18} style={{ color: 'var(--primary)' }} />
                       <span>Shiprocket Fulfillment</span>
                     </h4>
 
                     {shiprocketLoading && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', color: 'var(--text-light)', marginBottom: '14px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', color: 'var(--text-light)' }}>
                         <div className="spinner" style={{ width: 16, height: 16, borderWidth: 2, margin: 0 }} />
                         <span>Processing request...</span>
                       </div>
                     )}
 
-                    {!hasShiprocketData(selectedOrder) ? (
-                      /* Create shipment form */
-                      <div>
-                        <p style={{ fontSize: '0.82rem', color: 'var(--text-light)', marginBottom: '14px', lineHeight: '1.4' }}>
-                          Create a shipment record for this order on your Shiprocket dashboard. Enter dimensions & weight:
-                        </p>
-                        
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+                    {/* Step 1: Create Shipment */}
+                    <div>
+                      {!hasShiprocketData(selectedOrder) && (
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
                           <div className="form-group" style={{ margin: 0 }}>
                             <label className="form-label" style={{ fontSize: '0.75rem', marginBottom: '4px', display: 'block', fontWeight: 600 }}>Weight (kg)</label>
                             <input
@@ -391,73 +387,99 @@ export default function AdminOrders() {
                             />
                           </div>
                         </div>
+                      )}
 
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          style={{ width: '100%', padding: '10px 14px', fontSize: '0.85rem', fontWeight: 600 }}
-                          onClick={() => handleCreateShipment(selectedOrder.id)}
-                          disabled={shiprocketLoading}
-                        >
-                          Create Shiprocket Shipment
-                        </button>
-                      </div>
-                    ) : !hasAWB(selectedOrder) ? (
-                      /* Assign Courier & Get AWB */
+                      <button
+                        type="button"
+                        className="btn"
+                        style={{ 
+                          width: '100%', 
+                          padding: '10px 14px', 
+                          fontSize: '0.85rem', 
+                          fontWeight: 600,
+                          backgroundColor: hasShiprocketData(selectedOrder) ? '#ccc' : 'var(--primary)',
+                          color: hasShiprocketData(selectedOrder) ? '#666' : '#fff',
+                          border: 'none',
+                          cursor: hasShiprocketData(selectedOrder) ? 'not-allowed' : 'pointer'
+                        }}
+                        onClick={() => handleCreateShipment(selectedOrder.id)}
+                        disabled={hasShiprocketData(selectedOrder) || shiprocketLoading}
+                      >
+                        {hasShiprocketData(selectedOrder) ? '✓ Shipment Created' : 'Create Shiprocket Shipment'}
+                      </button>
+                    </div>
+
+                    {/* Step 2: Assign Courier & AWB */}
+                    {hasShiprocketData(selectedOrder) && (
                       <div>
-                        <div style={{ background: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.2)', padding: '10px 12px', borderRadius: '6px', marginBottom: '14px' }}>
-                          <span style={{ fontSize: '0.82rem', color: '#16a34a', fontWeight: 'bold', display: 'block' }}>✓ Shipment Created</span>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>Shipment ID: {selectedOrder.shiprocket_shipment_id}</span>
-                        </div>
-
-                        <p style={{ fontSize: '0.82rem', color: 'var(--text-light)', marginBottom: '14px', lineHeight: '1.4' }}>
-                          Assign a courier company automatically and obtain the AWB tracking number from Shiprocket.
-                        </p>
-
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          style={{ width: '100%', padding: '10px 14px', fontSize: '0.85rem', fontWeight: 600 }}
-                          onClick={() => handleAssignCourier(selectedOrder.id)}
-                          disabled={shiprocketLoading}
-                        >
-                          Assign Courier & Get AWB
-                        </button>
-                      </div>
-                    ) : (
-                      /* Courier assigned, labels and pickup request */
-                      <div>
-                        <div style={{ background: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.2)', padding: '12px', borderRadius: '6px', marginBottom: '16px' }}>
-                          <span style={{ fontSize: '0.82rem', color: '#16a34a', fontWeight: 'bold', display: 'block' }}>✓ Ready for Shipping</span>
-                          <span style={{ fontSize: '0.88rem', color: 'var(--text-h)', fontWeight: 'bold', display: 'block', margin: '4px 0' }}>AWB: {selectedOrder.awb_number}</span>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-light)' }}>Courier: {selectedOrder.courier_name || 'Assigned Courier'}</span>
-                        </div>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {hasAWB(selectedOrder) ? (
                           <button
                             type="button"
-                            className="btn btn-secondary"
-                            style={{ padding: '10px', fontSize: '0.85rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontWeight: 600 }}
-                            onClick={() => handleDownloadLabel(selectedOrder.id)}
-                            disabled={shiprocketLoading}
+                            className="btn"
+                            style={{ 
+                              width: '100%', 
+                              padding: '10px 14px', 
+                              fontSize: '0.85rem', 
+                              fontWeight: 600,
+                              backgroundColor: '#ccc',
+                              color: '#666',
+                              border: 'none',
+                              cursor: 'not-allowed'
+                            }}
+                            disabled={true}
                           >
-                            <FileText size={16} />
-                            <span>Download Shipping Label</span>
+                            ✓ Courier Assigned & AWB Generated
                           </button>
-                          
-                          <button
-                            type="button"
-                            className="btn btn-ghost"
-                            style={{ padding: '10px', fontSize: '0.85rem', width: '100%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontWeight: 600 }}
-                            onClick={() => handleSchedulePickup(selectedOrder.id)}
-                            disabled={shiprocketLoading || selectedOrder.shipment_status === 'pickup_scheduled'}
-                          >
-                            <Calendar size={16} />
-                            <span>
-                              {selectedOrder.shipment_status === 'pickup_scheduled' ? '✓ Pickup Scheduled' : 'Request Pickup'}
-                            </span>
-                          </button>
+                        ) : (
+                          <div>
+                            <p style={{ fontSize: '0.82rem', color: 'var(--text-light)', marginBottom: '10px', lineHeight: '1.4' }}>
+                              Shipment ID: {selectedOrder.shiprocket_shipment_id}
+                            </p>
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              style={{ width: '100%', padding: '10px 14px', fontSize: '0.85rem', fontWeight: 600 }}
+                              onClick={() => handleAssignCourier(selectedOrder.id)}
+                              disabled={shiprocketLoading}
+                            >
+                              Assign Courier & Get AWB
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Step 3: Actions (Label & Pickup) */}
+                    {hasAWB(selectedOrder) && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--text)', marginBottom: '10px' }}>
+                          <strong>AWB Number:</strong> {selectedOrder.awb_number}<br />
+                          <strong>Courier:</strong> {selectedOrder.courier_name || 'Assigned Courier'}
                         </div>
+                        
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          style={{ padding: '10px', fontSize: '0.85rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontWeight: 600 }}
+                          onClick={() => handleDownloadLabel(selectedOrder.id)}
+                          disabled={shiprocketLoading}
+                        >
+                          <FileText size={16} />
+                          <span>Download Shipping Label</span>
+                        </button>
+                        
+                        <button
+                          type="button"
+                          className="btn btn-ghost"
+                          style={{ padding: '10px', fontSize: '0.85rem', width: '100%', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontWeight: 600 }}
+                          onClick={() => handleSchedulePickup(selectedOrder.id)}
+                          disabled={shiprocketLoading || selectedOrder.shipment_status === 'pickup_scheduled'}
+                        >
+                          <Calendar size={16} />
+                          <span>
+                            {selectedOrder.shipment_status === 'pickup_scheduled' ? '✓ Pickup Scheduled' : 'Request Pickup'}
+                          </span>
+                        </button>
                       </div>
                     )}
                   </div>
