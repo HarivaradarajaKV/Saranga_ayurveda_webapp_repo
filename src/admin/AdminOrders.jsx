@@ -58,8 +58,26 @@ export default function AdminOrders() {
     }
   };
 
-  const hasShiprocketData = (order) => !!order.shiprocket_order_id;
-  const hasAWB = (order) => !!order.awb_number;
+  const hasShiprocketData = (order) => {
+    if (!order) return false;
+    return !!(
+      order.shiprocket_order_id ||
+      order.shiprocket_shipment_id ||
+      order.awb_number ||
+      order.shipment_status === 'created' ||
+      order.shipment_status === 'awb_generated' ||
+      order.shipment_status === 'pickup_scheduled'
+    );
+  };
+
+  const hasAWB = (order) => {
+    if (!order) return false;
+    return !!(
+      order.awb_number ||
+      order.shipment_status === 'awb_generated' ||
+      order.shipment_status === 'pickup_scheduled'
+    );
+  };
 
   const handleCreateShipment = async (orderId) => {
     setShiprocketLoading(true);
