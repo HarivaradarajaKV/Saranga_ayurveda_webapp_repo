@@ -31,6 +31,7 @@
   transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
   position: relative;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 /* Smooth hover lift & shadow lift */
@@ -87,6 +88,12 @@
   background-color: #1f4224; /* darker green */
   transform: scale(1.12);
   box-shadow: 0 4px 10px rgba(46, 93, 52, 0.22);
+}
+
+.new-arrival-add-btn.added {
+  background-color: #2ecc71 !important; /* success green */
+  transform: scale(1.12);
+  box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
 }
 
 .new-arrival-add-btn:disabled {
@@ -240,6 +247,23 @@
   text-transform: uppercase;
 }
 
+.new-arrival-stock-badge {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background-color: #E28743; /* Warm terracotta/orange */
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(226, 135, 67, 0.25);
+  pointer-events: none;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
 .new-arrival-wishlist-btn {
   position: absolute;
   top: 12px;
@@ -333,3 +357,44 @@
     height: 26px;
   }
 }
+
+/* Product Card Qty Control */
+.product-card-qty-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid #2E5D34;
+  border-radius: 13px;
+  overflow: hidden;
+  height: 26px;
+  background-color: #FAF8F5;
+  box-shadow: 0 2px 6px rgba(46, 93, 52, 0.08);
+  z-index: 5;
+}
+
+.product-card-qty-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #2E5D34;
+  transition: background-color 0.2s, color 0.2s;
+  padding: 0;
+}
+
+.product-card-qty-btn:hover {
+  background-color: rgba(46, 93, 52, 0.08);
+}
+
+.product-card-qty-val {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #2D2D2D;
+  min-width: 22px;
+  text-align: center;
+  user-select: none;
+}
+

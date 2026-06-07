@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api, { ENDPOINTS, getImageUrl } from '../../api/api';
-import { ArrowLeft, Package } from 'lucide-react';
+import { ArrowLeft, Package, Clock, MapPin, CreditCard, ChevronRight } from 'lucide-react';
+import './Profile.css';
 
 const STATUS_STEPS = ['pending', 'confirmed', 'shipped', 'delivered'];
 
@@ -18,90 +19,207 @@ export default function OrderDetail() {
   }, [id]);
 
   if (loading) return <div className="page-content loading-center"><div className="spinner" /></div>;
-  if (!order) return <div className="page-content container empty-state"><h3>Order not found</h3><Link to="/profile/orders" className="btn btn-primary">My Orders</Link></div>;
+  if (!order) return (
+    <div className="page-content container empty-state" style={{ padding: '80px 24px', textAlign: 'center' }}>
+      <h3>Order not found</h3>
+      <Link to="/profile/orders" className="btn-solid-green" style={{ textDecoration: 'none', display: 'inline-block', marginTop: 16 }}>My Orders</Link>
+    </div>
+  );
 
   const isCancelled = order.status === 'cancelled';
   const statusIdx = isCancelled ? -1 : STATUS_STEPS.indexOf(order.status);
 
   return (
-    <div className="page-content page-fade-in">
-      <div className="container-sm">
-        <Link to="/profile/orders" className="btn btn-ghost btn-sm mb-16"><ArrowLeft size={16} /> Back to Orders</Link>
-        <h1 style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary)', marginBottom: 6 }}>Order #{order.id}</h1>
-        <p style={{ color: 'var(--text-muted)', marginBottom: 28 }}>
-          Placed on {order.created_at ? new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
-        </p>
+    <div className="page-content page-fade-in account-page">
+      <div className="container relative-container" style={{ maxWidth: '800px' }}>
+        
+        {/* Back Link */}
+        <Link to="/profile/orders" className="profile-mobile-back-header" style={{ display: 'flex', marginBottom: 20 }}>
+          <ArrowLeft size={18} style={{ marginRight: '8px' }} />
+          <span>Back to Orders</span>
+        </Link>
 
-        {/* Status tracker */}
-        <div className="card card-body" style={{ marginBottom: 20 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-            <h3 style={{ margin: 0 }}>Order Status</h3>
-            <span className={`badge ${isCancelled ? 'badge-danger' : 'badge-primary'}`} style={{textTransform: 'capitalize'}}>
+        {/* Title */}
+        <div className="account-header-section" style={{ marginBottom: 28 }}>
+          <h1 className="account-title font-serif-main">Order #{order.id}</h1>
+          <p className="account-subtitle">
+            Placed on {order.created_at ? new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+          </p>
+        </div>
+
+        {/* Status Tracker */}
+        <div className="dashboard-content-panel" style={{ marginBottom: 24 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, borderBottom: '1px solid #FAF7F2', paddingBottom: 16 }}>
+            <h3 className="panel-title font-serif-main" style={{ margin: 0, border: 'none', padding: 0 }}>Order Status</h3>
+            <span 
+              className="order-status-badge" 
+              style={{ 
+                backgroundColor: isCancelled ? '#FEF2F2' : '#EAF5EC', 
+                color: isCancelled ? '#EF4444' : '#2E5D34',
+                fontSize: '0.85rem',
+                padding: '6px 16px'
+              }}
+            >
               {order.status}
             </span>
           </div>
           
           {isCancelled ? (
-            <div style={{ padding: 20, textAlign: 'center', color: 'var(--danger)', background: '#fff5f5', borderRadius: 8 }}>
+            <div style={{ padding: 24, textAlign: 'center', color: '#ef4444', background: '#FEF2F2', borderRadius: 12, fontWeight: 500 }}>
               This order has been cancelled.
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', padding: '12px 0' }}>
               {STATUS_STEPS.map((s, i) => (
-                <div key={s} style={{ flex: 1, display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 6 }}>
-                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: i <= statusIdx ? 'var(--primary)' : 'var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.75rem', fontWeight: 700 }}>
+                <div key={s} style={{ flex: 1, display: 'flex', alignItems: 'center', flexDirection: 'column', gap: 8, zIndex: 2 }}>
+                  <div 
+                    style={{ 
+                      width: 36, 
+                      height: 36, 
+                      borderRadius: '50%', 
+                      background: i <= statusIdx ? '#2E5D34' : '#EAE5D9', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justify: 'center',
+                      justifyContent: 'center',
+                      color: '#ffffff', 
+                      fontSize: '0.9rem', 
+                      fontWeight: 700,
+                      border: '4px solid #ffffff',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.05)'
+                    }}
+                  >
                     {i <= statusIdx ? '✓' : i + 1}
                   </div>
-                  <div style={{ fontSize: '0.72rem', textTransform: 'capitalize', fontWeight: i === statusIdx ? 700 : 400, color: i <= statusIdx ? 'var(--primary)' : 'var(--text-light)' }}>{s}</div>
-                  {i < STATUS_STEPS.length - 1 && (
-                    <div style={{ position: 'absolute', width: '25%', height: 2, background: i < statusIdx ? 'var(--primary)' : 'var(--border)', marginTop: 14 }} />
-                  )}
+                  <div 
+                    style={{ 
+                      fontSize: '0.78rem', 
+                      textTransform: 'capitalize', 
+                      fontWeight: i === statusIdx ? 700 : 500, 
+                      color: i <= statusIdx ? '#2E5D34' : '#7a8273' 
+                    }}
+                  >
+                    {s}
+                  </div>
                 </div>
               ))}
+              {/* Connector line behind dots */}
+              <div 
+                style={{ 
+                  position: 'absolute', 
+                  top: '30px', 
+                  left: '12%', 
+                  right: '12%', 
+                  height: 2, 
+                  background: '#EAE5D9', 
+                  zIndex: 1 
+                }} 
+              />
+              <div 
+                style={{ 
+                  position: 'absolute', 
+                  top: '30px', 
+                  left: '12%', 
+                  width: `${(statusIdx / (STATUS_STEPS.length - 1)) * 76}%`, 
+                  height: 2, 
+                  background: '#2E5D34', 
+                  zIndex: 1,
+                  transition: 'width 0.3s ease'
+                }} 
+              />
             </div>
           )}
         </div>
 
-        {/* Items */}
-        <div className="card card-body" style={{ marginBottom: 20 }}>
-          <h3 style={{ marginBottom: 16 }}>Items</h3>
-          {(order.items || []).map((item, i) => (
-            <div key={i} style={{ display: 'flex', gap: 14, paddingBottom: 14, marginBottom: 14, borderBottom: '1px solid var(--border-light)' }}>
-              <div style={{ width: 64, height: 64, borderRadius: 10, overflow: 'hidden', background: 'var(--surface)', flexShrink: 0 }}>
-                <img src={getImageUrl(item.image_url)} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => e.target.src = 'https://via.placeholder.com/64'} />
+        {/* Ordered Items */}
+        <div className="dashboard-content-panel" style={{ marginBottom: 24 }}>
+          <h3 className="panel-title font-serif-main" style={{ marginBottom: 16 }}>Items Ordered</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {(order.items || []).map((item, i) => (
+              <div 
+                key={i} 
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center',
+                  gap: 16, 
+                  paddingBottom: 16, 
+                  borderBottom: i < (order.items.length - 1) ? '1px solid #FAF7F2' : 'none' 
+                }}
+              >
+                <div style={{ width: 72, height: 72, borderRadius: 12, overflow: 'hidden', border: '1px solid #EAE5D9', flexShrink: 0, background: '#ffffff' }}>
+                  <img 
+                    src={getImageUrl(item.image_url)} 
+                    alt={item.name} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    onError={e => e.target.src = 'https://via.placeholder.com/72'} 
+                  />
+                </div>
+                <div style={{ flex: 1, textAlign: 'left' }}>
+                  <h4 style={{ margin: '0 0 4px', fontSize: '0.98rem', fontWeight: 600, color: '#2c3327' }}>
+                    {item.name || item.product_name}
+                  </h4>
+                  <p style={{ margin: 0, fontSize: '0.82rem', color: '#7a8273' }}>Qty: {item.quantity}</p>
+                </div>
+                <div style={{ fontWeight: 700, color: '#2E5D34', fontSize: '1.05rem' }}>
+                  ₹{parseFloat(item.price || 0).toFixed(0)}
+                </div>
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 600 }}>{item.name || item.product_name}</div>
-                <div style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Qty: {item.quantity}</div>
-                <div style={{ fontWeight: 700, color: 'var(--primary)' }}>₹{parseFloat(item.price || item.price_at_time || 0).toFixed(0)}</div>
+            ))}
+          </div>
+        </div>
+
+        {/* Delivery & Summary Column-Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: order.address ? '1.2fr 1fr' : '1fr', gap: 24 }}>
+          
+          {/* Left: Delivery Details */}
+          {order.address && (
+            <div className="dashboard-content-panel">
+              <h3 className="panel-title font-serif-main" style={{ marginBottom: 16 }}>Delivery Address</h3>
+              <div style={{ fontSize: '0.9rem', color: '#555555', lineHeight: 1.6, textAlign: 'left' }}>
+                <strong style={{ color: '#2c3327', fontSize: '1rem' }}>{order.address.full_name}</strong>
+                <p style={{ margin: '6px 0' }}>
+                  {order.address.address_line1}
+                  {order.address.address_line2 ? `, ${order.address.address_line2}` : ''}<br />
+                  {order.address.city}, {order.address.state} - {order.address.postal_code}
+                </p>
+                <span style={{ fontSize: '0.82rem', color: '#7a8273' }}>Phone: {order.address.phone_number}</span>
               </div>
             </div>
-          ))}
-        </div>
+          )}
 
-        {/* Summary */}
-        <div className="card card-body">
-          <h3 style={{ marginBottom: 14 }}>Order Summary</h3>
-          <div className="summary-row"><span>Subtotal</span><span>₹{parseFloat(order.total_amount || 0).toFixed(0)}</span></div>
-          {order.discount_amount > 0 && <div className="summary-row summary-row-green"><span>Discount</span><span>-₹{parseFloat(order.discount_amount).toFixed(0)}</span></div>}
-          <div className="summary-row"><span>Delivery</span><span>{parseFloat(order.delivery_charge || 0) === 0 ? 'FREE' : `₹${order.delivery_charge}`}</span></div>
-          <div className="summary-divider" />
-          <div className="summary-total"><span>Total Paid</span><span>₹{parseFloat(order.total_amount || 0).toFixed(0)}</span></div>
-          {order.payment_id && <div style={{ marginTop: 10, fontSize: '0.78rem', color: 'var(--text-light)' }}>Payment ID: {order.payment_id}</div>}
-        </div>
-
-        {/* Address */}
-        {order.address && (
-          <div className="card card-body" style={{ marginTop: 20 }}>
-            <h3 style={{ marginBottom: 10 }}>Delivery Address</h3>
-            <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-              <strong>{order.address.full_name}</strong><br />
-              {order.address.address_line1}{order.address.address_line2 ? `, ${order.address.address_line2}` : ''}<br />
-              {order.address.city}, {order.address.state} - {order.address.postal_code}<br />
-              {order.address.phone_number}
+          {/* Right: Price Details */}
+          <div className="dashboard-content-panel">
+            <h3 className="panel-title font-serif-main" style={{ marginBottom: 16 }}>Order Summary</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#555555' }}>
+                <span>Subtotal</span>
+                <span>₹{parseFloat(order.total_amount || 0).toFixed(0)}</span>
+              </div>
+              {order.discount_amount > 0 && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#2E5D34', fontWeight: 600 }}>
+                  <span>Discount</span>
+                  <span>-₹{parseFloat(order.discount_amount).toFixed(0)}</span>
+                </div>
+              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem', color: '#555555' }}>
+                <span>Delivery</span>
+                <span>{parseFloat(order.delivery_charge || 0) === 0 ? 'FREE' : `₹${order.delivery_charge}`}</span>
+              </div>
+              <div style={{ height: 1, background: '#EAE5D9', margin: '4px 0' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.1rem', fontWeight: 700, color: '#2E5D34' }}>
+                <span>Total Paid</span>
+                <span>₹{parseFloat(order.total_amount || 0).toFixed(0)}</span>
+              </div>
+              {order.payment_id && (
+                <p style={{ margin: '8px 0 0', fontSize: '0.75rem', color: '#7a8273', textAlign: 'left' }}>
+                  Payment ID: {order.payment_id}
+                </p>
+              )}
             </div>
           </div>
-        )}
+
+        </div>
+
       </div>
     </div>
   );

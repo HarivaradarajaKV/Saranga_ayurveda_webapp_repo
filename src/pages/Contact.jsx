@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   Phone, Mail, MapPin, User, ChevronDown, ChevronUp, Send, CheckCircle2, ShieldCheck 
 } from 'lucide-react';
+import SEO from '../components/SEO';
 import './Contact.css';
 
 export default function Contact() {
@@ -89,6 +90,12 @@ export default function Contact() {
 
   return (
     <div className="contact-page">
+      <SEO 
+        title="Contact Us | Customer Support & Consultations"
+        description="Get in touch with Saranga Ayurveda. Contact our customer service desk, book an Ayurvedic practitioner consultation, or ask a question."
+        keywords="Saranga Ayurveda contact, customer care, Ayurvedic practitioner consultation, Dehradun address"
+        canonicalPath="/contact-us"
+      />
       <div className="contact-container">
         
         {/* Breadcrumbs */}
@@ -135,18 +142,7 @@ export default function Contact() {
 
               <div className="reach-methods-grid">
                 
-                {/* Method 1: Phone */}
-                <div className="reach-method-item">
-                  <div className="reach-icon-wrap">
-                    <Phone size={20} strokeWidth={1.5} />
-                  </div>
-                  <h5>CALL US</h5>
-                  <p className="reach-primary">+91 96112 00444</p>
-                  <p className="reach-secondary">Mon - Sat</p>
-                  <p className="reach-secondary">10:00 AM – 6:00 PM (IST)</p>
-                </div>
-
-                {/* Method 2: Email */}
+                {/* Method 1: Email */}
                 <div className="reach-method-item">
                   <div className="reach-icon-wrap">
                     <Mail size={20} strokeWidth={1.5} />
@@ -157,25 +153,15 @@ export default function Contact() {
                   <p className="reach-secondary">24 business hours</p>
                 </div>
 
-                {/* Method 3: Location */}
-                <div className="reach-method-item">
-                  <div className="reach-icon-wrap">
-                    <MapPin size={20} strokeWidth={1.5} />
-                  </div>
-                  <h5>VISIT US</h5>
-                  <p className="reach-primary">Saranga Ayurveda</p>
-                  <p className="reach-secondary">Kerala, India</p>
-                  <p className="reach-secondary">By appointment only</p>
-                </div>
-
-                {/* Method 4: WhatsApp */}
+                {/* Method 2: WhatsApp */}
                 <div className="reach-method-item">
                   <div className="reach-icon-wrap">
                     <WhatsAppIcon className="reach-svg-icon" />
                   </div>
                   <h5>WHATSAPP</h5>
-                  <p className="reach-primary">Chat with us on WhatsApp</p>
-                  <p className="reach-secondary">+91 96112 00444</p>
+                  <p className="reach-primary">+91 96112 00444</p>
+                  <p className="reach-secondary">Chat with us on WhatsApp</p>
+                  <p className="reach-secondary">Mon - Sun (10 AM - 5 PM)</p>
                 </div>
 
               </div>
@@ -186,9 +172,9 @@ export default function Contact() {
           <div className="contact-form-col">
             {!submitted ? (
               <form className="contact-form-card" onSubmit={handleSubmit}>
-                <div className="contact-section-label">
+                <div className="contact-section-label" style={{ display: 'block', textAlign: 'center', width: '100%' }}>
                   <span>SEND US A MESSAGE</span>
-                  <div className="label-underline"></div>
+                  <div className="label-underline" style={{ margin: '8px auto 0 auto' }}></div>
                 </div>
 
                 {/* Full Name & Email Address Row */}
@@ -201,7 +187,7 @@ export default function Contact() {
                         name="fullName"
                         value={formData.fullName}
                         onChange={handleInputChange}
-                        placeholder="Enter your full name" 
+                        placeholder="Full name" 
                         className={errors.fullName ? 'input-error' : ''}
                       />
                       <User size={18} className="input-icon" />
@@ -217,7 +203,7 @@ export default function Contact() {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        placeholder="Enter your email" 
+                        placeholder="Email address" 
                         className={errors.email ? 'input-error' : ''}
                       />
                       <Mail size={18} className="input-icon" />
@@ -226,57 +212,56 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Phone Number & Subject Row */}
-                <div className="form-row-2col">
-                  <div className="form-group">
-                    <label>Phone Number</label>
-                    <div className="phone-input-group">
-                      <div className="select-wrap phone-code-select">
-                        <select 
-                          name="phoneCode" 
-                          value={formData.phoneCode}
-                          onChange={handleInputChange}
-                        >
-                          <option value="+91">+91</option>
-                          <option value="+1">+1</option>
-                          <option value="+44">+44</option>
-                          <option value="+971">+971</option>
-                        </select>
-                        <ChevronDown size={14} className="select-arrow" />
-                      </div>
-                      <div className="input-with-icon phone-number-input">
-                        <input 
-                          type="tel" 
-                          name="phoneNumber"
-                          value={formData.phoneNumber}
-                          onChange={handleInputChange}
-                          placeholder="Enter your phone number" 
-                        />
-                        <Phone size={18} className="input-icon" />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label>Subject <span className="req">*</span></label>
-                    <div className="select-wrap">
+                {/* Phone Number Field */}
+                <div className="form-group">
+                  <label>Phone Number</label>
+                  <div className="phone-input-group">
+                    <div className="select-wrap phone-code-select">
                       <select 
-                        name="subject"
-                        value={formData.subject}
+                        name="phoneCode" 
+                        value={formData.phoneCode}
                         onChange={handleInputChange}
-                        className={errors.subject ? 'input-error' : ''}
                       >
-                        <option value="">Choose a subject</option>
-                        <option value="General">General Inquiry</option>
-                        <option value="Product">Product Support</option>
-                        <option value="Order">Order Status</option>
-                        <option value="Consultation">Consultation Booking</option>
-                        <option value="Feedback">Feedback</option>
+                        <option value="+91">+91</option>
+                        <option value="+1">+1</option>
+                        <option value="+44">+44</option>
+                        <option value="+971">+971</option>
                       </select>
-                      <ChevronDown size={16} className="select-arrow" />
+                      <ChevronDown size={14} className="select-arrow" />
                     </div>
-                    {errors.subject && <span className="error-text">{errors.subject}</span>}
+                    <div className="input-with-icon phone-number-input">
+                      <input 
+                        type="tel" 
+                        name="phoneNumber"
+                        value={formData.phoneNumber}
+                        onChange={handleInputChange}
+                        placeholder="Phone number" 
+                      />
+                      <Phone size={18} className="input-icon" />
+                    </div>
                   </div>
+                </div>
+
+                {/* Subject Field */}
+                <div className="form-group">
+                  <label>Subject <span className="req">*</span></label>
+                  <div className="select-wrap">
+                    <select 
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className={errors.subject ? 'input-error' : ''}
+                    >
+                      <option value="">Choose a subject</option>
+                      <option value="General">General Inquiry</option>
+                      <option value="Product">Product Support</option>
+                      <option value="Order">Order Status</option>
+                      <option value="Consultation">Consultation Booking</option>
+                      <option value="Feedback">Feedback</option>
+                    </select>
+                    <ChevronDown size={16} className="select-arrow" />
+                  </div>
+                  {errors.subject && <span className="error-text">{errors.subject}</span>}
                 </div>
 
                 {/* Message */}
@@ -286,7 +271,7 @@ export default function Contact() {
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    placeholder="Type your message here.."
+                    placeholder="Type your message..."
                     rows={4}
                     className={errors.message ? 'input-error' : ''}
                   />

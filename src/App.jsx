@@ -136,12 +136,11 @@ export default function App() {
                   <Route path="/cart" element={<Layout><Cart /></Layout>} />
                   <Route path="/wishlist" element={<Layout><Wishlist /></Layout>} />
                   <Route path="/checkout" element={<ProtectedRoute><Layout><Checkout /></Layout></ProtectedRoute>} />
-                  <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
-                  <Route path="/profile/orders" element={<ProtectedRoute><Layout><Orders /></Layout></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><Layout><Profile tab="dashboard" /></Layout></ProtectedRoute>} />
+                  <Route path="/profile/orders" element={<ProtectedRoute><Layout><Profile tab="orders" /></Layout></ProtectedRoute>} />
                   <Route path="/profile/orders/:id" element={<ProtectedRoute><Layout><OrderDetail /></Layout></ProtectedRoute>} />
-                  <Route path="/profile/addresses" element={<ProtectedRoute><Layout><Addresses /></Layout></ProtectedRoute>} />
-                  <Route path="/profile/settings" element={<ProtectedRoute><Layout><Settings /></Layout></ProtectedRoute>} />
-                  <Route path="/profile/notifications" element={<ProtectedRoute><Layout><Notifications /></Layout></ProtectedRoute>} />
+                  <Route path="/profile/addresses" element={<ProtectedRoute><Layout><Profile tab="addresses" /></Layout></ProtectedRoute>} />
+                  <Route path="/profile/settings" element={<ProtectedRoute><Layout><Profile tab="settings" /></Layout></ProtectedRoute>} />
 
                   {/* Admin routes */}
                   <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>

@@ -1,11 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Leaf, Sparkles, Heart, HandHeart } from 'lucide-react';
+import SEO from '../components/SEO';
 import './About.css';
 
 export default function About() {
   return (
     <div className="about-page page-content page-fade-in">
+      <SEO 
+        title="Our Story | About Us"
+        description="Learn about Saranga Ayurveda's heritage. Discover how we prepare organic beauty, haircare, and skin formulations based on authentic ancient Ayurveda in Bengaluru."
+        keywords="Saranga Ayurveda Bengaluru, Ayurvedic heritage, authentic ayurveda, organic beauty brand, natural wellness story"
+        canonicalPath="/about"
+      />
       <div className="container about-container">
         {/* Breadcrumbs */}
         <div className="about-breadcrumbs">

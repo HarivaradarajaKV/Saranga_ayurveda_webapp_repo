@@ -3,35 +3,52 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import api, { ENDPOINTS, getImageUrl } from '../api/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import { getDisplayCategoryName } from '../context/CategoryContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ProductCard from '../components/ProductCard';
+import SEO from '../components/SEO';
 import {
   Heart, ShoppingCart, Star, ArrowLeft, Plus, Minus,
-  Package, Shield, Truck, ChevronDown, ChevronUp, Trash2
+  Package, Shield, Truck, ChevronDown, ChevronUp, Trash2,
+  Leaf, Rabbit, Sprout, ShieldCheck, Share2
 } from 'lucide-react';
 import './ProductDetail.css';
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { items: cartItems, addToCart, updateQuantity } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { isAuthenticated, user } = useAuth();
   const toast = useToast();
 
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
+  
+  const cartItem = cartItems?.find(i => (i.product_id || i.id) === parseInt(id));
+  const cartQty = cartItem ? cartItem.quantity : 0;
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
-  const [descExpanded, setDescExpanded] = useState(false);
   const [reviewText, setReviewText] = useState('');
   const [reviewRating, setReviewRating] = useState(5);
   const [submittingReview, setSubmittingReview] = useState(false);
   const [imageErrors, setImageErrors] = useState({});
+
+  const [openFaq, setOpenFaq] = useState(null);
+  const [accordions, setAccordions] = useState({
+    details: true,
+    howToUse: false,
+    ingredients: false,
+    delivery: false
+  });
+
+  const toggleAccordion = (sec) => {
+    setAccordions(prev => ({ ...prev, [sec]: !prev[sec] }));
+  };
 
   const images = product ? Array.from(new Set([
     ...(Array.isArray(product.media) ? product.media.map(m => m.url) : []),
@@ -93,6 +110,31 @@ export default function ProductDetail() {
     toast.success(isInWishlist(product.id) ? 'Removed from wishlist' : 'Added to wishlist!');
   };
 
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product.name,
+        text: product.benefits || product.description,
+        url: window.location.href,
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success('Product link copied to clipboard!');
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (images.length > 0) {
+      setActiveImage(prev => (prev - 1 + images.length) % images.length);
+    }
+  };
+
+  const handleNextImage = () => {
+    if (images.length > 0) {
+      setActiveImage(prev => (prev + 1) % images.length);
+    }
+  };
+
   const submitReview = async (e) => {
     e.preventDefault();
     if (!isAuthenticated) { navigate('/auth/login'); return; }
@@ -141,169 +183,372 @@ export default function ProductDetail() {
 
   const discountedPrice = product.price * (1 - (product.offer_percentage || 0) / 100);
   const inWishlist = isInWishlist(product.id);
-  const avgRating = reviews.length > 0 ? (reviews.reduce((s, r) => s + (r.rating || 0), 0) / reviews.length).toFixed(1) : product.rating || 0;
+
+  const faqs = [
+    {
+      q: "What skin types are your products suitable for?",
+      a: "Our products are formulated to be gentle and suitable for all skin types, including sensitive skin. However, we recommend doing a patch test before first use."
+    },
+    {
+      q: "Are your products cruelty-free and vegan?",
+      a: "Yes, all Saranga Ayurveda products are 100% cruelty-free and vegan. We never test on animals."
+    },
+    {
+      q: "How do I use this product for the best results?",
+      a: "For best results, apply the product consistently as directed on the label, preferably after cleansing."
+    },
+    {
+      q: "What ingredients are in this product?",
+      a: "We use high-quality organic ingredients, herbal extracts, and traditional Ayurvedic formulations free from harmful chemicals."
+    },
+    {
+      q: "Can I use this product if I have sensitive skin?",
+      a: "Yes! Our formulations are extremely mild. Please consult the ingredient list if you have known specific allergies."
+    }
+  ];
+
+  const productSchema = product ? {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": product.name,
+    "image": [getImageUrl(product.image_url)],
+    "description": product.description || `Buy ${product.name} online at Saranga Ayurveda. Premium quality Ayurvedic beauty and wellness product.`,
+    "sku": `SA-${product.id}`,
+    "brand": {
+      "@type": "Brand",
+      "name": "Saranga Ayurveda"
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": window.location.href,
+      "priceCurrency": "INR",
+      "price": discountedPrice,
+      "priceValidUntil": "2027-12-31",
+      "itemCondition": "https://schema.org/NewCondition",
+      "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+    }
+  } : null;
 
   return (
     <div className="page-content page-fade-in product-detail-page">
+      <SEO 
+        title={product.name}
+        description={product.description || `Buy ${product.name} online. Authentic Ayurvedic formulation for beauty and wellness by Saranga Ayurveda.`}
+        ogImage={getImageUrl(product.image_url)}
+        canonicalPath={`/product/${product.id}`}
+        schema={productSchema}
+      />
       <div className="container">
-        <Link to={-1} className="btn btn-ghost btn-sm mb-16">
-          <ArrowLeft size={16} /> Back
+        <Link to="/explore" className="btn btn-ghost btn-sm mb-24 pdp-back-link">
+          <ArrowLeft size={16} style={{ marginRight: '8px' }} /> Back to Shop
         </Link>
 
         <div className="product-detail-grid">
-          {/* Images */}
-          <div className="product-images">
+          {/* Left Column: Images & Bottom Features */}
+          <div className="pdp-left-col">
             <div className="product-main-image">
               <img
-                src={imageErrors[activeImage] ? 'https://via.placeholder.com/500x500?text=No+Image' : getImageUrl(images[activeImage] || product.image_url)}
+                src={imageErrors[activeImage] ? 'https://via.placeholder.com/600x600?text=No+Image' : getImageUrl(images[activeImage] || product.image_url)}
                 alt={product.name}
                 onError={() => setImageErrors(prev => ({ ...prev, [activeImage]: true }))}
               />
               {product.offer_percentage > 0 && (
-                <div className="product-image-badge">{Math.round(product.offer_percentage)}% OFF</div>
+                <div className="product-image-badge">-{Math.round(product.offer_percentage)}%</div>
               )}
-            </div>
-            {images.length > 1 && (
-              <div className="product-thumbnails">
-                {images.map((img, i) => (
-                  <button
-                    key={i}
-                    className={`product-thumb ${activeImage === i ? 'active' : ''}`}
-                    onClick={() => setActiveImage(i)}
-                  >
-                    <img src={getImageUrl(img)} alt={`View ${i + 1}`} />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Info */}
-          <div className="product-info">
-            <div className="product-category-tag">{product.category_name || product.category}</div>
-            <h1 className="product-name">{product.name}</h1>
-
-            {/* Rating */}
-            <div className="product-rating-row">
-              <div className="stars">
-                {Array(5).fill(0).map((_, i) => (
-                  <Star key={i} size={16} fill={i < Math.round(avgRating) ? 'var(--accent)' : 'none'} stroke={i < Math.round(avgRating) ? 'none' : 'var(--border)'} />
-                ))}
-              </div>
-              <span className="product-rating-val">{avgRating}</span>
-              <span className="product-review-count">({reviews.length} reviews)</span>
-            </div>
-
-            {/* Pricing */}
-            <div className="product-pricing">
-              <span className="product-price">₹{discountedPrice.toFixed(0)}</span>
-              {product.offer_percentage > 0 && (
-                <>
-                  <span className="product-original">₹{parseFloat(product.price).toFixed(0)}</span>
-                  <span className="product-savings">Save {Math.round(product.offer_percentage)}%</span>
-                </>
-              )}
-            </div>
-            <p className="product-gst-note">* Price includes GST</p>
-
-            {/* Stock */}
-            <div className={`product-stock ${product.stock_quantity > 0 ? 'in-stock' : 'out-stock'}`}>
-              <Package size={14} />
-              {product.stock_quantity > 0
-                ? product.stock_quantity <= 5 ? `Only ${product.stock_quantity} left!` : 'In Stock'
-                : 'Out of Stock'
-              }
-            </div>
-
-            {/* Size */}
-            {product.size && (
-              <div className="product-attr">
-                <span className="product-attr-label">Size:</span>
-                <span>{product.size}</span>
-              </div>
-            )}
-
-            {/* Quantity */}
-            <div className="product-qty-row">
-              <span className="product-attr-label">Quantity:</span>
-              <div className="qty-control">
-                <button className="qty-btn" onClick={() => setQuantity(q => Math.max(1, q - 1))}>
-                  <Minus size={16} />
-                </button>
-                <span className="qty-val">{quantity}</span>
-                <button className="qty-btn" onClick={() => setQuantity(q => Math.min(product.stock_quantity || 99, q + 1))}>
-                  <Plus size={16} />
-                </button>
-              </div>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="product-cta">
+              {/* Desktop Wishlist Button */}
               <button
-                className="btn btn-primary btn-lg"
-                onClick={handleAddToCart}
-                disabled={adding || !product.stock_quantity}
-                style={{ flex: 1 }}
-              >
-                <ShoppingCart size={18} />
-                {adding ? 'Adding...' : !product.stock_quantity ? 'Out of Stock' : 'Add to Cart'}
-              </button>
-              <button
-                className={`product-wishlist-btn ${inWishlist ? 'active' : ''}`}
+                className={`pdp-wishlist-float ${inWishlist ? 'active' : ''}`}
                 onClick={handleWishlist}
+                title={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
               >
                 <Heart size={20} fill={inWishlist ? 'currentColor' : 'none'} />
               </button>
             </div>
 
-            {/* Trust badges */}
-            <div className="product-trust">
-              <div className="trust-item"><Shield size={14} /> Authentic Product</div>
-              <div className="trust-item"><Truck size={14} /> Free delivery on ₹500+</div>
-            </div>
-
-            {/* Description */}
-            {product.description && (
-              <div className="product-desc-section">
-                <button
-                  className="product-desc-toggle"
-                  onClick={() => setDescExpanded(!descExpanded)}
-                >
-                  Description {descExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </button>
-                {descExpanded && <p className="product-desc">{product.description}</p>}
+            {/* Mobile Pagination Dots */}
+            {images.length > 1 && (
+              <div className="pdp-pagination-dots">
+                {images.map((_, i) => (
+                  <span 
+                    key={i} 
+                    className={`pdp-dot ${activeImage === i ? 'active' : ''}`}
+                    onClick={() => setActiveImage(i)}
+                  />
+                ))}
               </div>
             )}
 
-            {/* Extra Details */}
-            {(product.benefits || product.ingredients || product.usage_instructions) && (
-              <div className="product-extras">
-                {product.benefits && (
-                  <div className="product-extra-item">
-                    <strong>Benefits</strong>
-                    <p>{product.benefits}</p>
-                  </div>
+            {/* Desktop Thumbnails */}
+            {images.length > 1 && (
+              <div className="pdp-thumbnails-wrapper">
+                <button 
+                  className="pdp-nav-btn prev" 
+                  onClick={handlePrevImage} 
+                  disabled={images.length <= 1}
+                >
+                  <ArrowLeft size={16} />
+                </button>
+                <div className="pdp-thumbnails-list">
+                  {images.map((img, i) => (
+                    <button
+                      key={i}
+                      className={`pdp-thumb-item ${activeImage === i ? 'active' : ''}`}
+                      onClick={() => setActiveImage(i)}
+                    >
+                      <img src={getImageUrl(img)} alt={`View ${i + 1}`} onError={(e) => { e.target.src = 'https://via.placeholder.com/100x100?text=No+Image'; }} />
+                    </button>
+                  ))}
+                </div>
+                <button 
+                  className="pdp-nav-btn next" 
+                  onClick={handleNextImage} 
+                  disabled={images.length <= 1}
+                >
+                  <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
+                </button>
+              </div>
+            )}
+
+            {/* Subtle Horizontal Features Row (Desktop Only) */}
+            <div className="pdp-features-row">
+              <div className="pdp-feature-col">
+                <Leaf size={20} className="pdp-feature-icon" strokeWidth={1.5} />
+                <h6>Natural Formula</h6>
+                <p>Crafted with pure, skin-loving ingredients for ultimate care.</p>
+              </div>
+              <div className="pdp-feature-col">
+                <Rabbit size={20} className="pdp-feature-icon" strokeWidth={1.5} />
+                <h6>Cruelty-Free</h6>
+                <p>Never tested on animals, guaranteed ethical.</p>
+              </div>
+              <div className="pdp-feature-col">
+                <ShieldCheck size={20} className="pdp-feature-icon" strokeWidth={1.5} />
+                <h6>Expert Approved</h6>
+                <p>Carefully tested to ensure safety and visible results.</p>
+              </div>
+              <div className="pdp-feature-col">
+                <Truck size={20} className="pdp-feature-icon" strokeWidth={1.5} />
+                <h6>Free Shipping</h6>
+                <p>Delivered to your doorstep with no extra costs.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Info & Details Accordions */}
+          <div className="pdp-right-col">
+            {/* Meta Row: Pricing & Mobile Actions */}
+            <div className="pdp-meta-row">
+              <div className="pdp-price-row">
+                <span className="pdp-discounted-price">₹{discountedPrice.toFixed(2)}</span>
+                {product.offer_percentage > 0 && (
+                  <span className="pdp-original-price">₹{parseFloat(product.price).toFixed(2)}</span>
                 )}
-                {product.ingredients && (
-                  <div className="product-extra-item">
-                    <strong>Ingredients</strong>
-                    <p>{product.ingredients}</p>
-                  </div>
-                )}
-                {product.usage_instructions && (
-                  <div className="product-extra-item">
-                    <strong>How to Use</strong>
+              </div>
+              <div className="pdp-action-icons">
+                <button className="pdp-action-btn share-btn" onClick={handleShare} title="Share product">
+                  <Share2 size={20} />
+                </button>
+                <button 
+                  className={`pdp-action-btn wishlist-btn ${inWishlist ? 'active' : ''}`} 
+                  onClick={handleWishlist}
+                  title={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                >
+                  <Heart size={20} fill={inWishlist ? 'currentColor' : 'none'} />
+                </button>
+              </div>
+            </div>
+
+            {/* Product Title */}
+            <h1 className="pdp-title font-serif-main">{product.name}</h1>
+            
+            {/* Short Subtitle */}
+            <p className="pdp-subtitle">
+              {product.benefits || `Nourishing Ayurvedic formulation enriched with calming botanicals and oils for soft, radiant skin.`}
+            </p>
+
+            {/* Size Selector */}
+            {product.size && (
+              <div className="pdp-size-section">
+                <span className="pdp-size-label">Size</span>
+                <div className="pdp-size-pills">
+                  <button className="pdp-size-pill">{product.size}</button>
+                </div>
+              </div>
+            )}
+
+            {/* Quantity Selector & Add to Cart Row */}
+            <div className="pdp-qty-add-row">
+              <div className="pdp-qty-control">
+                <button 
+                  className="pdp-qty-btn" 
+                  onClick={() => {
+                    if (cartQty > 0) {
+                      updateQuantity(product.id, cartQty - 1);
+                    } else {
+                      setQuantity(q => Math.max(1, q - 1));
+                    }
+                  }}
+                >
+                  <Minus size={16} />
+                </button>
+                <span className="pdp-qty-val">{cartQty > 0 ? cartQty : quantity}</span>
+                <button 
+                  className="pdp-qty-btn" 
+                  onClick={() => {
+                    if (cartQty > 0) {
+                      updateQuantity(product.id, cartQty + 1);
+                    } else {
+                      setQuantity(q => Math.min(product.stock_quantity || 99, q + 1));
+                    }
+                  }}
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+
+              {cartQty > 0 ? (
+                <Link
+                  to="/cart"
+                  className="pdp-add-to-cart-btn pdp-added-link"
+                >
+                  <ShoppingCart size={18} />
+                  Go to Cart ({cartQty} added)
+                </Link>
+              ) : (
+                <button
+                  className="pdp-add-to-cart-btn"
+                  onClick={handleAddToCart}
+                  disabled={adding || !product.stock_quantity}
+                >
+                  <ShoppingCart size={18} />
+                  {adding ? 'Adding...' : !product.stock_quantity ? 'Out of Stock' : 'Add to Cart'}
+                </button>
+              )}
+            </div>
+
+            {/* Buy Now Button */}
+            <button 
+              className="pdp-buy-now-btn"
+              onClick={async () => {
+                if (!isAuthenticated) { navigate('/auth/login'); return; }
+                if (cartQty === 0) {
+                  await addToCart(product.id, quantity);
+                }
+                navigate('/cart');
+              }}
+              disabled={!product.stock_quantity}
+            >
+              Buy Now
+            </button>
+
+            {/* Row of 4 Badges */}
+            <div className="pdp-badges-row">
+              <div className="pdp-badge-item">
+                <Leaf size={18} className="pdp-badge-icon" strokeWidth={1.5} />
+                <span>100% Natural</span>
+              </div>
+              <div className="pdp-badge-item">
+                <Rabbit size={18} className="pdp-badge-icon" strokeWidth={1.5} />
+                <span>Cruelty Free</span>
+              </div>
+              <div className="pdp-badge-item">
+                <Sprout size={18} className="pdp-badge-icon" strokeWidth={1.5} />
+                <span>Eco Friendly</span>
+              </div>
+              <div className="pdp-badge-item">
+                <ShieldCheck size={18} className="pdp-badge-icon" strokeWidth={1.5} />
+                <span>Expert Approved</span>
+              </div>
+            </div>
+
+            {/* Accordions */}
+            <div className="pdp-accordions">
+              {/* Details Accordion */}
+              {product.description && (
+                <div className="pdp-accordion-item">
+                  <button className="pdp-accordion-header" onClick={() => toggleAccordion('details')}>
+                    <span>Details</span>
+                    {accordions.details ? <Minus size={16} /> : <Plus size={16} />}
+                  </button>
+                  {accordions.details && (
+                    <div className="pdp-accordion-content">
+                      <p>{product.description}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* How to Use Accordion */}
+              <div className="pdp-accordion-item">
+                <button className="pdp-accordion-header" onClick={() => toggleAccordion('howToUse')}>
+                  <span>How to Use</span>
+                  {accordions.howToUse ? <Minus size={16} /> : <Plus size={16} />}
+                </button>
+                {accordions.howToUse && (
+                  <div className="pdp-accordion-content">
                     <p>
-                      {String(product.usage_instructions)
+                      {product.usage_instructions ? String(product.usage_instructions)
                         .split('\n')
                         .map(inst => inst.replace(/^\s*(?:step\s*\d+\s*[:.-]?\s*|\d+\s*[:.-]\s*)/i, '').trim())
                         .filter(Boolean)
-                        .join(' ')}
+                        .join(' ') : "Apply a generous amount of product gently over cleansed skin. Massage in soft upward circular motions until fully absorbed. Use daily for best results."}
                     </p>
                   </div>
                 )}
               </div>
-            )}
+
+              {/* Ingredients Accordion */}
+              <div className="pdp-accordion-item">
+                <button className="pdp-accordion-header" onClick={() => toggleAccordion('ingredients')}>
+                  <span>Ingredients</span>
+                  {accordions.ingredients ? <Minus size={16} /> : <Plus size={16} />}
+                </button>
+                {accordions.ingredients && (
+                  <div className="pdp-accordion-content">
+                    <p>{product.ingredients || "Formulated with pure organic Ayurvedic extracts, cold-pressed botanical carrier oils, essential oils, and clean plant-derived emulsifiers. Free from parabens, sulfates, and mineral oils."}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Delivery & Returns Accordion */}
+              <div className="pdp-accordion-item">
+                <button className="pdp-accordion-header" onClick={() => toggleAccordion('delivery')}>
+                  <span>Delivery & Returns</span>
+                  {accordions.delivery ? <Minus size={16} /> : <Plus size={16} />}
+                </button>
+                {accordions.delivery && (
+                  <div className="pdp-accordion-content">
+                    <p>We deliver across India with premium courier partners. Standard shipping takes 3-5 business days. We offer free replacements/returns within 7 days of delivery for damaged or unused products.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <div className="pdp-faq-section">
+          <div className="pdp-faq-left">
+            <h2 className="pdp-faq-title font-serif-main">FAQ</h2>
+            <div className="pdp-faq-divider">
+              <Leaf size={18} className="pdp-faq-leaf-icon" />
+            </div>
+            <p className="pdp-faq-subtitle">Find answers to the most commonly asked questions.</p>
+          </div>
+          <div className="pdp-faq-right">
+            {faqs.map((faq, i) => (
+              <div key={i} className={`pdp-faq-item ${openFaq === i ? 'open' : ''}`}>
+                <button className="pdp-faq-question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                  <span>{faq.q}</span>
+                  {openFaq === i ? <Minus size={16} /> : <Plus size={16} />}
+                </button>
+                {openFaq === i && (
+                  <div className="pdp-faq-answer">
+                    <p>{faq.a}</p>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 

@@ -40,17 +40,28 @@ export function CartProvider({ children }) {
   };
 
   const addToCart = async (productId, quantity = 1, variant = null) => {
+    const existing = items.find(i => (i.product_id || i.id) === productId && i.variant === variant);
+    if (existing) {
+      return updateQuantity(productId, (existing.quantity || 1) + 1, variant);
+    }
+    
+    // Optimistic Update: Add new item to state instantly so controls render without delay
+    const tempItem = {
+      id: productId,
+      product_id: productId,
+      quantity,
+      variant,
+      cartId: `temp-${Date.now()}`
+    };
+    const previousItems = items;
+    setItems(prev => [...prev, tempItem]);
+
     try {
-      // Check if already in cart — just increment quantity
-      const existing = items.find(i => (i.product_id || i.id) === productId && i.variant === variant);
-      if (existing) {
-        await updateQuantity(productId, (existing.quantity || 1) + 1, variant);
-        return { success: true };
-      }
       await api.post(ENDPOINTS.CART, { product_id: productId, quantity, variant });
       await fetchCart();
       return { success: true };
     } catch (err) {
+      setItems(previousItems);
       return { success: false, error: err.response?.data?.error || 'Failed to add to cart' };
     }
   };
@@ -63,10 +74,16 @@ export function CartProvider({ children }) {
     );
     const cartId = item?.cartId || item?.id;
     if (!cartId) { await fetchCart(); return; }
+    
+    const previousItems = items;
+    setItems(prev => prev.filter(i => i.cartId !== cartId));
+    
     try {
       await api.delete(ENDPOINTS.CART_ITEM(cartId));
-      setItems(prev => prev.filter(i => i.cartId !== cartId));
-    } catch { await fetchCart(); }
+    } catch {
+      setItems(previousItems);
+      await fetchCart();
+    }
   };
 
   // updateQuantity: quantity is the new absolute value
@@ -78,12 +95,20 @@ export function CartProvider({ children }) {
     );
     const cartId = item?.cartId || item?.id;
     if (!cartId) { await fetchCart(); return; }
+    
+    const previousItems = items;
+    setItems(prev => prev.map(i =>
+      i.cartId === cartId ? { ...i, quantity } : i
+    ));
+    
     try {
       await api.put(ENDPOINTS.CART_ITEM(cartId), { quantity });
-      setItems(prev => prev.map(i =>
-        i.cartId === cartId ? { ...i, quantity } : i
-      ));
-    } catch { await fetchCart(); }
+      return { success: true };
+    } catch (err) {
+      setItems(previousItems);
+      await fetchCart();
+      return { success: false, error: err.response?.data?.error || 'Failed to update quantity' };
+    }
   };
 
   const clearCart = async () => {

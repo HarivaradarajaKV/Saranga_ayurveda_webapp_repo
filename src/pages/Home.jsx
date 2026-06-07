@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import api, { ENDPOINTS, getImageUrl } from '../api/api';
-import { useCategories } from '../context/CategoryContext';
+import { useCategories, getDisplayCategoryName } from '../context/CategoryContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ProductCard from '../components/ProductCard';
-import { Leaf, Plus, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
+import SEO from '../components/SEO';
+import { Star, Leaf, ShoppingCart, Heart, Plus, Minus, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import './Home.css';
 
 const getComboImageUrl = (combo) => {
@@ -29,7 +30,7 @@ const getComboImageUrl = (combo) => {
 
 export default function Home() {
   const { categories, loading: catLoading } = useCategories();
-  const { addToCart } = useCart();
+  const { items: cartItems, addToCart, updateQuantity } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { isAuthenticated } = useAuth();
   const toast = useToast();
@@ -61,6 +62,7 @@ export default function Home() {
   const [newArrivals, setNewArrivals] = useState([]);
   const [bestSellers, setBestSellers] = useState([]);
   const [combos, setCombos] = useState([]);
+  const [addedCombos, setAddedCombos] = useState({});
   const [loading, setLoading] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeBottomSlide, setActiveBottomSlide] = useState(0);
@@ -84,6 +86,25 @@ export default function Home() {
     { src: '/images/banner/B_Banner 06.png', link: '/product/156' }  // Blueberry & Vitamin C Face Pack
   ];
 
+  const getProductIdFromLink = (link) => {
+    if (!link) return null;
+    const parts = link.split('/');
+    const productIndex = parts.indexOf('product');
+    if (productIndex !== -1 && parts[productIndex + 1]) {
+      return parts[productIndex + 1];
+    }
+    return null;
+  };
+
+  const topProductIds = banners
+    .map(b => getProductIdFromLink(b.link))
+    .filter(Boolean);
+
+  const filteredBottomBanners = bottomBanners.filter(b => {
+    const pid = getProductIdFromLink(b.link);
+    return !pid || !topProductIds.includes(pid);
+  });
+
   const nextSlide = () => {
     setActiveSlide((prev) => (prev + 1) % banners.length);
   };
@@ -93,11 +114,11 @@ export default function Home() {
   };
 
   const nextBottomSlide = () => {
-    setActiveBottomSlide((prev) => (prev + 1) % bottomBanners.length);
+    setActiveBottomSlide((prev) => (prev + 1) % filteredBottomBanners.length);
   };
 
   const prevBottomSlide = () => {
-    setActiveBottomSlide((prev) => (prev - 1 + bottomBanners.length) % bottomBanners.length);
+    setActiveBottomSlide((prev) => (prev - 1 + filteredBottomBanners.length) % filteredBottomBanners.length);
   };
 
   useEffect(() => {
@@ -134,6 +155,43 @@ export default function Home() {
     await toggleWishlist(product.id);
     const inWishlist = isInWishlist(product.id);
     toast.success(inWishlist ? 'Removed from wishlist' : 'Added to wishlist!');
+  };
+
+  const getComboCartQty = (combo) => {
+    const products = combo.items || combo.products || [];
+    if (products.length === 0) return 0;
+    
+    let minQty = null;
+    for (const item of products) {
+      const pid = item.product_id || item.id;
+      const cartItem = cartItems?.find(i => (i.product_id || i.id) === pid);
+      if (!cartItem) return 0;
+      
+      const comboRequiredQty = item.quantity || 1;
+      const possibleCombos = Math.floor(cartItem.quantity / comboRequiredQty);
+      if (minQty === null || possibleCombos < minQty) {
+        minQty = possibleCombos;
+      }
+    }
+    return minQty || 0;
+  };
+
+  const handleUpdateComboQty = async (combo, targetQty) => {
+    const products = combo.items || combo.products || [];
+    const currentQty = getComboCartQty(combo);
+    const diff = targetQty - currentQty;
+    
+    if (diff === 0) return;
+    
+    for (const item of products) {
+      const pid = item.product_id || item.id;
+      const cartItem = cartItems?.find(i => (i.product_id || i.id) === pid);
+      const currentProductQty = cartItem ? cartItem.quantity : 0;
+      const comboRequiredQty = item.quantity || 1;
+      const newProductQty = Math.max(0, currentProductQty + (diff * comboRequiredQty));
+      
+      await updateQuantity(pid, newProductQty);
+    }
   };
 
   const handleAddComboToCart = async (e, combo) => {
@@ -201,8 +259,36 @@ export default function Home() {
     setLoading(false);
   };
 
+  const homeSchema = {
+    "@context": "https://schema.org",
+    "@type": "Store",
+    "name": "Saranga Ayurveda",
+    "url": "https://sarangaayurveda.com",
+    "logo": "https://sarangaayurveda.com/images/logo.png",
+    "description": "Premium Ayurvedic Beauty & Wellness Products. Authentic, organic skincare, haircare, and wellness formulations.",
+    "telephone": "+91-9876543210",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Dehradun",
+      "addressRegion": "Uttarakhand",
+      "postalCode": "248001",
+      "addressCountry": "IN"
+    },
+    "sameAs": [
+      "https://www.facebook.com/sarangaayurveda",
+      "https://www.instagram.com/sarangaayurveda"
+    ]
+  };
+
   return (
     <div className="home page-fade-in">
+      <SEO 
+        title="Premium Ayurvedic Beauty & Wellness"
+        description="Discover Saranga Ayurveda – premium organic skincare, natural haircare, lip care, and holistic wellness products. Formulated with authentic Ayurvedic herbs."
+        keywords="Ayurveda, Organic skincare, natural haircare, lip care, Saranga Ayurveda, face wash, face pack, beard growth oil, kumkumadi taila"
+        canonicalPath="/"
+        schema={homeSchema}
+      />
       {/* ── LUXURY AYURVEDA HERO BANNER ── */}
       <section className="hero-ayurveda">
         <div className="hero-ayurveda-content">
@@ -225,7 +311,7 @@ export default function Home() {
                         </div>
                       )}
                     </div>
-                    <span className="category-overlay-name">{cat.name.toUpperCase()}</span>
+                    <span className="category-overlay-name">{(cat.displayName || cat.name).toUpperCase()}</span>
                   </Link>
                 ))}
               </div>
@@ -357,27 +443,9 @@ export default function Home() {
             </div>
           ) : bestSellers.length > 0 ? (
             <div className="best-sellers-scroll-row">
-              {bestSellers.map(p => {
-                const hasOffer = p.offer_percentage > 0;
-                return (
-                  <Link to={`/product/${p.id}`} key={p.id} className="new-arrival-card" style={{ backgroundColor: '#F3EEE6', flexShrink: 0 }}>
-                    {hasOffer && (
-                      <div className="new-arrival-offer-badge">
-                        {Math.round(p.offer_percentage)}% OFF
-                      </div>
-                    )}
-                    <div className="new-arrival-img-wrap">
-                      <img src={getImageUrl(p.image_url)} alt={p.name} className="new-arrival-img" />
-                    </div>
-                    <div className="new-arrival-info" style={{ backgroundColor: '#F3EEE6' }}>
-                      <h3 className="new-arrival-name">{p.name.toUpperCase()}</h3>
-                      <span className="new-arrival-category">
-                        {p.category_name ? p.category_name.toUpperCase() : p.category ? p.category.toUpperCase() : 'CAPSULES'}
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
+              {bestSellers.map(p => (
+                <ProductCard key={p.id} product={p} />
+              ))}
             </div>
           ) : (
             <p className="text-center" style={{ color: 'var(--text-light)', padding: '40px 0' }}>
@@ -409,6 +477,7 @@ export default function Home() {
                 const originalPrice = combo.subtotal || combo.original_price;
                 const comboPrice = combo.total || combo.combo_price || combo.price;
                 const discountVal = (originalPrice && comboPrice) ? (parseFloat(originalPrice) - parseFloat(comboPrice)) : (combo.discount_amount || combo.discount || 0);
+                const comboQty = getComboCartQty(combo);
 
                 return (
                   <Link to={`/deals/combo/${combo.id}`} key={combo.id} className="new-arrival-card">
@@ -454,13 +523,33 @@ export default function Home() {
                             </span>
                           )}
                         </span>
-                        <button 
-                          className="new-arrival-add-btn"
-                          onClick={(e) => handleAddComboToCart(e, combo)}
-                          title="Add combo to cart"
-                        >
-                          <Plus size={14} />
-                        </button>
+                        {comboQty > 0 ? (
+                          <div className="product-card-qty-control">
+                            <button 
+                              className="product-card-qty-btn" 
+                              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleUpdateComboQty(combo, comboQty - 1); }}
+                              title="Decrease quantity"
+                            >
+                              <Minus size={10} strokeWidth={3} />
+                            </button>
+                            <span className="product-card-qty-val">{comboQty}</span>
+                            <button 
+                              className="product-card-qty-btn" 
+                              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleUpdateComboQty(combo, comboQty + 1); }}
+                              title="Increase quantity"
+                            >
+                              <Plus size={10} strokeWidth={3} />
+                            </button>
+                          </div>
+                        ) : (
+                          <button 
+                            className="new-arrival-add-btn"
+                            onClick={(e) => handleAddComboToCart(e, combo)}
+                            title="Add combo to cart"
+                          >
+                            <Plus size={14} />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </Link>
@@ -479,7 +568,7 @@ export default function Home() {
       {/* ── BOTTOM BANNER SLIDESHOW ── */}
       <section className="home-bottom-banner-slider-sec" style={{ width: '100%', overflow: 'hidden', position: 'relative', margin: 0, padding: 0 }}>
         <div className="home-top-banner-slider-container" style={{ width: '100%', position: 'relative', overflow: 'hidden' }}>
-          {bottomBanners.map((banner, idx) => (
+          {filteredBottomBanners.map((banner, idx) => (
             <div 
               key={idx} 
               className={`home-slide ${idx === activeBottomSlide ? 'active' : ''}`}
@@ -538,7 +627,7 @@ export default function Home() {
 
           {/* Indicators / Dots */}
           <div className="home-slideshow-dots" style={{ zIndex: 10 }}>
-            {bottomBanners.map((_, idx) => (
+            {filteredBottomBanners.map((_, idx) => (
               <button
                 key={idx}
                 className={`home-slideshow-dot ${idx === activeBottomSlide ? 'active' : ''}`}
@@ -615,7 +704,7 @@ export default function Home() {
       {/* ── WHAT WE DO SECTION ── */}
       <section className="home-what-we-do-section">
         <div className="container">
-          <h2 className="home-what-we-do-title">What We Do</h2>
+          <h2 className="home-what-we-do-title">Providing Hope And Help During Challenging Times</h2>
           <div className="home-what-we-do-grid">
             <div className={`home-what-we-do-card ${currentWhatWeDoSlide === 0 ? 'active' : ''}`}>
               <div className="home-what-we-do-img-wrapper">

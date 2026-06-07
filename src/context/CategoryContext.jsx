@@ -4,6 +4,46 @@ import { useAuth } from './AuthContext';
 
 const CategoryContext = createContext(null);
 
+export const categoryDisplayNames = {
+  'BABY CARE': 'Baby Care',
+  'PREGNANCY CARE': 'Pregnancy Care',
+  'BODY CONCERN': 'Body Care',
+  'BODY CARE': 'Body Care',
+  'FACIAL CARE': 'Facial Care',
+  'HAIR CONCERN': 'Hair Care',
+  'HAIR CARE': 'Hair Care',
+  'DANDRUFF CONCERN': 'Dandruff Care',
+  'DANDRUFF CARE': 'Dandruff Care',
+  'ACNE CARE': 'Acne Care',
+  'LIP CONCERN': 'Lip Care',
+  'LIP CARE': 'Lip Care',
+  'WOMEN CONCERN': 'Women Concern',
+  'MEN': 'Men',
+  'WELLNESS': 'Wellness',
+  'BODY MIST': 'Body Mist'
+};
+
+const targetOrder = [
+  'BABY CARE',
+  'PREGNANCY CARE',
+  'BODY CONCERN',
+  'FACIAL CARE',
+  'HAIR CONCERN',
+  'DANDRUFF CONCERN',
+  'ACNE CARE',
+  'LIP CONCERN',
+  'WOMEN CONCERN',
+  'MEN',
+  'WELLNESS',
+  'BODY MIST'
+];
+
+export const getDisplayCategoryName = (name) => {
+  if (!name) return '';
+  const key = name.trim().toUpperCase();
+  return categoryDisplayNames[key] || name;
+};
+
 export function CategoryProvider({ children }) {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +56,22 @@ export function CategoryProvider({ children }) {
     try {
       const res = await api.get(ENDPOINTS.CATEGORIES);
       const data = Array.isArray(res.data) ? res.data : res.data?.categories || [];
-      setCategories(data);
+      
+      const sortedData = [...data].sort((a, b) => {
+        const nameA = (a.name || '').toUpperCase();
+        const nameB = (b.name || '').toUpperCase();
+        const idxA = targetOrder.indexOf(nameA);
+        const idxB = targetOrder.indexOf(nameB);
+        if (idxA === -1 && idxB === -1) return 0;
+        if (idxA === -1) return 1;
+        if (idxB === -1) return -1;
+        return idxA - idxB;
+      }).map(cat => ({
+        ...cat,
+        displayName: categoryDisplayNames[cat.name.toUpperCase()] || cat.name
+      }));
+
+      setCategories(sortedData);
       setError(null);
     } catch (err) {
       setError('Failed to load categories');
@@ -39,3 +94,4 @@ export const useCategories = () => {
   if (!ctx) throw new Error('useCategories must be used within CategoryProvider');
   return ctx;
 };
+
