@@ -4,6 +4,7 @@ import {
   User, Mail, Phone, GraduationCap, Heart, Sprout, Globe, 
   UploadCloud, FileText, CheckCircle2, ChevronDown 
 } from 'lucide-react';
+import api from '../api/api';
 import './Careers.css';
 
 export default function Careers() {
@@ -25,6 +26,7 @@ export default function Careers() {
   const [coverFile, setCoverFile] = useState(null);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const resumeInputRef = useRef(null);
   const coverInputRef = useRef(null);
@@ -82,13 +84,39 @@ export default function Careers() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Simulate API submission
-      setTimeout(() => {
-        setSubmitted(true);
-      }, 500);
+      setLoading(true);
+      try {
+        const data = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+          data.append(key, value);
+        });
+        if (resumeFile) {
+          data.append('resume', resumeFile);
+        }
+        if (coverFile) {
+          data.append('cover', coverFile);
+        }
+
+        const response = await api.post('/submissions/career', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        if (response.data && response.data.success) {
+          setSubmitted(true);
+        } else {
+          throw new Error(response.data?.error || 'Failed to submit application.');
+        }
+      } catch (err) {
+        console.error('Failed to submit career application:', err);
+        alert(err.response?.data?.error || err.message || 'Failed to submit application. Please try again.');
+      } finally {
+        setLoading(false);
+      }
     } else {
       // Scroll to the first error
       const firstError = document.querySelector('.error-text');
@@ -501,8 +529,8 @@ export default function Careers() {
                 </div>
 
                 {/* Submit button */}
-                <button type="submit" className="submit-application-btn">
-                  SUBMIT APPLICATION
+                <button type="submit" className="submit-application-btn" disabled={loading}>
+                  {loading ? 'SUBMITTING...' : 'SUBMIT APPLICATION'}
                 </button>
               </form>
             ) : (

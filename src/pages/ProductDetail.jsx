@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import api, { ENDPOINTS, getImageUrl } from '../api/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
-import { getDisplayCategoryName } from '../context/CategoryContext';
+import { getDisplayCategoryName, slugify } from '../context/CategoryContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import ProductCard from '../components/ProductCard';
@@ -26,7 +26,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   
-  const cartItem = cartItems?.find(i => (i.product_id || i.id) === parseInt(id));
+  const cartItem = product ? cartItems?.find(i => (i.product_id || i.id) === product.id) : null;
   const cartQty = cartItem ? cartItem.quantity : 0;
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +67,7 @@ export default function ProductDetail() {
   }, [images.length, activeImage]);
 
   useEffect(() => {
-    if (id) { fetchProduct(); fetchReviews(); }
+    if (id) { fetchProduct(); }
     window.scrollTo(0, 0);
   }, [id]);
 
@@ -75,20 +75,33 @@ export default function ProductDetail() {
     setLoading(true);
     try {
       const res = await api.get(ENDPOINTS.PRODUCT(id));
-      setProduct(res.data);
+      const productData = res.data;
+      setProduct(productData);
+      
+      // Fetch reviews using the resolved integer product ID
+      fetchReviews(productData.id);
+
+      // Redirect if id is numeric or differs from slugify(name)
+      if (productData?.name) {
+        const slug = slugify(productData.name);
+        if (id !== slug) {
+          navigate(`/product/${slug}`, { replace: true });
+        }
+      }
+
       // Fetch related
-      if (res.data?.category_id) {
-        const relRes = await api.get(`${ENDPOINTS.PRODUCTS}?category_id=${res.data.category_id}&limit=5`);
+      if (productData?.category_id) {
+        const relRes = await api.get(`${ENDPOINTS.PRODUCTS}?category_id=${productData.category_id}&limit=5`);
         const relData = Array.isArray(relRes.data) ? relRes.data : (relRes.data?.products || []);
-        setRelated(relData.filter(p => p.id !== parseInt(id)).slice(0, 4));
+        setRelated(relData.filter(p => p.id !== productData.id).slice(0, 4));
       }
     } catch { toast.error('Failed to load product'); }
     setLoading(false);
   };
 
-  const fetchReviews = async () => {
+  const fetchReviews = async (productId) => {
     try {
-      const res = await api.get(ENDPOINTS.PRODUCT_REVIEWS(id));
+      const res = await api.get(ENDPOINTS.PRODUCT_REVIEWS(productId));
       const data = Array.isArray(res.data) ? res.data : (res.data?.reviews || []);
       setReviews(data);
     } catch { setReviews([]); }
@@ -140,10 +153,10 @@ export default function ProductDetail() {
     if (!isAuthenticated) { navigate('/auth/login'); return; }
     setSubmittingReview(true);
     try {
-      await api.post(ENDPOINTS.PRODUCT_REVIEWS(id), { rating: reviewRating, review: reviewText });
+      await api.post(ENDPOINTS.PRODUCT_REVIEWS(product.id), { rating: reviewRating, review: reviewText });
       toast.success('Review submitted!');
       setReviewText(''); setReviewRating(5);
-      fetchReviews();
+      fetchReviews(product.id);
     } catch { toast.error('Failed to submit review'); }
     setSubmittingReview(false);
   };
@@ -151,9 +164,9 @@ export default function ProductDetail() {
   const handleDeleteReview = async (reviewId) => {
     if (!window.confirm('Are you sure you want to delete your review?')) return;
     try {
-      await api.delete(`${ENDPOINTS.PRODUCT_REVIEWS(id)}/${reviewId}`);
+      await api.delete(`${ENDPOINTS.PRODUCT_REVIEWS(product.id)}/${reviewId}`);
       toast.success('Review deleted!');
-      fetchReviews();
+      fetchReviews(product.id);
     } catch {
       toast.error('Failed to delete review');
     }
@@ -235,7 +248,7 @@ export default function ProductDetail() {
         title={product.name}
         description={product.description || `Buy ${product.name} online. Authentic Ayurvedic formulation for beauty and wellness by Saranga Ayurveda.`}
         ogImage={getImageUrl(product.image_url)}
-        canonicalPath={`/product/${product.id}`}
+        canonicalPath={`/product/${slugify(product.name)}`}
         schema={productSchema}
       />
       <div className="container">
@@ -637,7 +650,7 @@ export default function ProductDetail() {
           <div className="related-products">
             <div className="section-header">
               <h2 className="section-title">You May Also Like</h2>
-              <Link to={`/category/${product.category_id}`} className="see-all">View All</Link>
+              <Link to={`/category/${slugify(product.category_name || product.category)}`} className="see-all">View All</Link>
             </div>
             <div className="new-arrivals-grid-custom">
               {related.map(p => <ProductCard key={p.id} product={p} />)}

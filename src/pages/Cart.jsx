@@ -8,6 +8,7 @@ import {
   Trash2, Plus, Minus, ShoppingBag, Tag, ArrowRight, X, 
   Leaf, Sprout, ShieldCheck, Lock, HelpCircle 
 } from 'lucide-react';
+import { slugify } from '../context/CategoryContext';
 import './Cart.css';
 
 export default function Cart() {
@@ -182,7 +183,7 @@ export default function Cart() {
                     <div className="cart-row-item desktop-only-row">
                       {/* Product cell */}
                       <div className="cart-cell-product">
-                        <Link to={`/product/${item.product_id || item.id}`} className="cart-product-img-box">
+                        <Link to={`/product/${slugify(item.name)}`} className="cart-product-img-box">
                           <img 
                             src={getImageUrl(item.image_url)} 
                             alt={item.name} 
@@ -190,7 +191,7 @@ export default function Cart() {
                           />
                         </Link>
                         <div className="cart-product-meta">
-                          <Link to={`/product/${item.product_id || item.id}`} className="cart-product-name">
+                          <Link to={`/product/${slugify(item.name)}`} className="cart-product-name">
                             {item.name}
                           </Link>
                           <span className="cart-product-attr">{item.size || 'Standard Size'}</span>
@@ -238,7 +239,7 @@ export default function Cart() {
 
                     {/* Mobile Item Layout */}
                     <div className="cart-row-item-mobile mobile-only-row">
-                      <Link to={`/product/${item.product_id || item.id}`} className="cart-mobile-img-box">
+                      <Link to={`/product/${slugify(item.name)}`} className="cart-mobile-img-box">
                         <img 
                           src={getImageUrl(item.image_url)} 
                           alt={item.name} 
@@ -248,7 +249,7 @@ export default function Cart() {
                       
                       <div className="cart-mobile-details-box">
                         <div className="cart-mobile-meta-header">
-                          <Link to={`/product/${item.product_id || item.id}`} className="cart-mobile-name">
+                          <Link to={`/product/${slugify(item.name)}`} className="cart-mobile-name">
                             {item.name}
                           </Link>
                           <span className="cart-mobile-unit-price">

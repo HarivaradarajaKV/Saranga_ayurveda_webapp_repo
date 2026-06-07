@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import api, { ENDPOINTS, getImageUrl } from '../api/api';
-import { useCategories, getDisplayCategoryName } from '../context/CategoryContext';
+import { useCategories, getDisplayCategoryName, slugify } from '../context/CategoryContext';
 import ProductCard from '../components/ProductCard';
 import ComboCard from '../components/ComboCard';
 import SEO from '../components/SEO';
@@ -193,7 +193,7 @@ export default function Explore() {
           <div className="categories-overlay-grid">
             {categories.length > 0 && categories.map((cat) => (
               <Link
-                to={`/category/${cat.id}`}
+                to={`/category/${slugify(cat.name)}`}
                 key={cat.id}
                 className="category-overlay-item"
                 title={`View ${cat.name} products`}

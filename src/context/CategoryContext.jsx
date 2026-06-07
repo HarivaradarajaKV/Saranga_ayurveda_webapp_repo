@@ -38,6 +38,19 @@ const targetOrder = [
   'BODY MIST'
 ];
 
+export const slugify = (text) => {
+  if (!text) return '';
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+};
+
 export const getDisplayCategoryName = (name) => {
   if (!name) return '';
   const key = name.trim().toUpperCase();
@@ -80,7 +93,15 @@ export function CategoryProvider({ children }) {
     }
   };
 
-  const getCategoryById = (id) => categories.find(c => c.id === parseInt(id));
+  const getCategoryById = (idOrSlug) => {
+    if (!idOrSlug) return null;
+    const clean = idOrSlug.toString().toLowerCase().trim();
+    return categories.find(c => 
+      c.id.toString() === clean || 
+      slugify(c.name) === clean ||
+      c.name.toLowerCase().trim() === clean
+    );
+  };
 
   return (
     <CategoryContext.Provider value={{ categories, loading, error, getCategoryById, fetchCategories }}>

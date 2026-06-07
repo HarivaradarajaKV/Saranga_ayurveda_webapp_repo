@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import api, { ENDPOINTS } from '../api/api';
-import { useCategories } from '../context/CategoryContext';
+import { useCategories, slugify } from '../context/CategoryContext';
 import ProductCard from '../components/ProductCard';
 import ComboCard from '../components/ComboCard';
 import { ArrowLeft } from 'lucide-react';
@@ -9,6 +9,7 @@ import './Explore.css';
 
 export default function CategoryDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { getCategoryById } = useCategories();
   const [products, setProducts] = useState([]);
   const [combos, setCombos] = useState([]);
@@ -16,6 +17,15 @@ export default function CategoryDetail() {
   const [filterType, setFilterType] = useState('all');
   const [sortBy, setSortBy] = useState('default');
   const category = getCategoryById(id);
+
+  useEffect(() => {
+    if (category) {
+      const slug = slugify(category.name);
+      if (id !== slug) {
+        navigate(`/category/${slug}`, { replace: true });
+      }
+    }
+  }, [category, id, navigate]);
 
   const fetchData = async () => {
     if (!category?.name) return; // Wait until category is loaded

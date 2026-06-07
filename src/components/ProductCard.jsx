@@ -6,7 +6,7 @@ import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { getImageUrl } from '../api/api';
-import { getDisplayCategoryName } from '../context/CategoryContext';
+import { getDisplayCategoryName, slugify } from '../context/CategoryContext';
 import './ProductCard.css';
 
 export default function ProductCard({ product }) {
@@ -70,7 +70,7 @@ export default function ProductCard({ product }) {
     : getImageUrl(image_url);
 
   return (
-    <Link to={`/product/${id}`} className="new-arrival-card">
+    <Link to={`/product/${slugify(name)}`} className="new-arrival-card">
       {hasOffer && (
         <div className="new-arrival-offer-badge">
           {Math.round(offer_percentage)}% OFF

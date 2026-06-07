@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import api, { ENDPOINTS, getImageUrl } from '../api/api';
-import { useCategories, getDisplayCategoryName } from '../context/CategoryContext';
+import { useCategories, getDisplayCategoryName, slugify } from '../context/CategoryContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
@@ -301,7 +301,7 @@ export default function Home() {
             {!catLoading && categories.length > 0 && (
               <div className="categories-overlay-grid">
                 {categories.map((cat) => (
-                  <Link to={`/category/${cat.id}`} key={cat.id} className="category-overlay-item">
+                  <Link to={`/category/${slugify(cat.name)}`} key={cat.id} className="category-overlay-item">
                     <div className="category-overlay-img-wrap">
                       {cat.image_url ? (
                         <img src={getImageUrl(cat.image_url)} alt={cat.name} className="category-overlay-img" />

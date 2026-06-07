@@ -4,7 +4,9 @@ import {
   Phone, Mail, MapPin, User, ChevronDown, ChevronUp, Send, CheckCircle2, ShieldCheck 
 } from 'lucide-react';
 import SEO from '../components/SEO';
+import api from '../api/api';
 import './Contact.css';
+
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -19,6 +21,7 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -43,12 +46,19 @@ export default function Contact() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      setTimeout(() => {
+      setLoading(true);
+      try {
+        await api.post('/submissions/contact', formData);
         setSubmitted(true);
-      }, 500);
+      } catch (err) {
+        console.error('Failed to submit contact form:', err);
+        alert(err.response?.data?.error || 'Failed to send message. Please try again.');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -279,8 +289,8 @@ export default function Contact() {
                 </div>
 
                 {/* Submit button */}
-                <button type="submit" className="contact-submit-btn">
-                  SEND MESSAGE <Send size={14} style={{ marginLeft: '8px' }} />
+                <button type="submit" className="contact-submit-btn" disabled={loading}>
+                  {loading ? 'SENDING...' : 'SEND MESSAGE'} <Send size={14} style={{ marginLeft: '8px' }} />
                 </button>
 
                 <div className="form-privacy-note">

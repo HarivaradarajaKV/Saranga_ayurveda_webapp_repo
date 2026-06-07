@@ -4,7 +4,7 @@ import { useWishlist } from '../context/WishlistContext';
 import { getImageUrl } from '../api/api';
 import { Heart, Trash2, ShoppingCart, Leaf, Plus, Minus } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { getDisplayCategoryName } from '../context/CategoryContext';
+import { getDisplayCategoryName, slugify } from '../context/CategoryContext';
 import './Wishlist.css';
 import '../components/ProductCard.css';
 import { useToast } from '../context/ToastContext';
@@ -61,7 +61,7 @@ export default function Wishlist() {
             const hasOffer = offer > 0;
             const isSellingFast = item.stock_quantity > 0 && item.stock_quantity <= 10;
             return (
-              <Link key={item.id} to={`/product/${pid}`} className="new-arrival-card">
+              <Link key={item.id} to={`/product/${slugify(item.name)}`} className="new-arrival-card">
                 {hasOffer && (
                   <div className="new-arrival-offer-badge">
                     {Math.round(offer)}% OFF
