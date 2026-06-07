@@ -80,3 +80,42 @@
 @media (max-width: 480px) {
   .auth-card { padding: 28px 20px; }
 }
+
+/* Premium Google Sign-In Button */
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: #ffffff;
+  color: #3c4043;
+  border: 1px solid #dadce0;
+  border-radius: var(--radius-md, 8px);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  height: 48px;
+  padding: 0 24px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.1), 0 1px 3px 1px rgba(60,64,67,0.05);
+}
+
+.btn-google:hover {
+  background-color: #f8f9fa;
+  border-color: #d2e3fc;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.2), 0 1px 3px 1px rgba(60,64,67,0.1);
+}
+
+.btn-google:active {
+  background-color: #f1f3f4;
+  border-color: #dadce0;
+}
+
+.btn-google-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+

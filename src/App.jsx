@@ -36,6 +36,8 @@ import RefundPolicy from './pages/legal/RefundPolicy';
 import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import ForgotPassword from './pages/auth/ForgotPassword';
+import GoogleCallback from './pages/auth/GoogleCallback';
+
 
 // User (protected)
 import Profile from './pages/profile/Profile';
@@ -131,6 +133,7 @@ export default function App() {
                   <Route path="/auth/login" element={<Login />} />
                   <Route path="/auth/signup" element={<Signup />} />
                   <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/auth/google-callback" element={<GoogleCallback />} />
 
                   {/* Protected user routes */}
                   <Route path="/cart" element={<Layout><Cart /></Layout>} />
