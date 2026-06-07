@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import api, { ENDPOINTS } from '../api/api';
 import { 
   Package, ShoppingBag, Users, Star, DollarSign, 
-  PlusCircle, FolderOpen, Tag, Gift, Sparkles 
+  PlusCircle, FolderOpen, Tag, Gift, Sparkles,
+  Mail, Briefcase
 } from 'lucide-react';
 import './Admin.css';
 
@@ -28,6 +29,8 @@ export default function AdminDashboard() {
     { label: 'Total Orders', value: stats.total_orders || stats.orders || 0, icon: <ShoppingBag size={20} />, color: '#3b82f6', bg: '#eff6ff' },
     { label: 'Total Users', value: stats.total_users || stats.users || 0, icon: <Users size={20} />, color: '#8b5cf6', bg: '#f5f3ff' },
     { label: 'Revenue', value: `₹${parseFloat(stats.total_revenue || stats.revenue || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, icon: <DollarSign size={20} />, color: '#22c55e', bg: '#f0fff4' },
+    { label: 'Contact Responses', value: stats.total_contacts || 0, icon: <Mail size={20} />, color: '#0d9488', bg: '#f0fdfa' },
+    { label: 'Career Responses', value: stats.total_careers || 0, icon: <Briefcase size={20} />, color: '#db2777', bg: '#fdf2f8' }
   ] : [];
 
   const SHORTCUTS = [
@@ -54,7 +57,7 @@ export default function AdminDashboard() {
       {/* KPI Stats */}
       {loading ? (
         <div className="admin-stats-grid">
-          {Array(4).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 120, borderRadius: 14 }} />)}
+          {Array(6).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 120, borderRadius: 14 }} />)}
         </div>
       ) : (
         <div className="admin-stats-grid">
