@@ -181,9 +181,9 @@ export default function Checkout() {
           description: `Order #${order.id}`,
           order_id: rzpOrder.id,
           prefill: {
-            name: user?.name || selectedAddress.full_name,
+            name: selectedAddress.full_name || user?.name || '',
             email: user?.email || '',
-            contact: selectedAddress.phone_number || '',
+            contact: selectedAddress.phone_number || selectedAddress.phone || user?.phone || user?.phone_number || '',
           },
           theme: { color: '#2b3a1a' },
           handler: async (response) => {
