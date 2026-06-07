@@ -188,13 +188,13 @@ export default function Checkout() {
           theme: { color: '#2b3a1a' },
           handler: async (response) => {
             try {
-              await api.post('/razorpay/verify-payment', {
+              const verifyRes = await api.post('/razorpay/verify-payment', {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
                 order_id: order.id
               });
-              setOrderId(order.id);
+              setOrderId(verifyRes.data?.order_id || order.id);
               await clearCart();
               setOrderSuccess(true);
             } catch {
