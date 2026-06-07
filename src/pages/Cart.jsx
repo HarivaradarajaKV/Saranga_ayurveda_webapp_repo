@@ -24,7 +24,7 @@ export default function Cart() {
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [loadingCoupons, setLoadingCoupons] = useState(false);
 
-  const deliveryCharge = cartSubtotal >= 500 ? 0 : 59;
+  const deliveryCharge = cartSubtotal >= 599 ? 0 : 59;
   const total = cartSubtotal - couponDiscount + deliveryCharge;
 
   const fetchCoupons = async () => {
@@ -372,7 +372,7 @@ export default function Cart() {
               <div className="summary-card-row">
                 <span className="shipping-info-label">
                   Shipping 
-                  <span className="shipping-info-pop" title="Free delivery on orders over ₹500">
+                  <span className="shipping-info-pop" title="Free delivery on orders over ₹599">
                     <HelpCircle size={14} />
                   </span>
                 </span>

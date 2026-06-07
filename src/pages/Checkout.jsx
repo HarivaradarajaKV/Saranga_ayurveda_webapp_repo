@@ -19,7 +19,7 @@ export default function Checkout() {
 
   const [couponCode, setCouponCode] = useState(location.state?.couponCode || '');
   const [couponDiscount, setCouponDiscount] = useState(location.state?.couponDiscount || 0);
-  const deliveryCharge = location.state?.deliveryCharge ?? (cartSubtotal >= 500 ? 0 : 59);
+  const deliveryCharge = location.state?.deliveryCharge ?? (cartSubtotal >= 599 ? 0 : 59);
   const orderTotal = cartSubtotal - couponDiscount + deliveryCharge;
 
   const [showCouponsModal, setShowCouponsModal] = useState(false);
@@ -337,16 +337,24 @@ export default function Checkout() {
                     </div>
                   </div>
                   <div 
-                    className={`payment-method-card ${paymentMethod === 'cod' ? 'selected' : ''}`}
-                    onClick={() => setPaymentMethod('cod')}
+                    className="payment-method-card payment-method-disabled"
+                    style={{ opacity: 0.45, cursor: 'not-allowed', pointerEvents: 'none' }}
                   >
-                    <div className="radio-circle" style={{ borderColor: paymentMethod === 'cod' ? '#2E5D34' : '#ccc' }}>
-                      {paymentMethod === 'cod' && <div className="active" style={{ background: '#2E5D34', width: 10, height: 10, borderRadius: '50%', margin: 2 }} />}
-                    </div>
+                    <div className="radio-circle" style={{ borderColor: '#ccc' }} />
                     <div className="method-info">
-                      <strong>Cash on Delivery</strong>
-                      <p>Pay when you receive</p>
+                      <strong style={{ color: '#999' }}>Cash on Delivery</strong>
+                      <p style={{ color: '#bbb' }}>Currently unavailable</p>
                     </div>
+                    <span style={{
+                      marginLeft: 'auto',
+                      fontSize: '0.7rem',
+                      background: '#f0f0f0',
+                      color: '#999',
+                      padding: '2px 8px',
+                      borderRadius: 20,
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap'
+                    }}>Not Available</span>
                   </div>
                 </div>
               </div>
