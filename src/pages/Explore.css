@@ -383,7 +383,8 @@
     padding: 20px 12px;
   }
   
-  .explore-page .explore-header h1 {
+  .explore-page .explore-header h1,
+  .category-detail-page h1 {
     font-size: 1.8rem !important;
   }
   
@@ -433,7 +434,8 @@
   }
 
   /* Minimized Filter & Sort Controls for Mobile */
-  .explore-page .filter-sort-controls {
+  .explore-page .filter-sort-controls,
+  .category-detail-page .filter-sort-controls {
     display: grid !important;
     grid-template-columns: 1fr auto !important;
     align-items: center !important;
@@ -447,7 +449,8 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.03) !important;
   }
 
-  .explore-page .filter-group {
+  .explore-page .filter-group,
+  .category-detail-page .filter-group {
     display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
@@ -459,11 +462,13 @@
     width: 100% !important;
   }
 
-  .explore-page .filter-group::-webkit-scrollbar {
+  .explore-page .filter-group::-webkit-scrollbar,
+  .category-detail-page .filter-group::-webkit-scrollbar {
     display: none !important;
   }
 
-  .explore-page .filter-btn {
+  .explore-page .filter-btn,
+  .category-detail-page .filter-btn {
     padding: 6px 12px !important;
     font-size: 0.78rem !important;
     border-radius: 20px !important;
@@ -474,24 +479,28 @@
     margin: 0 !important;
   }
 
-  .explore-page .filter-btn.active {
+  .explore-page .filter-btn.active,
+  .category-detail-page .filter-btn.active {
     background: #2E5D34 !important;
     color: #ffffff !important;
     border-color: #2E5D34 !important;
   }
 
-  .explore-page .sort-group {
+  .explore-page .sort-group,
+  .category-detail-page .sort-group {
     display: flex !important;
     align-items: center !important;
     gap: 6px !important;
     margin-left: 0 !important;
   }
 
-  .explore-page .sort-label {
+  .explore-page .sort-label,
+  .category-detail-page .sort-label {
     display: none !important;
   }
 
-  .explore-page .sort-select {
+  .explore-page .sort-select,
+  .category-detail-page .sort-select {
     padding: 6px 24px 6px 10px !important;
     font-size: 0.78rem !important;
     border-radius: 20px !important;
@@ -505,7 +514,8 @@
 
 @media (max-width: 480px) {
   /* Prevent product cards from overflowing the container and fix their mobile layout */
-  .explore-page .new-arrivals-grid-custom {
+  .explore-page .new-arrivals-grid-custom,
+  .category-detail-page .new-arrivals-grid-custom {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 16px 10px !important;
     padding: 0 !important;
@@ -513,7 +523,8 @@
     margin-bottom: 24px !important;
   }
 
-  .explore-page .new-arrival-card {
+  .explore-page .new-arrival-card,
+  .category-detail-page .new-arrival-card {
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
@@ -521,18 +532,21 @@
     border-radius: 16px !important;
   }
   
-  .explore-page .new-arrival-img-wrap {
+  .explore-page .new-arrival-img-wrap,
+  .category-detail-page .new-arrival-img-wrap {
     height: auto !important;
     aspect-ratio: 1 / 1 !important;
     width: 100% !important;
   }
 
-  .explore-page .new-arrival-img {
+  .explore-page .new-arrival-img,
+  .category-detail-page .new-arrival-img {
     border-top-left-radius: 16px !important;
     border-top-right-radius: 16px !important;
   }
 
-  .explore-page .new-arrival-info {
+  .explore-page .new-arrival-info,
+  .category-detail-page .new-arrival-info {
     padding: 10px 10px !important;
     height: 105px !important;
     border-bottom-left-radius: 16px !important;
@@ -542,12 +556,14 @@
     justify-content: space-between !important;
   }
 
-  .explore-page .new-arrival-category {
+  .explore-page .new-arrival-category,
+  .category-detail-page .new-arrival-category {
     font-size: 0.55rem !important;
     margin-bottom: 2px !important;
   }
 
-  .explore-page .new-arrival-name {
+  .explore-page .new-arrival-name,
+  .category-detail-page .new-arrival-name {
     font-size: 0.78rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
@@ -555,7 +571,8 @@
     margin-bottom: 4px !important;
   }
 
-  .explore-page .new-arrival-footer {
+  .explore-page .new-arrival-footer,
+  .category-detail-page .new-arrival-footer {
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-between !important;
@@ -566,48 +583,57 @@
   }
 
   /* Vertically stack standard and original discount price to avoid horizontal overflow on narrow cards */
-  .explore-page .new-arrival-price-wrap {
+  .explore-page .new-arrival-price-wrap,
+  .category-detail-page .new-arrival-price-wrap {
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-start !important;
     gap: 1px !important;
   }
 
-  .explore-page .new-arrival-price {
+  .explore-page .new-arrival-price,
+  .category-detail-page .new-arrival-price {
     font-size: 0.82rem !important;
     line-height: 1.1 !important;
   }
 
-  .explore-page .new-arrival-original-price {
+  .explore-page .new-arrival-original-price,
+  .category-detail-page .new-arrival-original-price {
     font-size: 0.68rem !important;
     margin-left: 0 !important;
   }
 
   /* Badges positioning and scaling to avoid overlapping */
   .explore-page .new-arrival-offer-badge,
-  .explore-page .new-arrival-stock-badge {
+  .category-detail-page .new-arrival-offer-badge,
+  .explore-page .new-arrival-stock-badge,
+  .category-detail-page .new-arrival-stock-badge {
     font-size: 0.58rem !important;
     padding: 3px 6px !important;
     border-radius: 8px !important;
     top: -8px !important;
   }
 
-  .explore-page .new-arrival-offer-badge {
+  .explore-page .new-arrival-offer-badge,
+  .category-detail-page .new-arrival-offer-badge {
     right: 8px !important;
   }
 
-  .explore-page .new-arrival-stock-badge {
+  .explore-page .new-arrival-stock-badge,
+  .category-detail-page .new-arrival-stock-badge {
     left: 8px !important;
   }
 
-  .explore-page .new-arrival-wishlist-btn {
+  .explore-page .new-arrival-wishlist-btn,
+  .category-detail-page .new-arrival-wishlist-btn {
     top: 8px !important;
     right: 8px !important;
     width: 26px !important;
     height: 26px !important;
   }
 
-  .explore-page .new-arrivals-grid-custom .skeleton {
+  .explore-page .new-arrivals-grid-custom .skeleton,
+  .category-detail-page .new-arrivals-grid-custom .skeleton {
     height: 220px !important;
     border-radius: 16px !important;
   }

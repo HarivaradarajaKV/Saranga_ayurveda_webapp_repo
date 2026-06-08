@@ -97,7 +97,7 @@ export default function CategoryDetail() {
 
   return (
     <div className="page-content page-fade-in category-detail-page">
-      <div className="container">
+      <div className="container explore-container">
         <div style={{ marginBottom: 24 }}>
           <Link to="/explore" className="btn btn-ghost btn-sm">
             <ArrowLeft size={16} /> Back to Saranga Space
