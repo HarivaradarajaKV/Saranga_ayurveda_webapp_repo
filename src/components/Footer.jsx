@@ -70,7 +70,7 @@ export default function Footer() {
 
         {/* Footer Bottom copyright */}
         <div className="footer-bottom-copyright">
-          <p>© 2026 by Saranga Ayurveda. All Rights Reserved</p>
+          <p>© 2026 Saranga Ayurveda. All Rights Reserved</p>
           <p className="footer-made-in">Proudly Made In India</p>
         </div>
       </div>
