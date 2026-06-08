@@ -96,6 +96,11 @@ export function CartProvider({ children }) {
     const cartId = item?.cartId || item?.id;
     if (!cartId) { await fetchCart(); return; }
     
+    // Enforce stock limit
+    if (item.stock_quantity !== undefined && quantity > item.stock_quantity) {
+      quantity = item.stock_quantity;
+    }
+    
     const previousItems = items;
     setItems(prev => prev.map(i =>
       i.cartId === cartId ? { ...i, quantity } : i

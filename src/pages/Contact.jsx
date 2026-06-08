@@ -153,26 +153,36 @@ export default function Contact() {
               <div className="reach-methods-grid">
                 
                 {/* Method 1: Email */}
-                <div className="reach-method-item">
+                <a 
+                  href="mailto:info@sarangaayurveda.com"
+                  className="reach-method-item"
+                  style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                >
                   <div className="reach-icon-wrap">
                     <Mail size={20} strokeWidth={1.5} />
                   </div>
                   <h5>EMAIL US</h5>
-                  <p className="reach-primary mail-link">hello@sarangaayurveda.com</p>
+                  <p className="reach-primary mail-link">info@sarangaayurveda.com</p>
                   <p className="reach-secondary">We reply within</p>
                   <p className="reach-secondary">24 business hours</p>
-                </div>
+                </a>
 
                 {/* Method 2: WhatsApp */}
-                <div className="reach-method-item">
+                <a 
+                  href="https://wa.me/919611200444"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="reach-method-item"
+                  style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                >
                   <div className="reach-icon-wrap">
                     <WhatsAppIcon className="reach-svg-icon" />
                   </div>
                   <h5>WHATSAPP</h5>
-                  <p className="reach-primary">+91 96112 00444</p>
-                  <p className="reach-secondary">Chat with us on WhatsApp</p>
+                  <p className="reach-primary">Chat with us</p>
+                  <p className="reach-secondary">WhatsApp Support</p>
                   <p className="reach-secondary">Mon - Sun (10 AM - 5 PM)</p>
-                </div>
+                </a>
 
               </div>
             </div>

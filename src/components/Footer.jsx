@@ -54,9 +54,8 @@ export default function Footer() {
           </div>
 
           {/* Column 6: Support Links */}
-          <div className="footer-col">
-            <h4 className="footer-col-title">Support Links</h4>
-            <ul className="footer-links-list">
+          <div className="footer-col" style={{ alignItems: 'center', textAlign: 'center' }}>
+            <ul className="footer-links-list" style={{ alignItems: 'center' }}>
               <li><Link to="/legal/terms">Terms & Conditions</Link></li>
               <li><Link to="/legal/privacy-policy">Privacy Policy</Link></li>
               <li><Link to="/legal/shipping">Shipping and Delivery Policy</Link></li>

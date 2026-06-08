@@ -218,6 +218,7 @@ export default function Cart() {
                           <button
                             className="cart-qty-adjust-btn"
                             onClick={() => updateQuantity(item.product_id || item.id, qty + 1)}
+                            disabled={item.stock_quantity !== undefined && qty >= item.stock_quantity}
                           >
                             <Plus size={14} />
                           </button>
@@ -272,6 +273,7 @@ export default function Cart() {
                               <button
                                 className="cart-qty-adjust-btn"
                                 onClick={() => updateQuantity(item.product_id || item.id, qty + 1)}
+                                disabled={item.stock_quantity !== undefined && qty >= item.stock_quantity}
                               >
                                 <Plus size={14} />
                               </button>
@@ -346,7 +348,7 @@ export default function Cart() {
 
             {/* Special Note */}
             <div className="cart-special-note">
-              <span className="special-note-dash">-</span> This order has been specially made for you
+              <span className="special-note-dash">-</span> This order has been specially customised for you
             </div>
 
           </div>
