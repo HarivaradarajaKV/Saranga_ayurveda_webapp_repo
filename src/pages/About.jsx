@@ -6,7 +6,7 @@ import './About.css';
 
 export default function About() {
   return (
-    <div className="about-page page-content page-fade-in">
+    <div className="about-page page-fade-in">
       <SEO 
         title="Our Story | About Us"
         description="Learn about Saranga Ayurveda's heritage. Discover how we prepare organic beauty, haircare, and skin formulations based on authentic ancient Ayurveda in Bengaluru."
@@ -44,7 +44,7 @@ export default function About() {
         <div className="about-section about-all-about-section">
           <div className="about-text-col">
             <div className="about-section-label">
-              <span>ALL ABOUT SARANGA AYURVEDA</span>
+              <span>WHO WE ARE</span>
               <div className="label-underline"></div>
             </div>
             <h2 className="about-section-title">All About Saranga Ayurveda</h2>
@@ -74,7 +74,7 @@ export default function About() {
           </div>
           <div className="about-text-col">
             <div className="about-section-label">
-              <span>CONNECTING PEOPLE</span>
+              <span>OUR MISSION</span>
               <div className="label-underline"></div>
             </div>
             <h2 className="about-section-title">Connecting People</h2>
@@ -94,7 +94,7 @@ export default function About() {
         <div className="about-section about-this-is-us-section">
           <div className="about-text-col">
             <div className="about-section-label">
-              <span>THIS IS US</span>
+              <span>OUR ESSENCE</span>
               <div className="label-underline"></div>
             </div>
             <h2 className="about-section-title">This Is Us</h2>
