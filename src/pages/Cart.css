@@ -507,6 +507,10 @@
 }
 
 @media (max-width: 768px) {
+  .cart-page {
+    margin-top: -94px;
+    padding-top: 90px;
+  }
   .desktop-only-row {
     display: none !important;
   }
