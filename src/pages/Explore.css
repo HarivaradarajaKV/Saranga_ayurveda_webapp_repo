@@ -374,19 +374,241 @@
   border-color: #2E5D34;
 }
 
+.explore-container {
+  padding: 40px 24px;
+}
+
 @media (max-width: 768px) {
-  .filter-sort-controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
-    padding: 16px;
+  .explore-container {
+    padding: 20px 12px;
   }
-  .sort-group {
-    margin-left: 0;
-    justify-content: space-between;
+  
+  .explore-page .explore-header h1 {
+    font-size: 1.8rem !important;
   }
-  .sort-select {
-    flex-grow: 1;
-    max-width: 200px;
+  
+  .explore-page .explore-header {
+    margin-bottom: 20px !important;
+  }
+  
+  .explore-page .explore-google-search-container {
+    margin: 20px auto !important;
+  }
+  
+  .explore-page .explore-google-search-form {
+    height: 44px !important;
+    padding: 0 16px !important;
+  }
+  
+  .explore-page .google-search-input {
+    font-size: 0.9rem !important;
+  }
+  
+  .explore-page .google-search-input::placeholder {
+    font-size: 0.85rem !important;
+  }
+
+  .explore-page .section-title-flat {
+    font-size: 1.15rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  .explore-page .categories-overlay-card {
+    padding: 12px 8px !important;
+    border-radius: 20px !important;
+  }
+  
+  .explore-page .category-overlay-item {
+    width: 80px !important;
+    gap: 6px !important;
+  }
+  
+  .explore-page .category-overlay-img-wrap {
+    width: 64px !important;
+    height: 64px !important;
+  }
+  
+  .explore-page .category-overlay-name {
+    font-size: 0.65rem !important;
+  }
+
+  /* Minimized Filter & Sort Controls for Mobile */
+  .explore-page .filter-sort-controls {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 10px 12px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border-radius: 16px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03) !important;
+  }
+
+  .explore-page .filter-group {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 6px !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 2px 0 !important;
+    width: 100% !important;
+  }
+
+  .explore-page .filter-group::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .explore-page .filter-btn {
+    padding: 6px 12px !important;
+    font-size: 0.78rem !important;
+    border-radius: 20px !important;
+    white-space: nowrap !important;
+    background: #FAF8F5 !important;
+    border-color: rgba(46, 93, 52, 0.1) !important;
+    color: #4a5a45 !important;
+    margin: 0 !important;
+  }
+
+  .explore-page .filter-btn.active {
+    background: #2E5D34 !important;
+    color: #ffffff !important;
+    border-color: #2E5D34 !important;
+  }
+
+  .explore-page .sort-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-left: 0 !important;
+  }
+
+  .explore-page .sort-label {
+    display: none !important;
+  }
+
+  .explore-page .sort-select {
+    padding: 6px 24px 6px 10px !important;
+    font-size: 0.78rem !important;
+    border-radius: 20px !important;
+    background-color: #FAF8F5 !important;
+    border: 1px solid rgba(46, 93, 52, 0.15) !important;
+    color: #4a5a45 !important;
+    max-width: 120px !important;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Prevent product cards from overflowing the container and fix their mobile layout */
+  .explore-page .new-arrivals-grid-custom {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px 10px !important;
+    padding: 0 !important;
+    margin-top: 24px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .explore-page .new-arrival-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: unset !important;
+    border-radius: 16px !important;
+  }
+  
+  .explore-page .new-arrival-img-wrap {
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    width: 100% !important;
+  }
+
+  .explore-page .new-arrival-img {
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+  }
+
+  .explore-page .new-arrival-info {
+    padding: 10px 10px !important;
+    height: 105px !important;
+    border-bottom-left-radius: 16px !important;
+    border-bottom-right-radius: 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .explore-page .new-arrival-category {
+    font-size: 0.55rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  .explore-page .new-arrival-name {
+    font-size: 0.78rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin-bottom: 4px !important;
+  }
+
+  .explore-page .new-arrival-footer {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-top: auto !important;
+    gap: 4px !important;
+  }
+
+  /* Vertically stack standard and original discount price to avoid horizontal overflow on narrow cards */
+  .explore-page .new-arrival-price-wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 1px !important;
+  }
+
+  .explore-page .new-arrival-price {
+    font-size: 0.82rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .explore-page .new-arrival-original-price {
+    font-size: 0.68rem !important;
+    margin-left: 0 !important;
+  }
+
+  /* Badges positioning and scaling to avoid overlapping */
+  .explore-page .new-arrival-offer-badge,
+  .explore-page .new-arrival-stock-badge {
+    font-size: 0.58rem !important;
+    padding: 3px 6px !important;
+    border-radius: 8px !important;
+    top: -8px !important;
+  }
+
+  .explore-page .new-arrival-offer-badge {
+    right: 8px !important;
+  }
+
+  .explore-page .new-arrival-stock-badge {
+    left: 8px !important;
+  }
+
+  .explore-page .new-arrival-wishlist-btn {
+    top: 8px !important;
+    right: 8px !important;
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .explore-page .new-arrivals-grid-custom .skeleton {
+    height: 220px !important;
+    border-radius: 16px !important;
   }
 }

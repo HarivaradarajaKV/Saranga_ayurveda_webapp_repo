@@ -179,7 +179,7 @@ export default function Explore() {
         keywords="Ayurvedic products online, organic face wash, herbal shampoo, argan oil shampoo, natural skincare combo, baby skin products"
         canonicalPath="/explore"
       />
-      <div className="container" style={{ padding: '40px 24px' }}>
+      <div className="container explore-container">
         {/* Page Header */}
         <div className="explore-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div>
