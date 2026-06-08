@@ -106,7 +106,7 @@ export default function Contact() {
         keywords="Saranga Ayurveda contact, customer care, Ayurvedic practitioner consultation, Dehradun address"
         canonicalPath="/contact-us"
       />
-      <div className="contact-container">
+      <div className="container contact-container">
         
         {/* Breadcrumbs */}
         <div className="contact-breadcrumbs">

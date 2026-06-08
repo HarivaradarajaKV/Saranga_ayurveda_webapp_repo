@@ -148,7 +148,7 @@ export default function Careers() {
 
   return (
     <div className="careers-page">
-      <div className="careers-container">
+      <div className="container careers-container">
         
         {/* Breadcrumbs */}
         <div className="careers-breadcrumbs">

@@ -682,11 +682,3 @@
     font-size: 1.8rem;
   }
 }
-
-@media (min-width: 1200px) {
-  .product-detail-page .container {
-    padding-left: 2in;
-    padding-right: 2in;
-    max-width: 100%;
-  }
-}
