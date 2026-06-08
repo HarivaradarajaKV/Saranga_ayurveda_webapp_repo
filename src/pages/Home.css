@@ -765,6 +765,9 @@
   .category-overlay-img-wrap { width: 110px; height: 110px; }
 }
 @media (max-width: 768px) {
+  .home {
+    margin-top: -94px !important;
+  }
   .hero-ayurveda {
     background-image: url('/images/hero/ayurveda_hero_bg_mobile.png');
     background-size: 100% 100%;
