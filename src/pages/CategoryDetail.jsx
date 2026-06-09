@@ -10,7 +10,7 @@ import './Explore.css';
 export default function CategoryDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { getCategoryById } = useCategories();
+  const { getCategoryById, loading: catLoading } = useCategories();
   const [products, setProducts] = useState([]);
   const [combos, setCombos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,12 +46,16 @@ export default function CategoryDetail() {
   };
 
   useEffect(() => {
-    if (category?.name) {
-      fetchData();
-      setFilterType('all');
-      setSortBy('default');
+    if (!catLoading) {
+      if (category?.name) {
+        fetchData();
+        setFilterType('all');
+        setSortBy('default');
+      } else {
+        setLoading(false);
+      }
     }
-  }, [category?.name]);
+  }, [category?.name, catLoading]);
 
   const getFilteredAndSortedItems = () => {
     if (filterType === 'combos') {

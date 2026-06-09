@@ -32,9 +32,11 @@ export default function About() {
             {/* Inline Image on Mobile, Background on Desktop */}
             <div className="story-hero-image-box">
               <img 
-                src="/images/Our Story images/OS_01_Sourced_US.png" 
+                src="/images/Our Story images/OS_01_Sourced_US.webp" 
                 alt="Sourced Raw Materials" 
                 className="story-hero-inline-img"
+                loading="eager"
+                fetchpriority="high"
               />
             </div>
 
@@ -57,9 +59,10 @@ export default function About() {
           <div className="story-rooted-grid">
             <div className="story-rooted-image-box">
               <img 
-                src="/images/Our Story images/OS_02_Rooted in Nature_US.png" 
+                src="/images/Our Story images/OS_02_Rooted in Nature_US.webp" 
                 alt="Rooted in Nature" 
                 className="story-rooted-img"
+                loading="lazy"
               />
             </div>
             
@@ -142,27 +145,27 @@ export default function About() {
 
             <div className="story-process-grid">
               <div className="story-process-card">
-                <div className="story-process-img-box"><img src="/images/Our Story images/1 Handpicked_US.png" alt="Handpicked" /></div>
+                <div className="story-process-img-box"><img src="/images/Our Story images/1 Handpicked_US.webp" alt="Handpicked" loading="lazy" /></div>
                 <h4 className="story-process-card-title">1. Handpicked</h4>
                 <p className="story-process-card-desc">We handpick the finest herbs at high altitudes.</p>
               </div>
               <div className="story-process-card">
-                <div className="story-process-img-box"><img src="/images/Our Story images/2 Naturally Dried_US.png" alt="Naturally Dried" /></div>
+                <div className="story-process-img-box"><img src="/images/Our Story images/2 Naturally Dried_US.webp" alt="Naturally Dried" loading="lazy" /></div>
                 <h4 className="story-process-card-title">2. Naturally Dried</h4>
                 <p className="story-process-card-desc">Carefully dried using traditional methods to retain maximum potency.</p>
               </div>
               <div className="story-process-card">
-                <div className="story-process-img-box"><img src="/images/Our Story images/3 Quality Assured_US.png" alt="Quality Assured" /></div>
+                <div className="story-process-img-box"><img src="/images/Our Story images/3 Quality Assured_US.webp" alt="Quality Assured" loading="lazy" /></div>
                 <h4 className="story-process-card-title">3. Quality Assured</h4>
                 <p className="story-process-card-desc">Stringent quality checks ensure purity and authenticity.</p>
               </div>
               <div className="story-process-card">
-                <div className="story-process-img-box"><img src="/images/Our Story images/4 Expertly Processed_US.png" alt="Expertly Processed" /></div>
+                <div className="story-process-img-box"><img src="/images/Our Story images/4 Expertly Processed_US.webp" alt="Expertly Processed" loading="lazy" /></div>
                 <h4 className="story-process-card-title">4. Expertly Processed</h4>
                 <p className="story-process-card-desc">Processed in our GMP certified facilities with Ayurvedic expertise.</p>
               </div>
               <div className="story-process-card">
-                <div className="story-process-img-box"><img src="/images/Our Story images/5 Delivered to you_US.png" alt="Delivered to You" /></div>
+                <div className="story-process-img-box"><img src="/images/Our Story images/5 Delivered to you_US.webp" alt="Delivered to You" loading="lazy" /></div>
                 <h4 className="story-process-card-title">5. Delivered to You</h4>
                 <p className="story-process-card-desc">Delivered to your doorstep, bringing the best of Himalayas to you.</p>
               </div>
@@ -174,7 +177,7 @@ export default function About() {
             {/* Step 1 */}
             <div className="story-mobile-timeline-item">
               <div className="story-mobile-step-img">
-                <img src="/images/Our Story images/1 Handpicked_US.png" alt="Handpicked" />
+                <img src="/images/Our Story images/1 Handpicked_US.webp" alt="Handpicked" loading="lazy" />
               </div>
               <div className="story-mobile-step-line-col">
                 <div className="story-mobile-step-circle">
@@ -191,7 +194,7 @@ export default function About() {
             {/* Step 2 */}
             <div className="story-mobile-timeline-item">
               <div className="story-mobile-step-img">
-                <img src="/images/Our Story images/2 Naturally Dried_US.png" alt="Naturally Dried" />
+                <img src="/images/Our Story images/2 Naturally Dried_US.webp" alt="Naturally Dried" loading="lazy" />
               </div>
               <div className="story-mobile-step-line-col">
                 <div className="story-mobile-step-circle">
@@ -208,7 +211,7 @@ export default function About() {
             {/* Step 3 */}
             <div className="story-mobile-timeline-item">
               <div className="story-mobile-step-img">
-                <img src="/images/Our Story images/3 Quality Assured_US.png" alt="Quality Assured" />
+                <img src="/images/Our Story images/3 Quality Assured_US.webp" alt="Quality Assured" loading="lazy" />
               </div>
               <div className="story-mobile-step-line-col">
                 <div className="story-mobile-step-circle">
@@ -225,7 +228,7 @@ export default function About() {
             {/* Step 4 */}
             <div className="story-mobile-timeline-item">
               <div className="story-mobile-step-img">
-                <img src="/images/Our Story images/4 Expertly Processed_US.png" alt="Expertly Processed" />
+                <img src="/images/Our Story images/4 Expertly Processed_US.webp" alt="Expertly Processed" loading="lazy" />
               </div>
               <div className="story-mobile-step-line-col">
                 <div className="story-mobile-step-circle">
@@ -242,7 +245,7 @@ export default function About() {
             {/* Step 5 */}
             <div className="story-mobile-timeline-item">
               <div className="story-mobile-step-img">
-                <img src="/images/Our Story images/5 Delivered to you_US.png" alt="Delivered to You" />
+                <img src="/images/Our Story images/5 Delivered to you_US.webp" alt="Delivered to You" loading="lazy" />
               </div>
               <div className="story-mobile-step-line-col">
                 <div className="story-mobile-step-circle">
