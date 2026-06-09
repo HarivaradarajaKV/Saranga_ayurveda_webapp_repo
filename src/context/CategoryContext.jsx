@@ -64,7 +64,7 @@ export function CategoryProvider({ children }) {
 
   useEffect(() => { fetchCategories(); }, []);
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (retries = 3, delay = 2000) => {
     setLoading(true);
     try {
       const res = await api.get(ENDPOINTS.CATEGORIES);
@@ -86,10 +86,17 @@ export function CategoryProvider({ children }) {
 
       setCategories(sortedData);
       setError(null);
-    } catch (err) {
-      setError('Failed to load categories');
-    } finally {
       setLoading(false);
+    } catch (err) {
+      console.error(`Error loading categories, ${retries} retries left:`, err);
+      if (retries > 0) {
+        setTimeout(() => {
+          fetchCategories(retries - 1, delay * 1.5);
+        }, delay);
+      } else {
+        setError('Failed to load categories');
+        setLoading(false);
+      }
     }
   };
 
