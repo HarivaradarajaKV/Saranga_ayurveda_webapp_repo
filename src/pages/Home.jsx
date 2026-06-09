@@ -71,7 +71,7 @@ export default function Home() {
     { src: '/images/banner/T_Banner 01.png', link: '/product/119' }, // Argan Shampoo
     { src: '/images/banner/T_Banner 02.png', link: '/product/136' }, // Charcoal and Vitamin C Foaming Facewash
     { src: '/images/banner/T_Banner 03.png', link: '/product/130' }, // Tea Tree and Neem Foaming Facewash
-    { src: '/images/banner/T_Banner 04.png', link: '/product/196' }, // Intimate Wash
+    { src: '/images/banner/T_Banner 04.jpg', link: '/product/196' }, // Intimate Wash
     { src: '/images/banner/T_Banner 05.png', link: '/product/117' }, // Hibiscus Chickpea Shampoo
     { src: '/images/banner/T_Banner 06.png', link: '/product/137' }, // Alovera Gel
     { src: '/images/banner/T_Banner 07.png', link: '/product/123' }  // Pomegranate Lip Balm
@@ -709,8 +709,9 @@ export default function Home() {
             <div className={`home-what-we-do-card ${currentWhatWeDoSlide === 0 ? 'active' : ''}`}>
               <div className="home-what-we-do-img-wrapper">
                 <img 
-                  src="/images/foundation/card_1.png" 
+                  src="/images/foundation/card_1.jpg" 
                   alt="Provide Medical Care" 
+                  loading="lazy"
                   onError={(e) => { e.target.src = 'https://via.placeholder.com/400x360?text=Card+1+Image'; }} 
                 />
               </div>
@@ -722,8 +723,9 @@ export default function Home() {
             <div className={`home-what-we-do-card ${currentWhatWeDoSlide === 1 ? 'active' : ''}`}>
               <div className="home-what-we-do-img-wrapper">
                 <img 
-                  src="/images/foundation/card_2.png" 
+                  src="/images/foundation/card_2.jpg" 
                   alt="Educate Students" 
+                  loading="lazy"
                   onError={(e) => { e.target.src = 'https://via.placeholder.com/400x360?text=Card+2+Image'; }} 
                 />
               </div>
@@ -735,8 +737,9 @@ export default function Home() {
             <div className={`home-what-we-do-card ${currentWhatWeDoSlide === 2 ? 'active' : ''}`}>
               <div className="home-what-we-do-img-wrapper">
                 <img 
-                  src="/images/foundation/card_3.png" 
+                  src="/images/foundation/card_3.jpg" 
                   alt="Helping Feed the Hungry" 
+                  loading="lazy"
                   onError={(e) => { e.target.src = 'https://via.placeholder.com/400x360?text=Card+3+Image'; }} 
                 />
               </div>

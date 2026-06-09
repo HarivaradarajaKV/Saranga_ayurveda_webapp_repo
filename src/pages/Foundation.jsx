@@ -193,24 +193,27 @@ export default function Foundation() {
           <div className="foundation-cards-grid">
             <div className="foundation-outline-card">
               <img 
-                src="/images/foundation/card_1.png" 
+                src="/images/foundation/card_1.jpg" 
                 alt="Card 1" 
+                loading="lazy"
                 onError={(e) => { e.target.src = 'https://via.placeholder.com/400x360?text=Card+1+Image'; }}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '24px', display: 'block' }}
               />
             </div>
             <div className="foundation-outline-card">
               <img 
-                src="/images/foundation/card_2.png" 
+                src="/images/foundation/card_2.jpg" 
                 alt="Card 2" 
+                loading="lazy"
                 onError={(e) => { e.target.src = 'https://via.placeholder.com/400x360?text=Card+2+Image'; }}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '24px', display: 'block' }}
               />
             </div>
             <div className="foundation-outline-card">
               <img 
-                src="/images/foundation/card_3.png" 
+                src="/images/foundation/card_3.jpg" 
                 alt="Card 3" 
+                loading="lazy"
                 onError={(e) => { e.target.src = 'https://via.placeholder.com/400x360?text=Card+3+Image'; }}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '24px', display: 'block' }}
               />
