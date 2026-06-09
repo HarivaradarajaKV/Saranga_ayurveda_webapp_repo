@@ -166,7 +166,7 @@ export default function Home() {
     let minQty = null;
     for (const item of products) {
       const pid = item.product_id || item.id;
-      const cartItem = cartItems?.find(i => (i.product_id || i.id) === pid);
+      const cartItem = Array.isArray(cartItems) ? cartItems.find(i => (i.product_id || i.id) === pid) : null;
       if (!cartItem) return 0;
       
       const comboRequiredQty = item.quantity || 1;
@@ -187,7 +187,7 @@ export default function Home() {
     
     for (const item of products) {
       const pid = item.product_id || item.id;
-      const cartItem = cartItems?.find(i => (i.product_id || i.id) === pid);
+      const cartItem = Array.isArray(cartItems) ? cartItems.find(i => (i.product_id || i.id) === pid) : null;
       const currentProductQty = cartItem ? cartItem.quantity : 0;
       const comboRequiredQty = item.quantity || 1;
       const newProductQty = Math.max(0, currentProductQty + (diff * comboRequiredQty));
@@ -233,16 +233,25 @@ export default function Home() {
       const cachedCombos = localStorage.getItem('cache_combos');
 
       if (cachedNew) {
-        setNewArrivals(JSON.parse(cachedNew));
-        setNewLoading(false);
+        const parsed = JSON.parse(cachedNew);
+        if (Array.isArray(parsed)) {
+          setNewArrivals(parsed);
+          setNewLoading(false);
+        }
       }
       if (cachedBest) {
-        setBestSellers(JSON.parse(cachedBest));
-        setBestLoading(false);
+        const parsed = JSON.parse(cachedBest);
+        if (Array.isArray(parsed)) {
+          setBestSellers(parsed);
+          setBestLoading(false);
+        }
       }
       if (cachedCombos) {
-        setCombos(JSON.parse(cachedCombos));
-        setComboLoading(false);
+        const parsed = JSON.parse(cachedCombos);
+        if (Array.isArray(parsed)) {
+          setCombos(parsed);
+          setComboLoading(false);
+        }
       }
     } catch (e) {
       console.error('Failed to load cached home data:', e);
@@ -468,7 +477,7 @@ export default function Home() {
                 <div key={i} className="skeleton" style={{ width: 200, height: 300, borderRadius: 22, background: '#efe7da', opacity: 0.6 }} />
               ))}
             </div>
-          ) : newArrivals.length > 0 ? (
+          ) : (Array.isArray(newArrivals) && newArrivals.length > 0) ? (
             <div className="new-arrivals-grid-custom">
               {newArrivals.map(p => (
                 <ProductCard key={p.id} product={p} />
@@ -500,7 +509,7 @@ export default function Home() {
                 <div key={i} className="skeleton" style={{ width: 260, height: 420, borderRadius: 24, background: '#efe7da', opacity: 0.6, margin: '0 auto' }} />
               ))}
             </div>
-          ) : bestSellers.length > 0 ? (
+          ) : (Array.isArray(bestSellers) && bestSellers.length > 0) ? (
             <div className="best-sellers-scroll-row">
               {bestSellers.map(p => (
                 <ProductCard key={p.id} product={p} />
@@ -530,7 +539,7 @@ export default function Home() {
                 <div key={i} className="skeleton" style={{ height: 260, borderRadius: 22 }} />
               ))}
             </div>
-          ) : combos.length > 0 ? (
+          ) : (Array.isArray(combos) && combos.length > 0) ? (
             <div className="combo-grid-home">
               {combos.map(combo => {
                 const originalPrice = combo.subtotal || combo.original_price;

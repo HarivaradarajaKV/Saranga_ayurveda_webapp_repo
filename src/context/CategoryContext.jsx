@@ -66,8 +66,11 @@ export function CategoryProvider({ children }) {
     try {
       const cached = localStorage.getItem('cache_categories');
       if (cached) {
-        setCategories(JSON.parse(cached));
-        setLoading(false);
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed)) {
+          setCategories(parsed);
+          setLoading(false);
+        }
       }
     } catch (e) {
       console.error('Failed to load cached categories:', e);
