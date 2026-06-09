@@ -94,7 +94,7 @@ export default function Contact() {
     },
     {
       question: "Do you offer consultations?",
-      answer: "Yes! We host wellness consultations with experienced Ayurvedic practitioners. You can book an appointment by selecting 'Consultation Booking' in our contact form or by messaging us on WhatsApp."
+      answer: "Yes! We host wellness consultations with experienced Ayurvedic practitioners. You can book an appointment by selecting 'Consultation Booking' by messaging us on WhatsApp."
     }
   ];
 

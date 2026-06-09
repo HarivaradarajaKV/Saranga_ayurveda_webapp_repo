@@ -1142,95 +1142,158 @@
 }
 
 /* ── HOME STORY SECTION ── */
+/* ── HOME STORY SECTION ── */
 .home-story-section {
+  position: relative;
+  background-image: url('/images/Our%20Story%20images/OS_01_Sourced_US.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 580px;
+  display: flex;
+  align-items: center;
   padding: 80px 0;
-  background-color: #FFF5EE; /* Seashell shade */
-  overflow: hidden;
+  color: #2e3b23;
   border-top: 1px solid rgba(46, 93, 52, 0.05);
   border-bottom: 1px solid rgba(46, 93, 52, 0.05);
 }
 
-.home-story-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1.3fr;
-  gap: 60px;
-  align-items: center;
+.home-story-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.5) 40%, rgba(255,255,255,0) 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
-.home-story-label {
-  display: flex;
+.home-story-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.home-story-content {
+  max-width: 580px;
+}
+
+/* Label styling */
+.home-story-section-label {
+  display: inline-flex;
   align-items: center;
   gap: 12px;
+  margin-bottom: 24px;
+}
+
+.home-story-label-text {
+  font-family: var(--font-sans), sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 2px;
-  color: #8c9a84;
+  letter-spacing: 2.5px;
+  color: var(--primary);
+  text-transform: uppercase;
 }
 
 .home-story-label-line {
-  height: 2px;
-  width: 32px;
-  background-color: #d4af37;
-  border-radius: 1px;
+  height: 1px;
+  width: 30px;
+  background-color: var(--primary);
+  opacity: 0.4;
 }
 
-.home-story-title {
+.home-story-label-line.long {
+  width: 60px;
+}
+
+.home-story-label-leaf {
+  font-size: 0.9rem;
+  display: inline-block;
+}
+
+/* Typography styles */
+.home-story-hero-title {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-size: clamp(2rem, 4.2vw, 3rem);
   line-height: 1.2;
-  color: #2E5D34;
-  margin: 18px 0 24px 0;
-  font-weight: 600;
-  letter-spacing: -0.5px;
+  color: #1c2714;
+  font-weight: 500;
+  margin: 0 0 28px 0;
 }
 
-.home-story-desc {
-  font-size: 1.02rem;
-  line-height: 1.65;
-  color: #4a5542;
-  margin-bottom: 30px;
+.home-story-italic-highlight {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Heart separators */
+.home-story-separator-heart {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.home-story-heart-line {
+  height: 1px;
+  width: 40px;
+  background-color: var(--primary);
+  opacity: 0.35;
+}
+
+.home-story-heart-icon {
+  color: var(--primary);
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.home-story-hero-description {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.8;
+  color: #434e3c;
+  margin: 0 0 30px 0;
+  max-width: 460px;
 }
 
 .home-story-btn {
-  padding: 12px 28px;
+  padding: 12px 32px;
   font-weight: 600;
   border-radius: 30px;
   font-size: 0.9rem;
 }
 
-.home-story-img-wrapper {
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: 0 16px 40px rgba(63, 74, 53, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  background-color: #fff;
-}
-
-.home-story-main-img {
-  width: 100%;
-  height: 380px;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s ease;
-}
-
-.home-story-img-wrapper:hover .home-story-main-img {
-  transform: scale(1.02);
-}
-
-@media (max-width: 1024px) {
-  .home-story-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
+@media (max-width: 768px) {
+  .home-story-section {
+    background-image: none !important;
+    background-color: #faf9f6;
+    min-height: auto;
+    padding: 60px 0;
+    text-align: center;
   }
   
-  .home-story-img-wrapper {
-    max-width: 600px;
+  .home-story-overlay {
+    display: none;
+  }
+
+  .home-story-content {
     margin: 0 auto;
+    max-width: 100%;
   }
-  
-  .home-story-main-img {
-    height: 300px;
+
+  .home-story-section-label {
+    justify-content: center;
+  }
+
+  .home-story-separator-heart {
+    justify-content: center;
+  }
+
+  .home-story-hero-description {
+    margin: 0 auto 30px auto;
   }
 }
 

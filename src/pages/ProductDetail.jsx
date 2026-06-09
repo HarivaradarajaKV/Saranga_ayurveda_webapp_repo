@@ -411,9 +411,10 @@ export default function ProductDetail() {
                     if (cartQty > 0) {
                       updateQuantity(product.id, cartQty + 1);
                     } else {
-                      setQuantity(q => Math.min(product.stock_quantity || 99, q + 1));
+                      setQuantity(q => Math.min(product.stock_quantity !== undefined ? Math.min(product.stock_quantity, 20) : 20, q + 1));
                     }
                   }}
+                  disabled={cartQty > 0 ? cartQty >= 20 : quantity >= 20}
                 >
                   <Plus size={16} />
                 </button>

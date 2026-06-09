@@ -141,11 +141,11 @@ export default function Foundation() {
       <header className="foundation-sticky-header">
         <div className="foundation-nav-container">
           <div className="foundation-sub-nav" style={{ alignItems: 'center' }}>
+            <Link to="/" className="foundation-sub-nav-btn home-nav-btn">HOME</Link>
             <button onClick={() => handleScroll('who-we-are')} className="foundation-sub-nav-btn">WHO WE ARE</button>
             <button onClick={() => handleScroll('what-we-do')} className="foundation-sub-nav-btn">WHAT WE DO</button>
             <button onClick={() => handleScroll('news-events')} className="foundation-sub-nav-btn">NEWS & EVENTS</button>
             <button onClick={() => handleScroll('get-involved')} className="foundation-sub-nav-btn">GET INVOLVED</button>
-            <Link to="/" className="foundation-sub-nav-btn highlight-btn">SARANGA AYURVEDA</Link>
           </div>
         </div>
       </header>

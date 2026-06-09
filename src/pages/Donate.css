@@ -437,9 +437,11 @@
   .donate-actions {
     flex-direction: column;
     gap: 12px;
+    width: 100%;
   }
   .donate-submit-btn,
   .donate-qr-btn {
     width: 100%;
+    flex: none;
   }
 }

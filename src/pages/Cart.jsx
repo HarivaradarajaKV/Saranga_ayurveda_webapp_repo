@@ -218,7 +218,7 @@ export default function Cart() {
                           <button
                             className="cart-qty-adjust-btn"
                             onClick={() => updateQuantity(item.product_id || item.id, qty + 1)}
-                            disabled={item.stock_quantity !== undefined && qty >= item.stock_quantity}
+                            disabled={(item.stock_quantity !== undefined && qty >= item.stock_quantity) || qty >= 20}
                           >
                             <Plus size={14} />
                           </button>
@@ -273,7 +273,7 @@ export default function Cart() {
                               <button
                                 className="cart-qty-adjust-btn"
                                 onClick={() => updateQuantity(item.product_id || item.id, qty + 1)}
-                                disabled={item.stock_quantity !== undefined && qty >= item.stock_quantity}
+                                disabled={(item.stock_quantity !== undefined && qty >= item.stock_quantity) || qty >= 20}
                               >
                                 <Plus size={14} />
                               </button>

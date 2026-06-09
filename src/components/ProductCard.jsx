@@ -141,6 +141,7 @@ export default function ProductCard({ product }) {
                 className="product-card-qty-btn" 
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateQuantity(id, cartQty + 1); }}
                 title="Increase quantity"
+                disabled={cartQty >= 20}
               >
                 <Plus size={10} strokeWidth={3} />
               </button>

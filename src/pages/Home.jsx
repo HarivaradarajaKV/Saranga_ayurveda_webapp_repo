@@ -462,13 +462,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="new-arrivals-section" style={{ paddingTop: 0 }}>
-        <div className="container-large">
+      <section className="new-arrivals-section" style={{ padding: '40px 0' }}>
+        <div className="container">
           <div className="section-header-centered">
             <h2 className="section-title-flat">New Arrivals</h2>
-            <p className="section-desc-ayur">
-              Explore our newest hand-crafted formulations designed to bring traditional Ayurvedic wisdom to your modern lifestyle.
-            </p>
           </div>
 
           {newLoading ? (
@@ -493,14 +490,10 @@ export default function Home() {
       </section>
 
       {/* ── OUR BEST SELLERS ── */}
-      <section className="new-arrivals-section" style={{ backgroundColor: '#FAF8F5', borderTop: '1px solid #efe7da', padding: '80px 0' }}>
-        <div className="container-large">
+      <section className="new-arrivals-section" style={{ backgroundColor: '#FAF8F5', borderTop: '1px solid #efe7da', padding: '40px 0' }}>
+        <div className="container">
           <div className="section-header-centered">
-            <span className="section-subtitle-ayur">Customer Favorites</span>
             <h2 className="section-title-flat">Our Best Sellers</h2>
-            <p className="section-desc-ayur">
-              Explore our most loved and highly-rated products, chosen by our community for their exceptional quality and results.
-            </p>
           </div>
 
           {bestLoading ? (
@@ -524,13 +517,10 @@ export default function Home() {
       </section>
 
       {/* ── COMBO OFFERS ── */}
-      <section className="new-arrivals-section" style={{ paddingTop: 0, paddingBottom: '60px' }}>
-        <div className="container-large">
+      <section className="new-arrivals-section" style={{ padding: '40px 0' }}>
+        <div className="container">
           <div className="section-header-centered">
             <h2 className="section-title-flat">Combo Offers</h2>
-            <p className="section-desc-ayur">
-              Complete wellness sets curated by expert practitioners. Get comprehensive care and save more.
-            </p>
           </div>
 
           {comboLoading ? (
@@ -605,6 +595,7 @@ export default function Home() {
                               className="product-card-qty-btn" 
                               onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleUpdateComboQty(combo, comboQty + 1); }}
                               title="Increase quantity"
+                              disabled={comboQty >= 20}
                             >
                               <Plus size={10} strokeWidth={3} />
                             </button>
@@ -709,37 +700,34 @@ export default function Home() {
 
       {/* ── OUR STORY SECTION ── */}
       <section className="home-story-section">
-        <div className="container">
-          <div className="home-story-grid">
-            <div className="home-story-text-col">
-              <div className="home-story-label">
-                <span>OUR STORY</span>
-                <span className="home-story-label-line"></span>
-              </div>
-              
-              <h2 className="home-story-title">
-                Rooted in Ayurveda.<br />
-                Guided by Purpose.
-              </h2>
+        <div className="home-story-overlay"></div>
+        <div className="container home-story-container">
+          <div className="home-story-content">
+            <div className="home-story-section-label">
+              <span className="home-story-label-text">OUR STORY</span>
+              <span className="home-story-label-line"></span>
+              <span className="home-story-label-leaf">🍃</span>
+              <span className="home-story-label-line long"></span>
+            </div>
+            
+            <h2 className="home-story-hero-title font-serif-main">
+              Sourced raw materials<br />
+              from Himalayas to<br />
+              deliver you <span className="home-story-italic-highlight">the Best.</span>
+            </h2>
 
-              <p className="home-story-desc">
-                At Saranga Ayurveda, our story is one of passion, purpose and the timeless wisdom of Ayurveda. 
-                It is a journey that began with a vision to bring authentic Ayurvedic wellness to the world.
-              </p>
-
-              <div className="home-story-action">
-                <Link to="/about" className="btn btn-secondary home-story-btn">Read Our Story</Link>
-              </div>
+            <div className="home-story-separator-heart">
+              <span className="home-story-heart-line"></span>
+              <span className="home-story-heart-icon">♥</span>
+              <span className="home-story-heart-line"></span>
             </div>
 
-            <div className="home-story-img-col">
-              <div className="home-story-img-wrapper">
-                <img 
-                  src="/images/about-heritage-ashram.png" 
-                  alt="Saranga Ayurveda Heritage Ashram" 
-                  className="home-story-main-img" 
-                />
-              </div>
+            <p className="home-story-hero-description">
+              At Saranga Ayurveda, nature is our greatest healer and the Himalayas are our purest source. We travel to the highest altitudes to bring back the finest, most potent raw materials for you.
+            </p>
+
+            <div className="home-story-action">
+              <Link to="/about" className="btn btn-secondary home-story-btn">Read Our Story</Link>
             </div>
           </div>
         </div>
@@ -759,12 +747,12 @@ export default function Home() {
 
           <div className="assoc-actions">
             <Link to="/donate" className="assoc-donate-btn">DONATE</Link>
-            <a href="#need-help" className="assoc-help-link">
+            <Link to="/foundation" className="assoc-help-link">
               <span>I NEED HELP</span>
               <span className="assoc-arrow-circle">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
               </span>
-            </a>
+            </Link>
           </div>
         </div>
       </section>

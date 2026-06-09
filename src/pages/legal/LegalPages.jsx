@@ -27,42 +27,121 @@ export function PrivacyPolicy() {
 
 export function Terms() {
   return (
-    <LegalPage title="Terms of Service">
-      <p>Last updated: February 24, 2024</p>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>1. Acceptance of Terms</h3><p>By accessing and using this application, you accept and agree to be bound by the terms and provision of this agreement.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>2. Use License</h3><p>Permission is granted to temporarily download one copy of the application for personal, non-commercial transitory viewing only.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>3. Product Information</h3><p>We strive to provide accurate product descriptions and pricing. However, we do not warrant that product descriptions are accurate, complete, reliable, current, or error-free.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>4. User Account</h3><p>You are responsible for maintaining the confidentiality of your account and password and for restricting access to your computer or device.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>5. Limitation of Liability</h3><p>We shall not be liable for any indirect, incidental, special, consequential, or punitive damages resulting from your use or inability to use the service.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>6. Changes to Terms</h3><p>We reserve the right to modify these terms at any time. We will notify users of any material changes by posting the new terms on this page.</p></div>
+    <LegalPage title="Terms & Conditions">
+      <p>Last updated: June 9, 2026</p>
+      <p>By accessing this website, creating an account, placing an order, or using any service offered by Saranga Ayurveda LLP, you agree to be bound by these Terms & Conditions.</p>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>1. Order Acceptance & Verification</h3>
+        <p>All orders are subject to acceptance, verification, review, availability, operational feasibility, and compliance requirements.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>2. Right to Refuse or Cancel</h3>
+        <p>The Company reserves the right to refuse, limit, postpone, hold, cancel, or review any order at its sole discretion where necessary for operational, security, legal, compliance, quality control, inventory management, or business reasons.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>3. Payment & Billing</h3>
+        <p>Order processing commences following successful payment confirmation. Saranga Ayurveda LLP operates exclusively on a prepaid basis and does not offer Cash on Delivery services.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>4. Fulfillment & Operations</h3>
+        <p>The Company reserves the right to determine processing schedules, dispatch priorities, inventory allocation procedures, packaging requirements, and fulfillment methods as deemed appropriate for business operations.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>5. Product Representations</h3>
+        <p>Product images, descriptions, packaging, and representations displayed on the website are illustrative in nature. Minor variations in appearance, labeling, packaging design, or presentation shall not constitute defects.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>6. Force Majeure & Limitation of Liability</h3>
+        <p>Saranga Ayurveda LLP shall not be liable for delays, interruptions, losses, or failures resulting from supplier issues, transportation disruptions, public emergencies, governmental actions, natural disasters, technical failures, labor shortages, logistics constraints, force majeure events, or other circumstances beyond its reasonable control.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>7. Total Liability Limit</h3>
+        <p>To the maximum extent permitted by applicable law, the Company’s total liability relating to any order shall not exceed the amount paid by the customer for that specific order.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>8. Amendments & Updates</h3>
+        <p>The Company reserves the right to amend, modify, suspend, replace, or update these Terms & Conditions, policies, procedures, and website content at any time without prior notice.</p>
+      </div>
     </LegalPage>
   );
 }
 
 export function ShippingPolicy() {
   return (
-    <LegalPage title="Shipping Policy">
-      <p>Last updated: February 24, 2024</p>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>1. Processing Time</h3><p>Orders are typically processed within 1-2 business days. During peak seasons, processing may take up to 3 business days.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>2. Shipping Methods</h3><p>We offer standard shipping (5-7 business days) and express shipping (2-3 business days).</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>3. Shipping Costs</h3><p>Standard shipping is free for orders over INR 500. Express shipping and international shipping rates are calculated at checkout.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>4. Order Tracking</h3><p>Once your order ships, you will receive a tracking number via email. You can also track your order in the app's order history.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>5. Delivery Issues</h3><p>If you experience any issues with delivery, please contact our customer service team within 48 hours of the expected delivery date.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>6. International Orders</h3><p>International customers are responsible for any customs duties, taxes, and fees associated with their order.</p></div>
+    <LegalPage title="Shipping & Delivery Policy">
+      <p>Last updated: June 9, 2026</p>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>1. Operational Flow</h3>
+        <p>At Saranga Ayurveda LLP, every order undergoes multiple operational stages including order verification, processing, inventory allocation, quality assurance, packaging, dispatch preparation, and logistics coordination prior to shipment.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>2. Order Processing Sequence</h3>
+        <p>Orders are processed in the sequence in which they are received, subject to operational capacity, product availability, quality control requirements, regulatory compliance checks, seasonal demand fluctuations, logistics constraints, and other business considerations.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>3. Timeline Estimations</h3>
+        <p>Customers acknowledge that dispatch and delivery timelines displayed on the website are estimates only and shall not be construed as guaranteed delivery commitments.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>4. Processing Schedules</h3>
+        <p>While most orders are ordinarily processed within approximately 10–15 working days, certain orders may require additional processing time depending upon operational requirements, production schedules, quality assurance procedures, inventory management considerations, transportation availability, force majeure events, supplier delays, public holidays, or circumstances beyond the Company’s reasonable control.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>5. Dispatch Rights</h3>
+        <p>Saranga Ayurveda LLP reserves the right to determine the appropriate processing and dispatch timeline for any order.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>6. Logistics & Third-Party Delay</h3>
+        <p>Delivery dates provided by courier partners are estimates only. The Company shall not be responsible for delays occurring after shipment has been handed over to third-party logistics providers.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>7. Delays Acceptability</h3>
+        <p>Customers agree that reasonable delays in processing, dispatch, transportation, or delivery shall not constitute grounds for cancellation, compensation, damages, chargebacks, penalties, or legal claims against the Company.</p>
+      </div>
     </LegalPage>
   );
 }
 
 export function RefundPolicy() {
   return (
-    <LegalPage title="Refund Policy">
-      <p>Last updated: February 24, 2024</p>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>1. Return Period</h3><p>We accept returns within 30 days of delivery for unused items in their original packaging with all tags attached.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>2. Return Process</h3><p>To initiate a return, please contact our customer service team through the app or email. You will receive a return shipping label and instructions.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>3. Refund Timeline</h3><p>Once we receive and inspect your return, we will process your refund within 5-7 business days. The refund will be issued to your original payment method.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>4. Non-Returnable Items</h3><p>For hygiene reasons, certain items such as opened cosmetics, personal care products, and intimate items cannot be returned unless defective.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>5. Damaged or Defective Items</h3><p>If you receive a damaged or defective item, please contact us within 48 hours of delivery. We will arrange a replacement or full refund.</p></div>
-      <div><h3 style={{ color: 'var(--text)', marginBottom: 8 }}>6. Return Shipping</h3><p>Return shipping is free for defective items. For other returns, shipping costs may be deducted from your refund unless otherwise specified.</p></div>
+    <LegalPage title="Return, Cancellation & Refund Policy">
+      <p>Last updated: June 9, 2026</p>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>1. Order Verification & Processing</h3>
+        <p>All orders are subject to verification, processing, inventory allocation, packaging, and dispatch procedures immediately following successful payment confirmation.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>2. Order Cancellation Limits</h3>
+        <p>Once an order enters the processing stage, cancellation requests may not be accepted.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>3. Modification Restrictions</h3>
+        <p>Requests for modification of products, quantities, shipping information, or other order details may not be possible after order confirmation.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>4. Customer Review Checklist</h3>
+        <p>Customers are encouraged to carefully review all order details before completing payment.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>5. Case-by-Case Review</h3>
+        <p>Returns, exchanges, replacements, and cancellations are reviewed on a case-by-case basis and solely at the discretion of Saranga Ayurveda LLP, subject to applicable law.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>6. Delays & Refund Restrictions</h3>
+        <p>Refunds shall not ordinarily be issued for delays arising from processing requirements, quality assurance procedures, logistics constraints, courier delays, public holidays, force majeure events, or circumstances beyond the Company’s reasonable control.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>7. Payment Method Validation</h3>
+        <p>Approved refunds, if any, shall be processed through the original payment method after applicable verification procedures and administrative review.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>8. Non-Refundable Costs</h3>
+        <p>Shipping charges, payment gateway charges, processing fees, handling charges, and similar costs are generally non-refundable.</p>
+      </div>
+      <div>
+        <h3 style={{ color: 'var(--text)', marginBottom: 8 }}>9. Policy Compliance</h3>
+        <p>Saranga Ayurveda LLP reserves the right to refuse any refund, return, replacement, exchange, or cancellation request that does not comply with this policy or applicable law.</p>
+      </div>
     </LegalPage>
   );
 }

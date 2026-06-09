@@ -115,7 +115,7 @@ export default function CategoryDetail() {
           )}
         </div>
 
-        {!loading && (products.length > 0 || combos.length > 0) && (
+        {!loading && products.length > 0 && (
           <div className="filter-sort-controls">
             <div className="filter-group">
               <button 
@@ -163,6 +163,20 @@ export default function CategoryDetail() {
         {loading ? (
           <div className="new-arrivals-grid-custom">
             {Array(8).fill(0).map((_, i) => <div key={i} className="skeleton" style={{ height: 300, borderRadius: 22 }} />)}
+          </div>
+        ) : products.length === 0 ? (
+          <div className="empty-state" style={{ padding: '80px 20px' }}>
+            <img 
+              src="/images/logo.png" 
+              alt="Saranga Logo" 
+              style={{ width: '120px', height: 'auto', marginBottom: '16px', opacity: 0.9 }} 
+            />
+            <h2 style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary)', fontSize: '2rem', marginBottom: '8px' }}>
+              Coming Soon
+            </h2>
+            <p style={{ color: 'var(--text-muted)', maxWidth: '400px', margin: '0 auto', fontSize: '1rem' }}>
+              We are currently crafting authentic Ayurvedic formulations for this category. Stay tuned!
+            </p>
           </div>
         ) : displayItems.length > 0 ? (
           <div className="new-arrivals-grid-custom">

@@ -565,7 +565,12 @@
   .explore-page .new-arrival-name,
   .category-detail-page .new-arrival-name {
     font-size: 0.78rem !important;
-    white-space: nowrap !important;
+    white-space: normal !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    height: 2.4em !important;
+    line-height: 1.2 !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     margin-bottom: 4px !important;

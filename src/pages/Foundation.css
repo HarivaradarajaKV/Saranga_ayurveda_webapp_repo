@@ -501,12 +501,9 @@
     width: 100%;
     gap: 0;
   }
-  .foundation-sub-nav .foundation-sub-nav-btn:not(.highlight-btn),
+  .foundation-sub-nav .foundation-sub-nav-btn:not(.home-nav-btn),
   .foundation-sub-nav .foundation-sub-nav-link {
     display: none !important;
-  }
-  .foundation-sub-nav .foundation-sub-nav-btn.highlight-btn {
-    margin-left: 0;
   }
   .foundation-hero-section {
     height: auto;
@@ -591,7 +588,7 @@
   .foundation-donate-btn,
   .foundation-volunteer-btn {
     width: 100%;
-    max-width: 280px;
+    max-width: 100%;
   }
   .foundation-para {
     font-size: 1rem;
@@ -737,7 +734,7 @@
   
   #get-involved .foundation-volunteer-btn {
     width: 100%;
-    max-width: 280px;
+    max-width: 100%;
   }
 }
 

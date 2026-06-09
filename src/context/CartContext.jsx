@@ -41,6 +41,11 @@ export function CartProvider({ children }) {
 
   const addToCart = async (productId, quantity = 1, variant = null) => {
     const existing = items.find(i => (i.product_id || i.id) === productId && i.variant === variant);
+    const totalQty = (existing ? existing.quantity : 0) + quantity;
+    if (totalQty > 20) {
+      return { success: false, error: 'You can only add a maximum of 20 units of this product.' };
+    }
+    
     if (existing) {
       return updateQuantity(productId, (existing.quantity || 1) + 1, variant);
     }
@@ -89,6 +94,10 @@ export function CartProvider({ children }) {
   // updateQuantity: quantity is the new absolute value
   const updateQuantity = async (productId, quantity, variant = null) => {
     if (quantity < 1) { removeFromCart(productId, variant); return; }
+    if (quantity > 20) {
+      return { success: false, error: 'You can only add a maximum of 20 units of this product.' };
+    }
+    
     const item = items.find(i =>
       (i.product_id === productId || i.id === productId) &&
       (variant ? i.variant === variant : true)
