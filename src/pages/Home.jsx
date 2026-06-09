@@ -63,7 +63,9 @@ export default function Home() {
   const [bestSellers, setBestSellers] = useState([]);
   const [combos, setCombos] = useState([]);
   const [addedCombos, setAddedCombos] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [newLoading, setNewLoading] = useState(true);
+  const [bestLoading, setBestLoading] = useState(true);
+  const [comboLoading, setComboLoading] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeBottomSlide, setActiveBottomSlide] = useState(0);
 
@@ -224,39 +226,96 @@ export default function Home() {
   };
 
   useEffect(() => {
+    // Load cached home data instantly on mount
+    try {
+      const cachedNew = localStorage.getItem('cache_new_arrivals');
+      const cachedBest = localStorage.getItem('cache_best_sellers');
+      const cachedCombos = localStorage.getItem('cache_combos');
+
+      if (cachedNew) {
+        setNewArrivals(JSON.parse(cachedNew));
+        setNewLoading(false);
+      }
+      if (cachedBest) {
+        setBestSellers(JSON.parse(cachedBest));
+        setBestLoading(false);
+      }
+      if (cachedCombos) {
+        setCombos(JSON.parse(cachedCombos));
+        setComboLoading(false);
+      }
+    } catch (e) {
+      console.error('Failed to load cached home data:', e);
+    }
+
     fetchHomeData();
   }, []);
 
-  const fetchHomeData = async () => {
-    setLoading(true);
-    try {
-      const [prodRes, newRes, bestRes, comboRes] = await Promise.all([
-        api.get(`${ENDPOINTS.PRODUCTS}?limit=8`),
-        api.get(`${ENDPOINTS.PRODUCTS}?new_arrivals=true`),
-        api.get('/products/best-sellers'),
-        api.get(ENDPOINTS.COMBOS)
-      ]);
-
-      if (prodRes.data) {
-        setProducts(Array.isArray(prodRes.data) ? prodRes.data : (prodRes.data.products || []));
+  const fetchHomeData = () => {
+    const fetchWithRetry = async (fn, retries = 10, delay = 5000) => {
+      try {
+        return await fn();
+      } catch (err) {
+        if (retries > 0) {
+          console.warn(`Request failed. Retrying in ${delay}ms... (${retries} retries left)`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return fetchWithRetry(fn, retries - 1, delay);
+        }
+        throw err;
       }
+    };
 
-      if (newRes.data) {
-        setNewArrivals(Array.isArray(newRes.data) ? newRes.data : (newRes.data.products || []));
-      }
+    // 1. Fetch standard products (optional warm-up)
+    fetchWithRetry(() => api.get(`${ENDPOINTS.PRODUCTS}?limit=8`))
+      .then(res => {
+        if (res.data) {
+          setProducts(Array.isArray(res.data) ? res.data : (res.data.products || []));
+        }
+      })
+      .catch(err => console.error('Failed to fetch products:', err));
 
-      if (bestRes.data) {
-        const bestData = bestRes.data.products || bestRes.data;
-        setBestSellers(Array.isArray(bestData) ? bestData : []);
-      }
+    // 2. Fetch new arrivals
+    fetchWithRetry(() => api.get(`${ENDPOINTS.PRODUCTS}?new_arrivals=true`))
+      .then(res => {
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : (res.data.products || []);
+          setNewArrivals(list);
+          try {
+            localStorage.setItem('cache_new_arrivals', JSON.stringify(list));
+          } catch (e) {}
+        }
+      })
+      .catch(err => console.error('Failed to fetch new arrivals:', err))
+      .finally(() => setNewLoading(false));
 
-      if (comboRes.data) {
-        setCombos(Array.isArray(comboRes.data) ? comboRes.data : []);
-      }
-    } catch (err) {
-      console.error('Error fetching home data:', err);
-    }
-    setLoading(false);
+    // 3. Fetch best sellers
+    fetchWithRetry(() => api.get('/products/best-sellers'))
+      .then(res => {
+        if (res.data) {
+          const d = res.data.products || res.data;
+          const list = Array.isArray(d) ? d : [];
+          setBestSellers(list);
+          try {
+            localStorage.setItem('cache_best_sellers', JSON.stringify(list));
+          } catch (e) {}
+        }
+      })
+      .catch(err => console.error('Failed to fetch best sellers:', err))
+      .finally(() => setBestLoading(false));
+
+    // 4. Fetch combos
+    fetchWithRetry(() => api.get(ENDPOINTS.COMBOS))
+      .then(res => {
+        if (res.data) {
+          const list = Array.isArray(res.data) ? res.data : [];
+          setCombos(list);
+          try {
+            localStorage.setItem('cache_combos', JSON.stringify(list));
+          } catch (e) {}
+        }
+      })
+      .catch(err => console.error('Failed to fetch combos:', err))
+      .finally(() => setComboLoading(false));
   };
 
   const homeSchema = {
@@ -403,7 +462,7 @@ export default function Home() {
             </p>
           </div>
 
-          {loading ? (
+          {newLoading ? (
             <div className="new-arrivals-grid-custom">
               {Array(4).fill(0).map((_, i) => (
                 <div key={i} className="skeleton" style={{ width: 200, height: 300, borderRadius: 22, background: '#efe7da', opacity: 0.6 }} />
@@ -435,7 +494,7 @@ export default function Home() {
             </p>
           </div>
 
-          {loading ? (
+          {bestLoading ? (
             <div className="new-arrivals-grid-custom">
               {Array(8).fill(0).map((_, i) => (
                 <div key={i} className="skeleton" style={{ width: 260, height: 420, borderRadius: 24, background: '#efe7da', opacity: 0.6, margin: '0 auto' }} />
@@ -465,7 +524,7 @@ export default function Home() {
             </p>
           </div>
 
-          {loading ? (
+          {comboLoading ? (
             <div className="combo-grid-home">
               {Array(4).fill(0).map((_, i) => (
                 <div key={i} className="skeleton" style={{ height: 260, borderRadius: 22 }} />

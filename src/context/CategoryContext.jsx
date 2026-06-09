@@ -61,10 +61,26 @@ export function CategoryProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => { fetchCategories(); }, []);
+  useEffect(() => {
+    // Load cached categories instantly
+    try {
+      const cached = localStorage.getItem('cache_categories');
+      if (cached) {
+        setCategories(JSON.parse(cached));
+        setLoading(false);
+      }
+    } catch (e) {
+      console.error('Failed to load cached categories:', e);
+    }
+    fetchCategories();
+  }, []);
 
-  const fetchCategories = async (retries = 3, delay = 2000) => {
-    setLoading(true);
+  const fetchCategories = async (retries = 10, delay = 5000) => {
+    // Avoid triggering spinner/skeleton if cache already exists
+    const hasCache = localStorage.getItem('cache_categories') !== null;
+    if (!hasCache) {
+      setLoading(true);
+    }
     try {
       const res = await api.get(ENDPOINTS.CATEGORIES);
       const data = Array.isArray(res.data) ? res.data : res.data?.categories || [];
@@ -86,6 +102,9 @@ export function CategoryProvider({ children }) {
       setCategories(sortedData);
       setError(null);
       setLoading(false);
+      try {
+        localStorage.setItem('cache_categories', JSON.stringify(sortedData));
+      } catch (e) {}
     } catch (err) {
       console.error(`Error loading categories, ${retries} retries left:`, err);
       if (retries > 0) {
