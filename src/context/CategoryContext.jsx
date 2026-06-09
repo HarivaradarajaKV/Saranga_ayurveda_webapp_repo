@@ -53,8 +53,7 @@ export const slugify = (text) => {
 
 export const getDisplayCategoryName = (name) => {
   if (!name) return '';
-  const key = name.trim().toUpperCase();
-  return categoryDisplayNames[key] || name;
+  return name;
 };
 
 export function CategoryProvider({ children }) {
@@ -81,7 +80,7 @@ export function CategoryProvider({ children }) {
         return idxA - idxB;
       }).map(cat => ({
         ...cat,
-        displayName: categoryDisplayNames[cat.name.toUpperCase()] || cat.name
+        displayName: cat.name
       }));
 
       setCategories(sortedData);
