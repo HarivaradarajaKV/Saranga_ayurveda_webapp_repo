@@ -188,12 +188,12 @@ export default function AdminInvoicePrint() {
               <th style={{ width: '5%' }}>FREE</th>
               <th style={{ width: '5%' }}>PKG</th>
               <th style={{ width: '44%' }}>DESCRIPTION</th>
-              <th style={{ width: '8%' }}>MRP</th>
-              <th style={{ width: '8%' }}>RATE</th>
-              <th style={{ width: '9%' }}>VALUE</th>
+              <th style={{ width: '8%', textAlign: 'right' }}>MRP</th>
+              <th style={{ width: '8%', textAlign: 'right' }}>RATE</th>
+              <th style={{ width: '9%', textAlign: 'right' }}>VALUE</th>
               <th style={{ width: '5%' }}>DIS%</th>
               <th style={{ width: '5%' }}>GST%</th>
-              <th style={{ width: '11%' }}>NET AMT</th>
+              <th style={{ width: '11%', textAlign: 'right' }}>NET AMT</th>
             </tr>
           </thead>
           <tbody>
