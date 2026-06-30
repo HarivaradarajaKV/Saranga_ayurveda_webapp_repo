@@ -187,16 +187,13 @@ export default function AdminInvoicePrint() {
               <th style={{ width: '5%' }}>QTY</th>
               <th style={{ width: '5%' }}>FREE</th>
               <th style={{ width: '5%' }}>PKG</th>
-              <th style={{ width: '28%' }}>DESCRIPTION</th>
-              <th style={{ width: '8%' }}>HSN</th>
-              <th style={{ width: '10%' }}>BATCH #</th>
-              <th style={{ width: '6%' }}>EXP</th>
-              <th style={{ width: '6%' }}>MRP</th>
-              <th style={{ width: '6%' }}>RATE</th>
-              <th style={{ width: '6%' }}>VALUE</th>
+              <th style={{ width: '44%' }}>DESCRIPTION</th>
+              <th style={{ width: '8%' }}>MRP</th>
+              <th style={{ width: '8%' }}>RATE</th>
+              <th style={{ width: '9%' }}>VALUE</th>
               <th style={{ width: '5%' }}>DIS%</th>
               <th style={{ width: '5%' }}>GST%</th>
-              <th style={{ width: '8%' }}>NET AMT</th>
+              <th style={{ width: '11%' }}>NET AMT</th>
             </tr>
           </thead>
           <tbody>
@@ -209,9 +206,6 @@ export default function AdminInvoicePrint() {
                 <td style={{ textAlign: 'center' }}>{item.free_quantity || 0}</td>
                 <td style={{ textAlign: 'center' }}>{item.product_size || '10S'}</td>
                 <td style={{ fontWeight: 'bold' }}>{item.product_name}</td>
-                <td style={{ textAlign: 'center' }}>{item.product_hsn || '—'}</td>
-                <td>{item.batch_number || 'DEFAULT'}</td>
-                <td style={{ textAlign: 'center' }}>{formatExpiry(item.expiry_date)}</td>
                 <td style={{ textAlign: 'right' }}>{(item.rate * 1.12).toFixed(2)}</td> {/* Simulated MRP */}
                 <td style={{ textAlign: 'right' }}>{parseFloat(item.rate).toFixed(2)}</td>
                 <td style={{ textAlign: 'right' }}>{(item.rate * item.quantity).toFixed(2)}</td>
@@ -230,7 +224,7 @@ export default function AdminInvoicePrint() {
               <td style={{ textAlign: 'center' }}>
                 {invoice.items.reduce((sum, item) => sum + parseInt(item.free_quantity || 0), 0)}
               </td>
-              <td colSpan={7}></td>
+              <td colSpan={4}></td>
               <td style={{ textAlign: 'right' }}>₹{parseFloat(invoice.subtotal).toFixed(2)}</td>
               <td></td>
               <td></td>
