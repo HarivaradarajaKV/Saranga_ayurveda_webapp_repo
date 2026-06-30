@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import { useToast } from '../context/ToastContext';
 import { Plus, Pencil, Trash2, CheckCircle, MapPin } from 'lucide-react';
@@ -12,6 +13,7 @@ const EMPTY_ADDRESS = {
 
 export default function AdminCompanyAddresses() {
   const toast = useToast();
+  const navigate = useNavigate();
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -74,6 +76,7 @@ export default function AdminCompanyAddresses() {
       setShowForm(false);
       setForm(EMPTY_ADDRESS);
       setEditingId(null);
+      navigate('/admin/company-addresses');
       fetchAddresses();
     } catch (err) {
       toast.show(err.response?.data?.error || 'Failed to save address', 'error');

@@ -523,13 +523,7 @@ export default function AdminInvoiceForm() {
         toast.show('Invoice created successfully', 'success');
       }
       
-      if (saveStatus === 'draft') {
-        if (!isEditMode && savedInvoice?.id) {
-          navigate(`/admin/invoices/edit/${savedInvoice.id}`, { replace: true });
-        }
-      } else {
-        navigate('/admin/invoices');
-      }
+      navigate('/admin/invoices');
     } catch (err) {
       toast.show(err.response?.data?.error || 'Failed to save invoice transaction', 'error');
     } finally {

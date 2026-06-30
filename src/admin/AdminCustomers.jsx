@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import { useToast } from '../context/ToastContext';
 import { Plus, Pencil, Trash2, Search, Store } from 'lucide-react';
@@ -12,6 +13,7 @@ const EMPTY_CUSTOMER = {
 
 export default function AdminCustomers() {
   const toast = useToast();
+  const navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQ, setSearchQ] = useState('');
@@ -65,6 +67,7 @@ export default function AdminCustomers() {
       setShowForm(false);
       setForm(EMPTY_CUSTOMER);
       setEditingId(null);
+      navigate('/admin/customers');
       fetchCustomers();
     } catch (err) {
       toast.show(err.response?.data?.error || 'Failed to save customer', 'error');

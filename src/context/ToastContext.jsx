@@ -16,6 +16,17 @@ export function ToastProvider({ children }) {
     error: (msg) => addToast(msg, 'danger'),
     warning: (msg) => addToast(msg, 'warning'),
     info: (msg) => addToast(msg, 'default'),
+    show: (msg, type = 'default') => {
+      const typeMap = {
+        'success': 'success',
+        'error': 'danger',
+        'danger': 'danger',
+        'warning': 'warning',
+        'info': 'default',
+        'default': 'default'
+      };
+      addToast(msg, typeMap[type] || 'default');
+    }
   };
 
   return (
