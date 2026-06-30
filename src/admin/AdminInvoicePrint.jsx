@@ -206,7 +206,7 @@ export default function AdminInvoicePrint() {
                 <td style={{ textAlign: 'center' }}>{item.free_quantity || 0}</td>
                 <td style={{ textAlign: 'center' }}>{item.product_size || '10S'}</td>
                 <td style={{ fontWeight: 'bold' }}>{item.product_name}</td>
-                <td style={{ textAlign: 'right' }}>{(item.rate * 1.12).toFixed(2)}</td> {/* Simulated MRP */}
+                <td style={{ textAlign: 'right' }}>{(parseFloat(item.rate) / (1 + parseFloat(item.gst_percentage) / 100)).toFixed(2)}</td> {/* Unit price excluding GST */}
                 <td style={{ textAlign: 'right' }}>{parseFloat(item.rate).toFixed(2)}</td>
                 <td style={{ textAlign: 'right' }}>{(item.rate * item.quantity).toFixed(2)}</td>
                 <td style={{ textAlign: 'center' }}>{parseFloat(item.discount_percentage) > 0 ? `${parseFloat(item.discount_percentage).toFixed(0)}%` : '0'}</td>
