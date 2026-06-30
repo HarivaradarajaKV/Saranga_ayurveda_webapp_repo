@@ -111,9 +111,6 @@ export default function AdminInvoicePrint() {
           <h1 className="admin-page-title" style={{ fontSize: '1.25rem' }}>Invoice Preview</h1>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <button className="btn btn-secondary" onClick={handleEmailPDF}>
-            <Mail size={16} /> Email PDF
-          </button>
           <button className="btn btn-secondary" onClick={handleDownloadPDF}>
             <FileDown size={16} /> Download PDF
           </button>
@@ -327,10 +324,16 @@ export default function AdminInvoicePrint() {
         <div className="air-bank-terms-grid">
           <div style={{ padding: '10px' }}>
             <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Bank Billing Details:</div>
-            <div>Bank Name: Axis Bank Ltd</div>
-            <div>Account Number: 924020025688924</div>
-            <div>IFSC Code: UTIB0000166</div>
-            <div>Branch: Jayanagar, Bengaluru</div>
+            {invoice.bank_name ? (
+              <>
+                <div>Bank Name: {invoice.bank_name}</div>
+                <div>Account Number: {invoice.bank_account_no}</div>
+                <div>IFSC Code: {invoice.bank_ifsc}</div>
+                <div>Branch: {invoice.bank_branch}</div>
+              </>
+            ) : (
+              <div style={{ color: 'var(--text-light)', fontStyle: 'italic' }}>No bank details provided.</div>
+            )}
           </div>
           <div className="air-divider-vertical"></div>
           <div style={{ padding: '10px' }}>

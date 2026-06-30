@@ -52,6 +52,12 @@ export default function AdminInvoiceForm() {
   const [poNumber, setPoNumber] = useState('');
   const [salesPerson, setSalesPerson] = useState('Direct Sales');
   
+  // Custom Bank Details
+  const [bankName, setBankName] = useState('');
+  const [bankAccountNo, setBankAccountNo] = useState('');
+  const [bankIfsc, setBankIfsc] = useState('');
+  const [bankBranch, setBankBranch] = useState('');
+  
   // Invoice Items
   const [items, setItems] = useState([ { ...DEFAULT_LINE, id: Math.random() } ]);
   
@@ -113,6 +119,11 @@ export default function AdminInvoiceForm() {
     setPoNumber(source.po_number || '');
     setSalesPerson(source.sales_person || 'Direct Sales');
 
+    setBankName(source.bank_name || '');
+    setBankAccountNo(source.bank_account_no || '');
+    setBankIfsc(source.bank_ifsc || '');
+    setBankBranch(source.bank_branch || '');
+
     const mappedItems = source.items.map(item => {
       const isFlat = parseFloat(item.discount_percentage) === 0 && parseFloat(item.discount_amount) > 0;
       return {
@@ -145,11 +156,7 @@ export default function AdminInvoiceForm() {
     try {
       const res = await api.get(`/admin/invoices/${id}`);
       const inv = res.data;
-      if (inv.status === 'finalized') {
-        toast.show('Cannot edit finalized invoice', 'error');
-        navigate('/admin/invoices');
-        return;
-      }
+      
       setCompanyAddressId(String(inv.company_address_id));
       setSelectedCustomer({
         id: inv.customer_address_id,
@@ -165,6 +172,11 @@ export default function AdminInvoiceForm() {
       setTransport(inv.transport || '');
       setPoNumber(inv.po_number || '');
       setSalesPerson(inv.sales_person || '');
+
+      setBankName(inv.bank_name || '');
+      setBankAccountNo(inv.bank_account_no || '');
+      setBankIfsc(inv.bank_ifsc || '');
+      setBankBranch(inv.bank_branch || '');
 
       const mappedItems = inv.items.map(item => {
         const isFlat = parseFloat(item.discount_percentage) === 0 && parseFloat(item.discount_amount) > 0;
@@ -479,6 +491,10 @@ export default function AdminInvoiceForm() {
       grand_total: netPayable,
       round_off: roundOff,
       status: saveStatus,
+      bank_name: bankName || null,
+      bank_account_no: bankAccountNo || null,
+      bank_ifsc: bankIfsc || null,
+      bank_branch: bankBranch || null,
       items: filteredItems.map(i => ({
         product_id: i.product_id,
         batch_id: i.batch_id || null,
@@ -639,6 +655,29 @@ export default function AdminInvoiceForm() {
               <option value="Field Agent 1">Field Agent 1</option>
               <option value="Field Agent 2">Field Agent 2</option>
             </select>
+          </div>
+        </div>
+
+        {/* Bank Information Grid */}
+        <div style={{ marginTop: 20, borderTop: '1px solid var(--border-light)', paddingTop: 16 }}>
+          <div className="invoice-section-title" style={{ fontSize: '0.9rem', marginBottom: 12 }}>Bank Billing Details (Optional)</div>
+          <div className="invoice-grid-2" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+            <div className="form-group" style={{ margin: 0 }}>
+              <label>Bank Name</label>
+              <input type="text" className="form-input" placeholder="e.g. State Bank of India" value={bankName} onChange={e => setBankName(e.target.value)} />
+            </div>
+            <div className="form-group" style={{ margin: 0 }}>
+              <label>Account Number</label>
+              <input type="text" className="form-input" placeholder="e.g. 123456789012" value={bankAccountNo} onChange={e => setBankAccountNo(e.target.value)} />
+            </div>
+            <div className="form-group" style={{ margin: 0 }}>
+              <label>IFSC Code</label>
+              <input type="text" className="form-input" placeholder="e.g. SBIN0001234" value={bankIfsc} onChange={e => setBankIfsc(e.target.value)} />
+            </div>
+            <div className="form-group" style={{ margin: 0 }}>
+              <label>Branch Name</label>
+              <input type="text" className="form-input" placeholder="e.g. MG Road, Bangalore" value={bankBranch} onChange={e => setBankBranch(e.target.value)} />
+            </div>
           </div>
         </div>
 

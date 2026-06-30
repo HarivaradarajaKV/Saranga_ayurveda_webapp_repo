@@ -225,19 +225,13 @@ export default function AdminInvoices() {
                           <FileDown size={12} />
                         </button>
                         
-                        <button className="btn btn-secondary btn-xs" onClick={() => handleEmailPDF(inv.id, inv.customer_email)} title="Email PDF">
-                          <Mail size={12} />
-                        </button>
-                        
                         <button className="btn btn-secondary btn-xs" onClick={() => handleDuplicate(inv.id)} title="Duplicate Draft">
                           <Copy size={12} />
                         </button>
 
-                        {inv.status === 'draft' && (
-                          <Link to={`/admin/invoices/${inv.id}/edit`} className="btn btn-secondary btn-xs" title="Edit Draft">
-                            <Pencil size={12} />
-                          </Link>
-                        )}
+                        <Link to={`/admin/invoices/${inv.id}/edit`} className="btn btn-secondary btn-xs" title="Edit Invoice">
+                          <Pencil size={12} />
+                        </Link>
                         
                         <button className="btn btn-danger btn-xs" onClick={() => handleDelete(inv.id, inv.invoice_number)} title="Delete / Cancel">
                           <Trash2 size={12} />
