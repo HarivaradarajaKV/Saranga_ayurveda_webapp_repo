@@ -35,7 +35,8 @@ export default function AdminInvoices() {
         limit: String(limit),
         search: searchQuery,
         status: statusFilter,
-        sales_person: salesPersonFilter
+        sales_person: salesPersonFilter,
+        _t: String(Date.now())
       });
       const res = await api.get(`/admin/invoices?${params.toString()}`);
       setInvoices(res.data?.invoices || []);

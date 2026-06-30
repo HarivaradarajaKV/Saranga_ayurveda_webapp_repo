@@ -601,11 +601,28 @@ export default function AdminInvoiceForm() {
         <div className="invoice-grid-2" style={{ gridTemplateColumns: 'repeat(5, 1fr)' }}>
           <div className="form-group">
             <label>Invoice Date *</label>
-            <input type="date" className="form-input" value={invoiceDate} onChange={e => setInvoiceDate(e.target.value)} />
+            <input 
+              type="date" 
+              className="form-input" 
+              value={invoiceDate} 
+              onChange={e => {
+                const newDate = e.target.value;
+                setInvoiceDate(newDate);
+                if (dueDate && dueDate < newDate) {
+                  setDueDate('');
+                }
+              }} 
+            />
           </div>
           <div className="form-group">
             <label>Due Date</label>
-            <input type="date" className="form-input" value={dueDate} onChange={e => setDueDate(e.target.value)} />
+            <input 
+              type="date" 
+              className="form-input" 
+              value={dueDate} 
+              min={invoiceDate} 
+              onChange={e => setDueDate(e.target.value)} 
+            />
           </div>
           <div className="form-group">
             <label>Transport mode</label>
