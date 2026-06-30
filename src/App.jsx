@@ -66,6 +66,13 @@ const AdminNewArrivals = lazy(() => import('./admin/AdminNewArrivals'));
 const AdminBestSellers = lazy(() => import('./admin/AdminBestSellers'));
 const AdminContactSubmissions = lazy(() => import('./admin/AdminContactSubmissions'));
 const AdminCareerSubmissions = lazy(() => import('./admin/AdminCareerSubmissions'));
+const AdminDonations = lazy(() => import('./admin/AdminDonations'));
+const AdminInvoices = lazy(() => import('./admin/AdminInvoices'));
+const AdminInvoiceForm = lazy(() => import('./admin/AdminInvoiceForm'));
+const AdminInvoicePrint = lazy(() => import('./admin/AdminInvoicePrint'));
+const AdminCompanyAddresses = lazy(() => import('./admin/AdminCompanyAddresses'));
+const AdminCustomers = lazy(() => import('./admin/AdminCustomers'));
+const AdminProductBatches = lazy(() => import('./admin/AdminProductBatches'));
 
 import './styles/global.css';
 
@@ -162,6 +169,14 @@ export default function App() {
                       <Route path="best-sellers" element={<AdminBestSellers />} />
                       <Route path="contact-submissions" element={<AdminContactSubmissions />} />
                       <Route path="career-submissions" element={<AdminCareerSubmissions />} />
+                      <Route path="donations" element={<AdminDonations />} />
+                      <Route path="invoices" element={<AdminInvoices />} />
+                      <Route path="invoices/new" element={<AdminInvoiceForm />} />
+                      <Route path="invoices/:id" element={<AdminInvoicePrint />} />
+                      <Route path="invoices/:id/edit" element={<AdminInvoiceForm />} />
+                      <Route path="company-addresses" element={<AdminCompanyAddresses />} />
+                      <Route path="customers" element={<AdminCustomers />} />
+                      <Route path="products/batches" element={<AdminProductBatches />} />
                     </Route>
                   </Routes>
                 </Suspense>

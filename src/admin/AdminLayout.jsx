@@ -3,13 +3,14 @@ import { useAuth } from '../context/AuthContext';
 import {
   LayoutDashboard, Package, ShoppingBag, Users, FolderOpen,
   Gift, Tag, Star, LogOut, Menu, X, Leaf, Sparkles,
-  Mail, Briefcase
+  Mail, Briefcase, Heart, FileText, MapPin, UserCheck
 } from 'lucide-react';
 import { useState } from 'react';
 import './Admin.css';
 
 const NAV = [
   { to: '/admin', label: 'Dashboard', icon: <LayoutDashboard size={18} />, exact: true },
+  { to: '/admin/invoices', label: 'Invoices', icon: <FileText size={18} /> },
   { to: '/admin/products', label: 'Products', icon: <Package size={18} /> },
   { to: '/admin/orders', label: 'Orders', icon: <ShoppingBag size={18} /> },
   { to: '/admin/users', label: 'Users', icon: <Users size={18} /> },
@@ -21,6 +22,7 @@ const NAV = [
   { to: '/admin/best-sellers', label: 'Best Sellers', icon: <Star size={18} /> },
   { to: '/admin/contact-submissions', label: 'Contact Submissions', icon: <Mail size={18} /> },
   { to: '/admin/career-submissions', label: 'Career Submissions', icon: <Briefcase size={18} /> },
+  { to: '/admin/donations', label: 'Donations', icon: <Heart size={18} /> },
 ];
 
 export default function AdminLayout() {

@@ -1,0 +1,491 @@
+/* INVOICES MODULE CSS styles */
+
+/* Container & Spacing */
+.invoices-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Card & Forms */
+.invoice-card {
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+}
+
+.invoice-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .invoice-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.invoice-section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary-pale);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.form-input, .form-select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: all var(--transition);
+  box-sizing: border-box;
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-pale);
+}
+
+.form-input:disabled {
+  background: var(--surface);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Autocomplete Search Dropdown wrapper */
+.autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  z-index: 999;
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+
+.autocomplete-item {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.85rem;
+  text-align: left;
+  transition: background var(--transition);
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover {
+  background: var(--primary-pale);
+}
+
+.autocomplete-item-title {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.autocomplete-item-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Tables in Invoices */
+.invoice-items-table-wrap {
+  overflow: visible;
+  margin: 20px 0;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+}
+
+.invoice-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.invoice-items-table th {
+  padding: 10px 12px;
+  background: var(--surface);
+  color: var(--text-light);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  border-bottom: 1px solid var(--border-light);
+  text-align: center;
+}
+
+.invoice-items-table tr {
+  position: relative;
+}
+
+.invoice-items-table tr:focus-within {
+  z-index: 100;
+}
+
+.invoice-items-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+  position: relative;
+}
+
+.invoice-items-table td:focus-within {
+  z-index: 100;
+}
+
+.invoice-items-table input {
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+/* Financial summary layout */
+.invoice-summary-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .invoice-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.invoice-summary-left {
+  text-align: left;
+}
+
+.invoice-summary-right {
+  background: var(--surface);
+  padding: 20px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-light);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 0.88rem;
+  border-bottom: 1px dashed var(--border);
+}
+
+.summary-row:last-child {
+  border-bottom: none;
+}
+
+.summary-row.total {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  border-top: 2px solid var(--border);
+  border-bottom: none;
+  padding-top: 12px;
+  margin-top: 6px;
+}
+
+/* Warnings and Indicators */
+.alert-warning {
+  background-color: #fffbeb;
+  border: 1px solid #fef3c7;
+  color: #b45309;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.tag-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.tag-status.draft {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.tag-status.finalized {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.tag-status.cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Actions Menu */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  border: none;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-secondary:hover {
+  background: var(--surface);
+}
+
+.btn-danger {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.btn-danger:hover {
+  background: #fca5a5;
+}
+
+.btn-xs {
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  border-radius: 4px;
+}
+
+/* Header & Print format matching target */
+.air-lifesciences-invoice {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 12mm;
+  background: white;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.air-invoice-header {
+  border: 1.5px solid #222;
+  margin-bottom: 20px;
+}
+
+.air-invoice-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 8px;
+  background: #f0f0f0;
+  border-bottom: 1.5px solid #222;
+  text-transform: uppercase;
+}
+
+.air-invoice-address-grid {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.air-grid-column {
+  padding: 12px;
+}
+
+.air-divider-vertical {
+  background: #222;
+  width: 1px;
+}
+
+.air-invoice-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1.5px solid #222;
+  font-size: 9.5px;
+  padding: 8px 12px;
+  gap: 8px;
+}
+
+.air-invoice-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid #222;
+  font-size: 9.5px;
+}
+
+.air-invoice-items-table th {
+  border: 1px solid #222;
+  background: #f9f9f9;
+  font-weight: bold;
+  padding: 6px 4px;
+  text-align: center;
+}
+
+.air-invoice-items-table td {
+  border: 1px dashed #444;
+  border-left: 1px solid #222;
+  border-right: 1px solid #222;
+  padding: 6px 4px;
+}
+
+.air-invoice-items-table tr.total-row td {
+  border-top: 1.5px solid #222;
+  border-bottom: 1.5px solid #222;
+  font-weight: bold;
+  background: #f0f0f0;
+}
+
+.air-invoice-bottom {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  border: 1.5px solid #222;
+  border-top: none;
+  font-size: 9px;
+}
+
+.air-invoice-slab-wrap {
+  padding: 10px;
+  border-right: 1.5px solid #222;
+}
+
+.air-invoice-totals-wrap {
+  padding: 10px;
+}
+
+.air-slab-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 6px;
+}
+
+.air-slab-table th, .air-slab-table td {
+  border: 1px solid #444;
+  padding: 4px;
+  text-align: right;
+  font-size: 8px;
+}
+
+.air-slab-table th {
+  background: #f2f2f2;
+}
+
+.air-amount-words {
+  border: 1.5px solid #222;
+  border-top: none;
+  padding: 8px 12px;
+  font-size: 10px;
+}
+
+.air-bank-terms-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1px 1.5fr;
+  border: 1.5px solid #222;
+  border-top: none;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.air-signatures-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1px 1.5fr;
+  border: 1.5px solid #222;
+  border-top: none;
+  height: 100px;
+  font-size: 10px;
+}
+
+.air-signatures-box {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Print CSS overrides */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  
+  /* Make sure the printable invoice container is visible and occupies full width */
+  .air-lifesciences-invoice, .air-lifesciences-invoice * {
+    visibility: visible !important;
+  }
+  
+  .air-lifesciences-invoice {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+}
